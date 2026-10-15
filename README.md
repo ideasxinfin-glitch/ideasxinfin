@@ -1,6 +1,6 @@
 # Ideas Xinfin · primera versión navegable
 
-Web editorial responsive para presentar tres pilares: plataformas digitales y landing pages; IA y automatizaciones; marketing digital, redes sociales y SEO.
+Web cinematográfica responsive para presentar tres pilares: plataformas digitales y landing pages; IA y automatizaciones; marketing digital, redes sociales y SEO.
 
 ## Stack y costo
 
@@ -40,10 +40,11 @@ Salto a contenido, estados accesibles del menú y tema, controles nativos, label
 
 ## Rendimiento y seguridad
 
-Sin fuentes remotas, trackers, bibliotecas de animación o video automático. Hero vectorial adaptable sin imágenes pesadas; video bajo demanda, `preload=none`. Los módulos son del mismo origen; no hay HTML formado con entrada del visitante. CSP, no-referrer, nosniff, frame denial y permisos restringidos se configuran en `_headers`; el servidor local también los aplica. Verificar soporte de cabeceras en el hosting definitivo.
+Sin fuentes remotas, trackers, bibliotecas de animación o video automático. Hero fotográfico con WebP optimizados y dispositivos HTML/CSS; video bajo demanda, `preload=none`. Los módulos son del mismo origen; no hay HTML formado con entrada del visitante. CSP, no-referrer, nosniff, frame denial y permisos restringidos se configuran en `_headers`; el servidor local también los aplica. Verificar soporte de cabeceras en el hosting definitivo.
 
 La analítica está preparada como eventos internos sin transmisión ni identificadores (`public/analytics.js`). Respeta Do Not Track y Global Privacy Control. Para conectarla, añadir un adaptador, credenciales reales cuando correspondan y consentimiento según el proveedor. Nunca incluir valores del formulario en eventos.
 
 ## Contenido y pendientes
 
-Ver `docs/CONTENT-SOURCES.md`: contacto y servicios del sitio original; videos inventariados; sin resultados, testimonios ni clientes no verificados. Logo reconstruido desde descripción: sustituir por los archivos aprobados cuando estén disponibles. Las demos son conceptos, no un portafolio de clientes reales. Se requiere material aprobado para convertirlo en portafolio real.
+Ver `docs/CONTENT-SOURCES.md`: contacto y servicios del sitio original; videos inventariados; sin resultados, testimonios ni clientes no verificados. Dirección visual reconstruida desde las dos referencias adjuntas: ver docs/VISUAL-REVISION.md. El símbolo X es vectorial y el logo definitivo puede sustituirlo cuando se entregue su archivo. Las demos son conceptos, no un portafolio de clientes reales. Se requiere material aprobado para convertirlo en portafolio real.
+

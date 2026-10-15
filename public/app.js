@@ -7,7 +7,7 @@ const syncTheme = () => {
   themeToggle.setAttribute('aria-label', `Cambiar a tema ${isDark ? 'claro' : 'oscuro'}`);
   themeToggle.setAttribute('aria-pressed', String(!isDark));
   themeToggle.firstElementChild.textContent = isDark ? '☼' : '☾';
-  document.querySelector('meta[name="theme-color"]').content = isDark ? '#09141e' : '#f6f3ec';
+  document.querySelector('meta[name="theme-color"]').content = isDark ? '#060b0d' : '#fffaf4';
 };
 themeToggle.addEventListener('click', () => {
   const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -36,7 +36,7 @@ menuButton.addEventListener('click', () => {
 });
 mobileNav.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && !mobileNav.hidden) { closeMenu(); menuButton.focus(); } });
-matchMedia('(min-width: 761px)').addEventListener('change', event => { if (event.matches) closeMenu(); });
+matchMedia('(min-width: 961px)').addEventListener('change', event => { if (event.matches) closeMenu(); });
 
 document.querySelectorAll('[data-service]').forEach(link => link.addEventListener('click', () => { document.querySelector('#service').value = link.dataset.service; }));
 document.querySelectorAll('[data-track="whatsapp"]').forEach(link => link.addEventListener('click', () => track('whatsapp_click')));
@@ -55,10 +55,11 @@ document.querySelector('#contact-form').addEventListener('submit', event => {
 });
 
 const demos = {
-  web: { title: 'Un espacio para tu marca', description: 'Concepto de una landing para un espacio creativo. Explora cómo cambia el tono visual. No corresponde a un negocio real.', question: 'Elige una dirección visual:', options: ['Natural y cálida', 'Digital y audaz'], answers: ['Una paleta arena y verde, fotografía editorial y una ruta sencilla hacia reservas.', 'Contrastes azul marino y cian, tipografía expresiva y una llamada clara a conversar.'] },
+  web: { title: 'Un espacio para tu marca', description: 'Concepto de una plataforma inmobiliaria. Explora cómo cambia el tono visual. No corresponde a un negocio real.', question: 'Elige una dirección visual:', options: ['Natural y cálida', 'Digital y audaz'], answers: ['Una paleta arena y verde, fotografía editorial y una ruta sencilla hacia reservas.', 'Contrastes azul marino y cian, tipografía expresiva y una llamada clara a conversar.'] },
   ai: { title: 'Una conversación que avanza', description: 'Simulación local de un flujo. No usa un modelo de IA, no agenda citas reales y no envía datos.', question: 'Hola, ¿qué te gustaría resolver?', options: ['Recibir consultas', 'Organizar reservas'], answers: ['Flujo propuesto: formulario → clasificar el interés → preparar respuesta → revisión humana → seguimiento.', 'Flujo propuesto: consulta de disponibilidad → selección de horario → confirmación humana → recordatorio.'] },
   brand: { title: 'Una idea, una voz propia', description: 'Concepto editorial de campaña. Explora dos enfoques de contenido, sin datos ni resultados atribuidos a clientes.', question: '¿Qué quieres comunicar primero?', options: ['Presentar mi negocio', 'Explicar mi servicio'], answers: ['Dirección: historia de marca, propuesta de valor y una invitación a conocerte. Formatos: portada, carrusel y reel.', 'Dirección: una necesidad concreta, tu proceso y preguntas frecuentes. Formatos: carrusel educativo y video breve.'] }
 };
+demos.auto = { title: 'Una experiencia con carácter', description: 'Concepto de una plataforma automotriz. No representa una marca, inventario o cliente real.', question: '¿Qué quieres facilitar primero?', options: ['Explorar el catálogo', 'Solicitar información'], answers: ['Una ficha clara con imágenes, características y filtros que ayuden a descubrir cada modelo.', 'Una ruta sencilla desde el vehículo que interesa hasta una consulta revisada y enviada por WhatsApp.'] };
 const dialog = document.querySelector('#demo-dialog');
 document.querySelectorAll('[data-demo]').forEach(button => button.addEventListener('click', () => {
   const demo = demos[button.dataset.demo];
@@ -94,3 +95,7 @@ dialog.addEventListener('close', () => dialog.querySelectorAll('video').forEach(
 document.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
 document.querySelector('#demo-contact').addEventListener('click', () => dialog.close());
 dialog.addEventListener('click', event => { if (event.target === dialog) { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close(); } });
+
+const assistantResponses = { propuesta: 'Empecemos por tu objetivo, tu audiencia y el alcance. Cuéntanos tu idea en el formulario y preparemos una conversación.', landing: 'Podemos conectar diseño, contenido y contacto en una landing a medida. ¿Qué servicio o producto quieres presentar?', automatizar: 'Identifiquemos una tarea repetitiva y el proceso actual. Después definimos qué automatizar y dónde mantener revisión humana.', seo: 'Podemos revisar la estructura de tu web, el contenido y tu visibilidad. Cuéntanos tu negocio y el mercado al que quieres llegar.' };
+document.querySelectorAll('[data-assistant]').forEach(button => button.addEventListener('click', () => { document.querySelector('.assistant-message').textContent = assistantResponses[button.dataset.assistant]; document.querySelectorAll('[data-assistant]').forEach(item => item.setAttribute('aria-pressed',String(item===button))); }));
+

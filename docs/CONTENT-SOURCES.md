@@ -25,4 +25,4 @@ El video se solicita al dominio de origen únicamente al pulsar reproducir. Se m
 
 ## Identidad visual
 
-El resumen de la conversación adjunta no contiene las imágenes aprobadas y no hay una herramienta read_thread disponible en esta sesión. La implementación sigue la descripción escrita: marino, cian y dorado cálido; variantes claras y oscuras; infinito con rayo. El SVG es una reconstrucción provisional, no una copia verificada del archivo aprobado. La escultura del hero y las composiciones de las demos son vectores/HTML/CSS originales, no mockups planos.
+La segunda versión usa las dos imágenes adjuntas por el usuario el 15 de octubre: fotografía cinematográfica, arquitectura y montañas, naranja, títulos serif, temas claro y oscuro. Ver VISUAL-REVISION.md para referencias, recursos y límites. Los textos, dispositivos, tarjetas y controles son HTML/CSS reales.

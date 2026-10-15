@@ -24,3 +24,10 @@
 - Logo provisional reconstruido desde la descripción escrita; referencias adjuntas de la conversación anterior no accesibles en esta sesión.
 - Faltan archivos de marca definitivos, casos reales aprobados, datos legales de privacidad y elección del hosting definitivo. Si se desea recepción por servidor/correo, falta configurar ese canal; el formulario de esta versión funciona mediante WhatsApp.
 - Analítica preparada y desconectada; no se midieron Lighthouse/Core Web Vitals ni se completó una auditoría con lector de pantalla. No se atribuyen puntuaciones de rendimiento o accesibilidad.
+
+## Segunda versión: correspondencia con las referencias
+
+La composición se reconstruyó con las dos referencias ya adjuntas: escenario arquitectónico/alpino, naranja, titulares serif, dispositivos HTML/CSS, fotografías y secciones compactas. Recursos generados y optimizados: ver VISUAL-REVISION.md.
+
+Build, lint y las cuatro pruebas de contacto pasan. Preview autónomo verificado en Chrome a 1440 px (claro y oscuro), 390 px (claro y oscuro) y 320 px (oscuro), sin desbordamientos ni imágenes rotas. Menú, tema persistente, demos, formulario y salida a WhatsApp interceptada pasan. Video bajo demanda sin error observado. Evidencia: validation-browser-v2.json.
+También se verificaron anchos de 768 y 1024 px, y las respuestas de la demostración del asistente. Las comprobaciones pasaron sin desbordamiento horizontal.
