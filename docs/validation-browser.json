@@ -1,0 +1,118 @@
+{
+  "reports": [
+    {
+      "name": "desktop-dark",
+      "width": 1440,
+      "height": 1000,
+      "theme": "dark",
+      "scrollWidth": 1425,
+      "h1": 1,
+      "hero": {
+        "x": 90.71875,
+        "y": 290.765625,
+        "width": 721.265625,
+        "height": 240.234375,
+        "top": 290.765625,
+        "right": 811.984375,
+        "bottom": 531,
+        "left": 90.71875
+      },
+      "brokenImages": 0
+    },
+    {
+      "name": "desktop-light",
+      "width": 1440,
+      "height": 1000,
+      "theme": "light",
+      "scrollWidth": 1425,
+      "h1": 1,
+      "hero": {
+        "x": 90.71875,
+        "y": 290.765625,
+        "width": 721.265625,
+        "height": 240.234375,
+        "top": 290.765625,
+        "right": 811.984375,
+        "bottom": 531,
+        "left": 90.71875
+      },
+      "brokenImages": 0
+    },
+    {
+      "name": "mobile-dark",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "scrollWidth": 390,
+      "h1": 1,
+      "hero": {
+        "x": 24.5625,
+        "y": 153.6875,
+        "width": 340.875,
+        "height": 191.1875,
+        "top": 153.6875,
+        "right": 365.4375,
+        "bottom": 344.875,
+        "left": 24.5625
+      },
+      "brokenImages": 0
+    },
+    {
+      "name": "mobile-light",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "scrollWidth": 390,
+      "h1": 1,
+      "hero": {
+        "x": 24.5625,
+        "y": 153.6875,
+        "width": 340.875,
+        "height": 191.1875,
+        "top": 153.6875,
+        "right": 365.4375,
+        "bottom": 344.875,
+        "left": 24.5625
+      },
+      "brokenImages": 0
+    },
+    {
+      "name": "mobile-small",
+      "width": 320,
+      "height": 740,
+      "theme": "dark",
+      "scrollWidth": 320,
+      "h1": 1,
+      "hero": {
+        "x": 24,
+        "y": 153.6875,
+        "width": 272,
+        "height": 230.703125,
+        "top": 153.6875,
+        "right": 296,
+        "bottom": 384.390625,
+        "left": 24
+      },
+      "brokenImages": 0
+    }
+  ],
+  "interaction": {
+    "themeToggle": true,
+    "saved": true,
+    "menuOpen": true,
+    "menuCloses": true,
+    "dialog": true,
+    "demo": true,
+    "dialogClose": true,
+    "emptyFormBlocked": true,
+    "validForm": true
+  },
+  "media": {
+    "exists": true,
+    "preload": "none",
+    "source": "https://xinfinlab.com/img/pilar-landings.mp4",
+    "error": null
+  },
+  "formHandoff": true,
+  "runtimeErrors": []
+}
