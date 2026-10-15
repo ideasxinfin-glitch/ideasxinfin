@@ -31,3 +31,7 @@ La composición se reconstruyó con las dos referencias ya adjuntas: escenario a
 
 Build, lint y las cuatro pruebas de contacto pasan. Preview autónomo verificado en Chrome a 1440 px (claro y oscuro), 390 px (claro y oscuro) y 320 px (oscuro), sin desbordamientos ni imágenes rotas. Menú, tema persistente, demos, formulario y salida a WhatsApp interceptada pasan. Video bajo demanda sin error observado. Evidencia: validation-browser-v2.json.
 También se verificaron anchos de 768 y 1024 px, y las respuestas de la demostración del asistente. Las comprobaciones pasaron sin desbordamiento horizontal.
+
+## Revisión v3
+
+Build, lint y cuatro pruebas de validación de contacto aprobados. Chrome: siete combinaciones de tema y viewport (320, 390, 768, 1024 y 1440 px), sin desbordamiento horizontal, imágenes rotas ni errores de ejecución. Ver docs/validation-browser-v3.json. Verificados alternancia y persistencia del tema, símbolos correctos, WhatsApp flotante, tres enlaces sociales, retrato único, menú, demos y formulario. La navegación de prueba del formulario a WhatsApp se interceptó antes de salir; no se envió ningún mensaje. Video original creado solo al pulsar y sin error de media observado. Capturas revisadas visualmente en escritorio oscuro/claro y móvil.

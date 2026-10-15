@@ -11,3 +11,35 @@
 @media(min-width:761px){.hero{height:clamp(580px,43vw,700px);min-height:580px}.hero-inner{padding-top:118px;padding-bottom:38px}.device-stage{height:84%}.hero-copy{padding-bottom:0}}
 [data-theme=light] .header-contact{background:linear-gradient(110deg,#ff9c42,#ff730a);color:#11100c;border-color:#ff8d2c}[data-theme=light] .service-photo:before{filter:brightness(1.08)}
 @media(min-width:761px) and (max-width:960px){.desktop-nav,.header-contact{display:none}.menu-toggle{display:flex;flex-direction:column;justify-content:center;gap:6px;background:none;border:0;width:34px;height:42px;padding:5px}.menu-toggle span{height:1px;width:24px;background:var(--ink)}.menu-toggle[aria-expanded=true] span:first-child{transform:translateY(3.5px) rotate(45deg)}.menu-toggle[aria-expanded=true] span:last-child{transform:translateY(-3.5px) rotate(-45deg)}.service-body ul{flex-wrap:wrap;white-space:normal;gap:5px}.service-body li+li{border:0;padding:0}.service-body li{margin-right:6px}.service-body{padding-inline:15px}.hero h1{font-size:4.5vw}.hero-description{font-size:.79rem}.hero-actions .button{padding-inline:12px;font-size:.63rem;gap:10px}.ai-copy{padding-top:28px}.ai-copy h2{font-size:1.8rem}.capabilities{flex-wrap:wrap}.assistant-preview{margin-right:20px}.footer>nav{gap:13px}}
+
+/* Refinement: distinct images, compact proportions and accessible contact controls. */
+.theme-mark{display:inline-flex;align-items:center;justify-content:center;width:44px;height:38px;flex:none}
+.brand .theme-mark{font-size:inherit;letter-spacing:normal}
+.theme-mark img.mark-dark{width:44px;height:30px;object-fit:contain}
+.theme-mark img.mark-light{width:27px;height:34px;object-fit:contain}
+[data-theme=dark] .mark-light,[data-theme=light] .mark-dark{display:none}
+.photo-automation{background-image:url('/assets/automation-v3.webp');background-size:cover;background-position:center 52%}
+.photo-property{background-image:url('/assets/property-v3.webp');background-size:cover;background-position:center 42%}
+.photo-branding{background-image:url('/assets/branding-v3.webp');background-size:cover;background-position:center 42%}
+.service-photo{height:clamp(155px,13vw,190px)}
+.project{height:clamp(240px,19vw,275px)}
+.project-caption{padding-top:55px}
+.project-caption>span{padding-right:22px}
+.original-media{margin-top:22px;padding:18px 22px;border:1px solid var(--line);border-radius:13px;display:flex;justify-content:space-between;align-items:center;gap:20px;background:var(--surface)}
+.original-media .eyebrow{font-size:.55rem;margin-bottom:5px;display:block}
+.original-media p{font-family:Georgia,serif;font-size:1.35rem;line-height:1.2}
+.original-media small{font-size:.72rem;color:var(--muted)}
+.approach{background:linear-gradient(110deg,var(--surface),var(--bg));border-bottom:1px solid var(--line)}
+.footer{flex-wrap:wrap;padding-bottom:95px}
+.footer>.social-links{width:auto;display:flex;gap:8px;order:0}
+.social-links a{display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--line);border-radius:50%;transition:background .2s}
+.social-links a:hover{background:var(--surface)}
+.social-links svg{width:18px;height:18px}
+.whatsapp-float{position:fixed;z-index:30;right:24px;bottom:max(22px,env(safe-area-inset-bottom));min-height:52px;display:flex;align-items:center;justify-content:center;gap:9px;padding:12px 19px;border-radius:30px;background:#075e46;color:#fff;border:1px solid #ffffff70;box-shadow:0 5px 24px #0004;font-size:.8rem;font-weight:600;transition:transform .2s}
+.whatsapp-float svg{width:27px;height:27px}
+.whatsapp-float:hover{transform:translateY(-3px);background:#064c39}
+.dialog-open .whatsapp-float{visibility:hidden}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(min-width:961px){.device-stage{height:77%;width:51%;right:3.8%}.ai-section{grid-template-columns:26% 44% 30%;min-height:330px}.ai-portrait{min-height:330px}.ai-copy{padding-left:22px}}
+@media(max-width:760px){.service-photo{height:175px}.project{height:250px}.ai-portrait{height:220px;min-height:0}.ai-portrait:before{left:10%;right:10%}.device-stage{height:260px}.hero{min-height:0}.original-media{align-items:flex-start;flex-direction:column;padding:19px;gap:14px}.original-media small{font-size:.7rem}.original-media .button{width:100%}.footer>.social-links{order:2;width:auto;gap:8px}.footer>nav:not(.social-links){order:3}.footer>div{order:4;width:100%;border:0;padding:0;font-size:.65rem}.whatsapp-float{right:16px;bottom:max(16px,env(safe-area-inset-bottom));height:54px;width:54px;padding:12px}.whatsapp-float>span{display:none}.contact-form input,.contact-form select,.contact-form textarea{font-size:16px}}
+@media(max-width:370px){.device-stage{height:235px}.service-photo{height:160px}.brand{gap:8px}.brand>span{font-size:.71rem}.theme-mark{width:38px}.theme-mark img.mark-dark{width:38px}}

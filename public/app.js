@@ -60,6 +60,7 @@ const demos = {
   brand: { title: 'Una idea, una voz propia', description: 'Concepto editorial de campaña. Explora dos enfoques de contenido, sin datos ni resultados atribuidos a clientes.', question: '¿Qué quieres comunicar primero?', options: ['Presentar mi negocio', 'Explicar mi servicio'], answers: ['Dirección: historia de marca, propuesta de valor y una invitación a conocerte. Formatos: portada, carrusel y reel.', 'Dirección: una necesidad concreta, tu proceso y preguntas frecuentes. Formatos: carrusel educativo y video breve.'] }
 };
 demos.auto = { title: 'Una experiencia con carácter', description: 'Concepto de una plataforma automotriz. No representa una marca, inventario o cliente real.', question: '¿Qué quieres facilitar primero?', options: ['Explorar el catálogo', 'Solicitar información'], answers: ['Una ficha clara con imágenes, características y filtros que ayuden a descubrir cada modelo.', 'Una ruta sencilla desde el vehículo que interesa hasta una consulta revisada y enviada por WhatsApp.'] };
+demos.video = { title: 'Diseño y tecnología en acción', description: 'Video de landing pages conservado del sitio público Xinfin Lab. Material ilustrativo.', options: [] };
 const dialog = document.querySelector('#demo-dialog');
 document.querySelectorAll('[data-demo]').forEach(button => button.addEventListener('click', () => {
   const demo = demos[button.dataset.demo];
@@ -76,8 +77,8 @@ document.querySelectorAll('[data-demo]').forEach(button => button.addEventListen
     option.addEventListener('click', () => { choices.querySelectorAll('button').forEach(item => item.setAttribute('aria-pressed', String(item === option))); answer.textContent = demo.answers[index]; });
     choices.append(option);
   });
-  panel.append(question, choices, answer); container.append(panel);
-  if (button.dataset.demo === 'web') {
+  panel.append(question, choices, answer); if (demo.options.length) container.append(panel);
+  if (['web', 'video'].includes(button.dataset.demo)) {
     const media = document.createElement('div'); media.className = 'demo-panel';
     const caption = document.createElement('p'); caption.textContent = 'Video ilustrativo conservado de Xinfin Lab. No representa un caso ni resultados verificados. Solo se conecta al sitio de origen al reproducir.';
     const play = document.createElement('button'); play.type = 'button'; play.className = 'button'; play.textContent = 'Reproducir recurso original ↗';
@@ -89,13 +90,12 @@ document.querySelectorAll('[data-demo]').forEach(button => button.addEventListen
     }, { once: true });
     media.append(caption, play); container.append(media);
   }
-  dialog.showModal(); track('demo_open');
+  dialog.showModal(); document.body.classList.add('dialog-open'); track('demo_open');
 }));
-dialog.addEventListener('close', () => dialog.querySelectorAll('video').forEach(video => { video.pause(); video.removeAttribute('src'); video.load(); }));
+dialog.addEventListener('close', () => { document.body.classList.remove('dialog-open'); dialog.querySelectorAll('video').forEach(video => { video.pause(); video.removeAttribute('src'); video.load(); }); });
 document.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
 document.querySelector('#demo-contact').addEventListener('click', () => dialog.close());
 dialog.addEventListener('click', event => { if (event.target === dialog) { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close(); } });
 
 const assistantResponses = { propuesta: 'Empecemos por tu objetivo, tu audiencia y el alcance. Cuéntanos tu idea en el formulario y preparemos una conversación.', landing: 'Podemos conectar diseño, contenido y contacto en una landing a medida. ¿Qué servicio o producto quieres presentar?', automatizar: 'Identifiquemos una tarea repetitiva y el proceso actual. Después definimos qué automatizar y dónde mantener revisión humana.', seo: 'Podemos revisar la estructura de tu web, el contenido y tu visibilidad. Cuéntanos tu negocio y el mercado al que quieres llegar.' };
 document.querySelectorAll('[data-assistant]').forEach(button => button.addEventListener('click', () => { document.querySelector('.assistant-message').textContent = assistantResponses[button.dataset.assistant]; document.querySelectorAll('[data-assistant]').forEach(item => item.setAttribute('aria-pressed',String(item===button))); }));
-

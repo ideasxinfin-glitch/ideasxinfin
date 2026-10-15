@@ -46,5 +46,4 @@ La analítica está preparada como eventos internos sin transmisión ni identifi
 
 ## Contenido y pendientes
 
-Ver `docs/CONTENT-SOURCES.md`: contacto y servicios del sitio original; videos inventariados; sin resultados, testimonios ni clientes no verificados. Dirección visual reconstruida desde las dos referencias adjuntas: ver docs/VISUAL-REVISION.md. El símbolo X es vectorial y el logo definitivo puede sustituirlo cuando se entregue su archivo. Las demos son conceptos, no un portafolio de clientes reales. Se requiere material aprobado para convertirlo en portafolio real.
-
+Ver `docs/CONTENT-SOURCES.md`: contacto y servicios del sitio original; videos inventariados; sin resultados, testimonios ni clientes no verificados. Dirección visual reconstruida desde las dos referencias adjuntas: ver docs/VISUAL-REVISION.md. Por elección del usuario, el modo oscuro usa el infinito turquesa/dorado y el claro la X naranja. Ambos símbolos son reconstrucciones vectoriales locales. Ver docs/REFINEMENT-V3.md para ajustes de proporción, fotografías, redes y WhatsApp flotante. Las demos son conceptos, no un portafolio de clientes reales. Se requiere material aprobado para convertirlo en portafolio real.
