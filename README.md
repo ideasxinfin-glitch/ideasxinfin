@@ -47,3 +47,7 @@ La analítica está preparada como eventos internos sin transmisión ni identifi
 ## Contenido y pendientes
 
 Ver `docs/CONTENT-SOURCES.md`: contacto y servicios del sitio original; videos inventariados; sin resultados, testimonios ni clientes no verificados. Dirección visual reconstruida desde las dos referencias adjuntas: ver docs/VISUAL-REVISION.md. Por confirmación posterior del usuario, ambos temas usan los logos completos originales del infinito, con sus respectivas versiones oscura y clara. El selector es visible y fijo. Ver docs/REFINEMENT-V4.md para logos y animaciones accesibles con pausa. Ver docs/REFINEMENT-V3.md para ajustes de proporción, fotografías, redes y WhatsApp flotante. Las demos son conceptos, no un portafolio de clientes reales. Se requiere material aprobado para convertirlo en portafolio real.
+
+## Continuidad y Cloudflare
+
+Para abrir el proyecto en otra computadora, consulta [Continuar en otra computadora](docs/CONTINUAR-EN-OTRA-COMPUTADORA.md). La configuración exacta de la vista alojada está en [Cloudflare Pages](docs/CLOUDFLARE-PAGES.md). Estado: fuente completa en GitHub; despliegue pendiente de acceso a la cuenta Cloudflare, sin URL publicada verificada.
