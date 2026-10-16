@@ -1,3 +1,4 @@
+import './motion.js';
 import { prepareInquiry } from './contact.js';
 import { track } from './analytics.js';
 
@@ -7,6 +8,8 @@ const syncTheme = () => {
   themeToggle.setAttribute('aria-label', `Cambiar a tema ${isDark ? 'claro' : 'oscuro'}`);
   themeToggle.setAttribute('aria-pressed', String(!isDark));
   themeToggle.firstElementChild.textContent = isDark ? '☼' : '☾';
+  themeToggle.querySelector('.theme-label').textContent = isDark ? 'Claro' : 'Oscuro';
+  themeToggle.title = `Cambiar a modo ${isDark ? 'claro' : 'oscuro'}`;
   document.querySelector('meta[name="theme-color"]').content = isDark ? '#060b0d' : '#fffaf4';
 };
 themeToggle.addEventListener('click', () => {
