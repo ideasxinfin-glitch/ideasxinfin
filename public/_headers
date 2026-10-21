@@ -1,0 +1,9 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' https://xinfinlab.com; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action https://wa.me
+  X-Robots-Tag: noindex, nofollow
+/assets/*
+  Cache-Control: public, max-age=86400
