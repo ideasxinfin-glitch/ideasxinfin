@@ -23,6 +23,10 @@ Comprobado: sin sesión, las dos rutas redirigen al inicio de sesión de Access;
 
 Para dar acceso a otra persona: Zero Trust → Access controls → Policies → «Equipo Ideas Xinfin» → añadir su correo. Para cambiar el token: generar uno nuevo de 32 caracteres o más, cargarlo con `npx wrangler secret put ADMIN_TOKEN --config wrangler.production.jsonc` y actualizar `.dev.vars.production`.
 
+### Precios cargados en producción
+
+Autorizados por el usuario el 30/10/2026 y cargados en D1 de producción (no en `seed.js`, que sigue sin precios): landing page desde $3,800 MXN (entrada 25) y gestión y optimización de Google Business Profile y redes sociales desde $3,500 MXN (entrada 26). También se actualizaron la política «Precios, tiempos y cotizaciones» (7) y la FAQ «¿Cuánto cuesta una página web?» (10), que decían que no había precios publicados. El resto de servicios sigue sin precio y se deriva a WhatsApp. No se indicó periodicidad ni IVA, así que el asistente no los menciona. Para cambiarlos, usar el panel → Conocimiento.
+
 Rollback del asistente sin tocar la landing: `CHAT_ENABLED = "false"` en `wrangler.production.jsonc` y volver a desplegar. Rollback completo a la versión anterior: `npx wrangler rollback 693de030-64c0-42f3-a5a1-512d73ffc288 --config wrangler.production.jsonc`.
 
 ## Recursos creados en Cloudflare (entorno de prueba)
