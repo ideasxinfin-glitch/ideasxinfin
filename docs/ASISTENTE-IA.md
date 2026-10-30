@@ -1,6 +1,18 @@
 # Asistente comercial IA: arquitectura, políticas y activación
 
-Actualizado: 30/10/2026. Estado: **implementado y probado solo en local**. No hay recursos creados en Cloudflare ni cambios publicados en ideasxinfin.com.
+Actualizado: 30/10/2026. Estado: **activo solo en el entorno de prueba**. ideasxinfin.com no cambió (`/api/chat/status` responde 404 en producción).
+
+## Recursos creados en Cloudflare (entorno de prueba)
+
+| Recurso | Nombre | ID |
+| --- | --- | --- |
+| Worker | `ideasxinfin-chat-test` → https://ideasxinfin-chat-test.ideasxinfin.workers.dev (noindex, robots `Disallow`) | versión inicial `3b667361-2141-4888-923f-67b1bf00db51` |
+| D1 | `ideasxinfin-chat-test` (migración `0001_init.sql` aplicada) | `e197bc0d-fa66-4121-b59b-ddbe1717cced` |
+| KV | `ideasxinfin-chat-test` | `fc12730e8785484e9674f7797b0daecc` |
+| Cron | `17 9 * * *` (purga de vencidos, sincronización de la landing, embeddings) | — |
+| Secretos | `ADMIN_TOKEN`, `RATE_LIMIT_SALT` | valores solo en `.dev.vars.chat-test` (ignorado por Git) |
+
+Panel: https://ideasxinfin-chat-test.ideasxinfin.workers.dev/admin/chat/ con el `ADMIN_TOKEN` de `.dev.vars.chat-test`. Para borrar el entorno: `npx wrangler delete --config wrangler.chat-test.jsonc`, `npx wrangler d1 delete ideasxinfin-chat-test` y `npx wrangler kv namespace delete --namespace-id fc12730e8785484e9674f7797b0daecc`.
 
 ## Qué se implementó
 
@@ -86,11 +98,12 @@ AI Search empieza a cobrar el 1/11/2026 y su plan gratuito incluye 1,000 consult
   - El panel funciona y rechaza el acceso sin token (401).
   - El cron sincronizó 5 secciones de la landing.
 - Navegador: chat en escritorio y móvil (375 px, sin desplazamiento horizontal) y en ambos temas. El botón del asistente queda apilado sobre «Hablemos» y el de WhatsApp se oculta mientras el panel está abierto. El preparador de WhatsApp (no se abrió ni se envió nada) y la demo integrada comparten conversación con el panel. Sin errores en la consola.
-- **No probado:** Groq real (falta la clave), captura real de prospectos en Cloudflare, importación de PDF con `toMarkdown` en Cloudflare, ni ningún despliegue remoto.
+- Entorno de prueba desplegado: noindex y robots `Disallow`, respuesta predefinida fuera de tema, equivalencia semántica servida desde caché, respuesta de Gemma (8.8 s en la primera llamada, que incluye inicializar la semilla), panel admin 401 sin token y 200 con token, chat visible en el navegador bajo la CSP real sin errores.
+- **No probado:** Groq real (falta la clave), captura real de prospectos e importación de PDF con `toMarkdown`.
 
 ## Configuración pendiente
 
-1. **Entorno de prueba en Cloudflare** (crea recursos gratuitos; requiere autorización):
+1. ~~Entorno de prueba en Cloudflare~~: **hecho el 30/10/2026** (ver «Recursos creados»). Para redesplegar después de cambios: `node scripts/build-production.mjs` y `npx wrangler deploy --config wrangler.chat-test.jsonc`. Pasos originales, por referencia:
    ```sh
    npx wrangler d1 create ideasxinfin-chat-test
    npx wrangler kv namespace create ideasxinfin-chat-test

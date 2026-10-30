@@ -1,6 +1,6 @@
 // Entorno de PRUEBA del asistente IA. Separado de producción: otro Worker, otra base D1,
 // otro KV, sin rutas de dominio (solo workers.dev, siempre noindex). Mismo código que producción.
-// Antes de desplegarlo: crear los recursos y reemplazar los IDs (ver docs/ASISTENTE-IA.md).
+// Recursos de prueba creados el 30/10/2026 (ver docs/ASISTENTE-IA.md).
 {
   "name": "ideasxinfin-chat-test",
   "account_id": "9e3fcb2e0a132226793aea19306bdcfd",
@@ -16,10 +16,10 @@
   },
   "ai": { "binding": "AI" },
   "d1_databases": [
-    { "binding": "CHAT_DB", "database_name": "ideasxinfin-chat-test", "database_id": "00000000-0000-0000-0000-000000000000", "migrations_dir": "migrations/chat" }
+    { "binding": "CHAT_DB", "database_name": "ideasxinfin-chat-test", "database_id": "e197bc0d-fa66-4121-b59b-ddbe1717cced", "migrations_dir": "migrations/chat" }
   ],
   "kv_namespaces": [
-    { "binding": "CHAT_CACHE", "id": "00000000000000000000000000000000" }
+    { "binding": "CHAT_CACHE", "id": "fc12730e8785484e9674f7797b0daecc" }
   ],
   "vars": {
     "CHAT_ENABLED": "true",
