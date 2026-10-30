@@ -25,7 +25,7 @@ Para dar acceso a otra persona: Zero Trust → Access controls → Policies → 
 
 ### Precios cargados en producción
 
-Autorizados por el usuario el 30/10/2026 y cargados en D1 de producción (no en `seed.js`, que sigue sin precios): landing page desde $3,800 MXN (entrada 25) y gestión y optimización de Google Business Profile y redes sociales desde $3,500 MXN (entrada 26). También se actualizaron la política «Precios, tiempos y cotizaciones» (7) y la FAQ «¿Cuánto cuesta una página web?» (10), que decían que no había precios publicados. El resto de servicios sigue sin precio y se deriva a WhatsApp. No se indicó periodicidad ni IVA, así que el asistente no los menciona. Para cambiarlos, usar el panel → Conocimiento.
+Autorizados por el usuario el 30/10/2026 y cargados en D1 de producción (no en `seed.js`, que sigue sin precios): landing page desde $3,800 MXN en un solo pago (entrada 25) y gestión y optimización de Google Business Profile y redes sociales desde $3,500 MXN al mes (entrada 26). También se actualizaron la política «Precios, tiempos y cotizaciones» (7) y la FAQ «¿Cuánto cuesta una página web?» (10), que decían que no había precios publicados. El resto de servicios sigue sin precio y se deriva a WhatsApp. La landing es pago único y la gestión es mensual (confirmado por el usuario); no se indicó IVA, así que el asistente no lo menciona. Para cambiarlos, usar el panel → Conocimiento.
 
 Rollback del asistente sin tocar la landing: `CHAT_ENABLED = "false"` en `wrangler.production.jsonc` y volver a desplegar. Rollback completo a la versión anterior: `npx wrangler rollback 693de030-64c0-42f3-a5a1-512d73ffc288 --config wrangler.production.jsonc`.
 
