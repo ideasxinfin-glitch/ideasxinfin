@@ -1,6 +1,7 @@
 import './motion.js';
 import { prepareInquiry } from './contact.js';
 import { track } from './analytics.js';
+import './chat.js';
 
 const themeToggle = document.querySelector('.theme-toggle');
 const syncTheme = () => {
@@ -59,7 +60,7 @@ document.querySelector('#contact-form').addEventListener('submit', event => {
 
 const demos = {
   web: { title: 'Un espacio para tu marca', description: 'Concepto de una plataforma inmobiliaria. Explora cómo cambia el tono visual. No corresponde a un negocio real.', question: 'Elige una dirección visual:', options: ['Natural y cálida', 'Digital y audaz'], answers: ['Una paleta arena y verde, fotografía editorial y una ruta sencilla hacia reservas.', 'Contrastes azul marino y cian, tipografía expresiva y una llamada clara a conversar.'] },
-  ai: { title: 'Una conversación que avanza', description: 'Simulación local de un flujo. No usa un modelo de IA, no agenda citas reales y no envía datos.', question: 'Hola, ¿qué te gustaría resolver?', options: ['Recibir consultas', 'Organizar reservas'], answers: ['Flujo propuesto: formulario → clasificar el interés → preparar respuesta → revisión humana → seguimiento.', 'Flujo propuesto: consulta de disponibilidad → selección de horario → confirmación humana → recordatorio.'] },
+  ai: { title: 'Una conversación que avanza', description: 'Simulación local de un flujo. No usa un modelo de IA, no agenda citas reales y no envía datos.', question: 'Hola, ¿qué te gustaría resolver?', options: ['Recibir consultas', 'Organizar reservas'], answers: ['Flujo propuesto: formulario → clasificar el interés → preparar respuesta → revisión humana → seguimiento.', 'Flujo propuesto: consulta de disponibilidad → selección de horario → confirmación humana → recordatorio.'], liveDescription: 'Ejemplo ilustrativo de un flujo. No agenda citas ni envía datos. Para conversar con el asistente de IA conectado, usa el botón «Asistente IA».' },
   brand: { title: 'Una idea, una voz propia', description: 'Concepto editorial de campaña. Explora dos enfoques de contenido, sin datos ni resultados atribuidos a clientes.', question: '¿Qué quieres comunicar primero?', options: ['Presentar mi negocio', 'Explicar mi servicio'], answers: ['Dirección: historia de marca, propuesta de valor y una invitación a conocerte. Formatos: portada, carrusel y reel.', 'Dirección: una necesidad concreta, tu proceso y preguntas frecuentes. Formatos: carrusel educativo y video breve.'] }
 };
 demos.auto = { title: 'Una experiencia con carácter', description: 'Concepto de una plataforma automotriz. No representa una marca, inventario o cliente real.', question: '¿Qué quieres facilitar primero?', options: ['Explorar el catálogo', 'Solicitar información'], answers: ['Una ficha clara con imágenes, características y filtros que ayuden a descubrir cada modelo.', 'Una ruta sencilla desde el vehículo que interesa hasta una consulta revisada y enviada por WhatsApp.'] };
@@ -76,7 +77,8 @@ let selectedDemoService = '';
 document.querySelectorAll('[data-demo]').forEach(button => button.addEventListener('click', () => {
   const demo = demos[button.dataset.demo];
   document.querySelector('#demo-title').textContent = demo.title;
-  document.querySelector('#demo-description').textContent = demo.description;
+  const live = document.documentElement.dataset.chat === 'live';
+  document.querySelector('#demo-description').textContent = live && demo.liveDescription ? demo.liveDescription : demo.description;
   const container = document.querySelector('#demo-content');
   container.replaceChildren();
   const project = projectDetails[button.dataset.demo];
@@ -127,4 +129,5 @@ document.querySelector('#demo-contact').addEventListener('click', () => {
 dialog.addEventListener('click', event => { if (event.target === dialog) { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close(); } });
 
 const assistantResponses = { propuesta: 'Empecemos por tu objetivo, tu audiencia y el alcance. Cuéntanos tu idea en el formulario y preparemos una conversación.', landing: 'Podemos conectar diseño, contenido y contacto en una landing a medida. ¿Qué servicio o producto quieres presentar?', automatizar: 'Identifiquemos una tarea repetitiva y el proceso actual. Después definimos qué automatizar y dónde mantener revisión humana.', seo: 'Podemos revisar la estructura de tu web, el contenido y tu visibilidad. Cuéntanos tu negocio y el mercado al que quieres llegar.' };
-document.querySelectorAll('[data-assistant]').forEach(button => button.addEventListener('click', () => { document.querySelector('.assistant-message').textContent = assistantResponses[button.dataset.assistant]; document.querySelectorAll('[data-assistant]').forEach(item => item.setAttribute('aria-pressed',String(item===button))); }));
+// When the chat service is live, public/chat.js answers these buttons through the same API.
+document.querySelectorAll('[data-assistant]').forEach(button => button.addEventListener('click', () => { if (document.documentElement.dataset.chat === 'live') return; document.querySelector('.assistant-message').textContent = assistantResponses[button.dataset.assistant]; document.querySelectorAll('[data-assistant]').forEach(item => item.setAttribute('aria-pressed',String(item===button))); }));

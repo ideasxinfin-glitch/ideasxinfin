@@ -1,6 +1,7 @@
 import policies from './migration/policies.json' with { type: 'json' };
 import media from './migration/media-routes.json' with { type: 'json' };
 import previousRoutes from './migration/routes.json' with { type: 'json' };
+import { handleChat, isChatPath, runChatMaintenance } from './worker/chat/index.js';
 const mediaPaths = new Set(media);
 const consolidatedRoutes = new Set(previousRoutes.filter(path => path !== '/'));
 const isConsolidated = path => consolidatedRoutes.has(path.replace(/index\.html$/, '').replace(/\/?$/, '/'));
@@ -32,6 +33,8 @@ export default {
       url.hostname = 'ideasxinfin.com';
       return Response.redirect(url.href, 301);
     }
+    // Chat API and admin: plain 404 unless the chat bindings and CHAT_ENABLED are configured.
+    if (isChatPath(url.pathname)) return handleChat(request, env);
     if (!production && url.pathname === '/robots.txt') {
       return new Response('User-agent: *\nDisallow: /\n', { headers: { 'Content-Type': 'text/plain; charset=utf-8', 'X-Robots-Tag': 'noindex, nofollow' } });
     }
@@ -48,5 +51,8 @@ export default {
       response.headers.set('X-Robots-Tag', 'noindex, nofollow');
     }
     return response;
+  },
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(runChatMaintenance(env));
   }
 };

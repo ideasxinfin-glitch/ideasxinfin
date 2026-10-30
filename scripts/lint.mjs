@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 const root = resolve(import.meta.dirname, '..');
 let errors = 0;
-for (const folder of ['public', 'scripts', 'tests']) {
+for (const folder of ['public', 'scripts', 'tests', 'worker/chat']) {
   for (const file of await readdir(resolve(root, folder))) {
     if (!/\.(m?js)$/.test(file)) continue;
     const path = resolve(root, folder, file);

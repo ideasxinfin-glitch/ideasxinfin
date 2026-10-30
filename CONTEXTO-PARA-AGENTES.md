@@ -38,7 +38,11 @@ HTML, CSS y JavaScript nativos, sin framework ni dependencias de producción. No
 | `production-worker.js` | Dominio canónico, redirecciones, cabeceras e indexación |
 | `wrangler.jsonc` | Worker de preview |
 | `wrangler.production.jsonc` | Worker de producción y rutas de los cuatro hosts |
-| `tests/` | Pruebas de contacto, movimiento y producción |
+| `tests/` | Pruebas de contacto, movimiento, producción y asistente |
+| `public/chat.js` | Chat flotante del asistente IA y conexión de la demo; mejora progresiva |
+| `worker/chat/` | Backend del asistente: modelos con respaldo, caché, RAG, prospectos y panel `/admin/chat/` |
+| `migrations/chat/` | Esquema D1 del asistente |
+| `wrangler.chat-test.jsonc` | Worker de prueba del asistente (`ideasxinfin-chat-test`), separado de producción |
 
 Editar fuentes, no `dist/` ni `dist-production/`: se regeneran. El build de producción limpia su salida para impedir que reaparezcan páginas antiguas.
 
@@ -51,7 +55,7 @@ Editar fuentes, no `dist/` ni `dist-production/`: se regeneran. El build de prod
 - Animaciones activas por defecto. **El usuario pidió quitar el botón de pausar/reproducir**; no reintroducirlo por leer documentación anterior. Respetar `prefers-reduced-motion` y suspender trabajo cuando la pestaña está oculta.
 - WhatsApp flotante con halo, barrido y gesto sutil del icono, aproximadamente cada ocho segundos. Evitar movimiento constante invasivo.
 - Formulario prepara un mensaje de WhatsApp: el visitante lo revisa y envía allí. No hay backend de leads, bandeja de entrada ni envío automático.
-- Asistente mostrado como simulación local, sin afirmar que hay IA conectada.
+- Asistente: la demo de la sección de automatización y el chat flotante (`public/chat.js`) usan la misma API `/api/chat`. Solo se activan cuando `/api/chat/status` responde, es decir, cuando el Worker tiene `CHAT_ENABLED=true` y una base D1. Si no, la demo sigue siendo una simulación local que no afirma tener IA conectada. A 30/10/2026 el asistente solo se ha probado en local y no está activo en producción. Detalle, políticas y activación: `docs/ASISTENTE-IA.md`.
 - Proyectos y marcas ilustrativas son **conceptos**, no clientes reales ni resultados demostrados. No inventar testimonios o métricas.
 
 ### Imágenes vigentes importantes
