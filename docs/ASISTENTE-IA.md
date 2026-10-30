@@ -1,6 +1,29 @@
 # Asistente comercial IA: arquitectura, políticas y activación
 
-Actualizado: 30/10/2026. Estado: **activo solo en el entorno de prueba**. ideasxinfin.com no cambió (`/api/chat/status` responde 404 en producción).
+Actualizado: 30/10/2026. Estado: **activo en producción en https://ideasxinfin.com** (despliegue autorizado por el usuario el 30/10/2026). Panel administrativo de producción **cerrado** hasta configurar Cloudflare Access.
+
+## Recursos de producción
+
+| Recurso | Nombre | ID |
+| --- | --- | --- |
+| Worker | `ideasxinfin-production` (mismas rutas de siempre) | versión `8d772a1b-0155-4bd5-9249-b67c655e1ef9`; versión anterior sin asistente: `693de030-64c0-42f3-a5a1-512d73ffc288` |
+| D1 | `ideasxinfin-chat` (migración aplicada) | `207758dc-bb52-4480-9d86-c3d4c1c3c28a` |
+| KV | `ideasxinfin-chat` | `7059cc47e58a487eacc64741b84a0c75` |
+| Cron | `23 9 * * *` | — |
+| Secretos | `RATE_LIMIT_SALT` cargado. `ADMIN_TOKEN` generado en `.dev.vars.production` (ignorado por Git) pero **no cargado** | — |
+
+Activo en producción: chat flotante, demo conectada, Gemma 4 → GLM 4.7, caché exacta y semántica, RAG, filtro de relevancia, límites por visitante y presupuesto de neuronas, sincronización diaria de la landing y aviso de privacidad actualizado. Desactivado: Groq (sin `GROQ_API_KEY`), captura de prospectos (`LEAD_CAPTURE_ENABLED=false`) y panel administrativo (sin Access).
+
+### Activar el panel de producción con Cloudflare Access
+
+El código exige, en `CHAT_ENV=production`, un JWT válido de Access (firma RS256, audiencia, emisor y vigencia comprobados en el Worker) **además** del token. Sin `ACCESS_TEAM_DOMAIN` y `ACCESS_AUD`, `/admin/chat/` y `/api/admin/*` responden 404.
+
+1. En el panel de Cloudflare: Zero Trust → elegir el plan Free (hasta 50 usuarios). **Si pide método de pago, detenerse y decidir.**
+2. Access → Applications → Self-hosted: dominio `ideasxinfin.com`, rutas `/admin/chat*` y `/api/admin/*`. Política Allow solo para los correos del equipo (por ejemplo, código por correo).
+3. Copiar el *Application Audience (AUD) tag* y el dominio del equipo (`<equipo>.cloudflareaccess.com`). Añadirlos a `vars` de `wrangler.production.jsonc` como `ACCESS_AUD` y `ACCESS_TEAM_DOMAIN`.
+4. Cargar el token: `npx wrangler secret put ADMIN_TOKEN --config wrangler.production.jsonc` (valor de `.dev.vars.production`), construir y desplegar.
+
+Rollback del asistente sin tocar la landing: `CHAT_ENABLED = "false"` en `wrangler.production.jsonc` y volver a desplegar. Rollback completo a la versión anterior: `npx wrangler rollback 693de030-64c0-42f3-a5a1-512d73ffc288 --config wrangler.production.jsonc`.
 
 ## Recursos creados en Cloudflare (entorno de prueba)
 
@@ -76,7 +99,7 @@ AI Search empieza a cobrar el 1/11/2026 y su plan gratuito incluye 1,000 consult
 
 **Seguridad del modelo.** Las instrucciones del sistema van separadas del texto del visitante, y el conocimiento se envía marcado como datos, no como instrucciones. El conocimiento `confidential` nunca se envía al modelo. Un identificador canario bloquea las respuestas que filtren las instrucciones. Los mensajes admiten como máximo 600 caracteres y el cuerpo 8 KB. Además se exige el mismo origen, JSON y un campo trampa contra spam. Los registros de errores no guardan textos de visitantes ni credenciales.
 
-**Aviso de privacidad.** El chat envía las preguntas a Cloudflare Workers AI y, si está activo, a GroqCloud para generar respuestas. **Antes de publicarlo en producción hay que añadir esto al aviso de privacidad.**
+**Aviso de privacidad.** `public/privacidad.html` incluye la sección «Asistente de inteligencia artificial»: envío a Cloudflare Workers AI y, si está activo, a GroqCloud; no se guardan conversaciones; primera pregunta anonimizada hasta 90 días; identificador diario sin IP. La captura de prospectos requerirá ampliar el aviso antes de activarse.
 
 ## Centro de conocimiento
 
@@ -120,7 +143,7 @@ AI Search empieza a cobrar el 1/11/2026 y su plan gratuito incluye 1,000 consult
 2. **Groq (opcional):** crear una clave en una cuenta gratuita y ejecutar `npx wrangler secret put GROQ_API_KEY --config …`. Confirmar en la consola de Groq los límites del plan gratuito.
 3. **Datos comerciales:** cargar en el panel los precios, promociones y condiciones autorizados (tipo `price` o `promo`, con vigencia).
 4. **Prospectos:** actualizar el aviso de privacidad y después poner `LEAD_CAPTURE_ENABLED=true`.
-5. **Producción (solo con autorización explícita):** crear otra base D1 y otro KV (`ideasxinfin-chat`), y añadir a `wrangler.production.jsonc` los bloques `ai`, `d1_databases`, `kv_namespaces`, `vars` (`CHAT_ENABLED`, `CHAT_ENV=production`, `LEAD_CAPTURE_ENABLED`, `LEAD_RETENTION_DAYS`) y `triggers.crons`, igual que en la configuración de prueba pero con sus propios IDs. Añadir también los secretos, proteger el panel con Cloudflare Access y actualizar el aviso de privacidad. Hoy `wrangler.production.jsonc` no tiene esos bloques: aunque se desplegara, el chat respondería 404 y la landing seguiría igual.
+5. ~~Producción~~: **hecho el 30/10/2026** (ver «Recursos de producción»). Texto original: crear otra base D1 y otro KV (`ideasxinfin-chat`), y añadir a `wrangler.production.jsonc` los bloques `ai`, `d1_databases`, `kv_namespaces`, `vars` (`CHAT_ENABLED`, `CHAT_ENV=production`, `LEAD_CAPTURE_ENABLED`, `LEAD_RETENTION_DAYS`) y `triggers.crons`, igual que en la configuración de prueba pero con sus propios IDs. Añadir también los secretos, proteger el panel con Cloudflare Access y actualizar el aviso de privacidad. Hoy `wrangler.production.jsonc` no tiene esos bloques: aunque se desplegara, el chat respondería 404 y la landing seguiría igual.
 6. Revisar en el panel si el plan de la cuenta es Free o Paid, y ajustar `neuronBudget` según lo que consuman otros proyectos de la misma cuenta.
 
 ## Desactivar sin afectar la landing

@@ -15,5 +15,22 @@
     "binding": "ASSETS",
     "run_worker_first": true,
     "not_found_handling": "404-page"
-  }
+  },
+  // Asistente IA (docs/ASISTENTE-IA.md). Recursos propios de producción, distintos de los de prueba.
+  // Para desactivarlo sin afectar la landing: CHAT_ENABLED = "false" y volver a desplegar.
+  "ai": { "binding": "AI" },
+  "d1_databases": [
+    { "binding": "CHAT_DB", "database_name": "ideasxinfin-chat", "database_id": "207758dc-bb52-4480-9d86-c3d4c1c3c28a", "migrations_dir": "migrations/chat" }
+  ],
+  "kv_namespaces": [
+    { "binding": "CHAT_CACHE", "id": "7059cc47e58a487eacc64741b84a0c75" }
+  ],
+  "vars": {
+    "CHAT_ENABLED": "true",
+    "CHAT_ENV": "production",
+    "LEAD_CAPTURE_ENABLED": "false",
+    "LEAD_RETENTION_DAYS": "180",
+    "GROQ_MODEL": "openai/gpt-oss-120b"
+  },
+  "triggers": { "crons": ["23 9 * * *"] }
 }

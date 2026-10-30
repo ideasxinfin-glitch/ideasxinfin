@@ -1,6 +1,6 @@
 import { answer, status, visitorKey } from './chat.js';
 import { captureLead } from './leads.js';
-import { authorize, adminConfigured, handleAdminApi, purgeExpired } from './admin.js';
+import { authorize, adminConfigured, verifyAccess, handleAdminApi, purgeExpired } from './admin.js';
 import { syncSite, embedMissing } from './knowledge.js';
 import { logError } from './store.js';
 import { ADMIN_HTML, ADMIN_CSS, ADMIN_JS } from './admin-ui.js';
@@ -40,6 +40,7 @@ export async function handleChat(request, env) {
     }
     if (path === '/admin/chat' || path.startsWith('/admin/chat/')) {
       if (!adminConfigured(env)) return json({ error: 'No encontrado.' }, 404);
+      if (!(await verifyAccess(request, env))) return json({ error: 'Acceso no autorizado.' }, 403);
       if (path === '/admin/chat') return Response.redirect(`${url.origin}/admin/chat/`, 302);
       if (path === '/admin/chat/') return asset(ADMIN_HTML, 'text/html; charset=utf-8');
       if (path === '/admin/chat/admin.js') return asset(ADMIN_JS, 'text/javascript; charset=utf-8');
@@ -49,7 +50,7 @@ export async function handleChat(request, env) {
     if (path.startsWith('/api/admin/')) {
       if (!sameOrigin(request, url)) return json({ error: 'Origen no permitido.' }, 403);
       const auth = await authorize(request, env, await visitorKey(request, env));
-      if (!auth.ok) return json({ error: auth.status === 401 ? 'Token no válido.' : 'No disponible.' }, auth.status);
+      if (!auth.ok) return json({ error: auth.status === 401 ? 'Token no válido.' : auth.status === 403 ? 'Acceso no autorizado.' : 'No disponible.' }, auth.status);
       return handleAdminApi(request, env, path.slice('/api/admin/'.length));
     }
     return json({ error: 'No encontrado.' }, 404);

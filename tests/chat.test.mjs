@@ -206,3 +206,23 @@ test('landing sync extracts public sections and skips the contact form', () => {
   assert.equal(sections.length, 1);
   assert.equal(sections[0].id, 'servicios');
 });
+
+test('production admin stays closed without Cloudflare Access and accepts only a valid Access JWT', async () => {
+  const closed = await setup({ CHAT_ENV: 'production' });
+  assert.equal((await worker.fetch(new Request('https://ideasxinfin.com/admin/chat/'), closed)).status, 404);
+  const team = 'ideasxinfin.cloudflareaccess.com'; const aud = 'test-aud';
+  const env = await setup({ CHAT_ENV: 'production', ACCESS_TEAM_DOMAIN: team, ACCESS_AUD: aud });
+  const { privateKey, publicKey } = await crypto.subtle.generateKey({ name: 'RSASSA-PKCS1-v1_5', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, ['sign', 'verify']);
+  const jwk = { ...(await crypto.subtle.exportKey('jwk', publicKey)), kid: 'k1' };
+  const enc = value => Buffer.from(typeof value === 'string' ? value : JSON.stringify(value)).toString('base64url');
+  const sign = async claims => { const unsigned = `${enc({ alg: 'RS256', kid: 'k1' })}.${enc(claims)}`; return `${unsigned}.${Buffer.from(await crypto.subtle.sign('RSASSA-PKCS1-v1_5', privateKey, new TextEncoder().encode(unsigned))).toString('base64url')}`; };
+  const original = globalThis.fetch;
+  globalThis.fetch = async url => { assert.equal(String(url), `https://${team}/cdn-cgi/access/certs`); return new Response(JSON.stringify({ keys: [jwk] })); };
+  try {
+    const call = jwt => worker.fetch(new Request('https://ideasxinfin.com/api/admin/overview', { headers: { authorization: `Bearer ${env.ADMIN_TOKEN}`, ...(jwt ? { 'cf-access-jwt-assertion': jwt } : {}) } }), env);
+    assert.equal((await call(null)).status, 403);
+    assert.equal((await call(await sign({ aud: ['other'], iss: `https://${team}`, exp: Date.now() / 1000 + 60 }))).status, 403);
+    assert.equal((await call(await sign({ aud: [aud], iss: `https://${team}`, exp: Date.now() / 1000 - 60 }))).status, 403);
+    assert.equal((await call(await sign({ aud: [aud], iss: `https://${team}`, exp: Date.now() / 1000 + 60 }))).status, 200);
+  } finally { globalThis.fetch = original; }
+});

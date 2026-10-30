@@ -4,7 +4,33 @@ import { PROVIDERS } from './providers.js';
 import { LEAD_STATUSES } from './leads.js';
 import { sha256 } from './text.js';
 
-export const adminConfigured = env => typeof env.ADMIN_TOKEN === 'string' && env.ADMIN_TOKEN.length >= 32;
+// Production also requires Cloudflare Access in front of the panel; without its settings the panel stays a 404.
+export const adminConfigured = env => typeof env.ADMIN_TOKEN === 'string' && env.ADMIN_TOKEN.length >= 32
+  && (env.CHAT_ENV !== 'production' || Boolean(env.ACCESS_TEAM_DOMAIN && env.ACCESS_AUD));
+
+const b64url = value => Uint8Array.from(atob(value.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(value.length / 4) * 4, '=')), char => char.charCodeAt(0));
+const certs = { team: null, keys: [], at: 0 };
+// Re-verify the signed Access JWT so a misconfigured route can never expose the panel.
+export async function verifyAccess(request, env) {
+  if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) return env.CHAT_ENV !== 'production';
+  const token = request.headers.get('cf-access-jwt-assertion') || '';
+  const [head, body, signature] = token.split('.');
+  if (!head || !body || !signature) return false;
+  try {
+    const header = JSON.parse(new TextDecoder().decode(b64url(head)));
+    const claims = JSON.parse(new TextDecoder().decode(b64url(body)));
+    if (certs.team !== env.ACCESS_TEAM_DOMAIN || Date.now() - certs.at > 3600000 || !certs.keys.some(key => key.kid === header.kid)) {
+      const response = await fetch(`https://${env.ACCESS_TEAM_DOMAIN}/cdn-cgi/access/certs`);
+      certs.keys = (await response.json()).keys || []; certs.team = env.ACCESS_TEAM_DOMAIN; certs.at = Date.now();
+    }
+    const jwk = certs.keys.find(key => key.kid === header.kid);
+    if (!jwk || header.alg !== 'RS256') return false;
+    const key = await crypto.subtle.importKey('jwk', jwk, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
+    const valid = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', key, b64url(signature), new TextEncoder().encode(`${head}.${body}`));
+    const audience = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
+    return valid && audience.includes(env.ACCESS_AUD) && claims.iss === `https://${env.ACCESS_TEAM_DOMAIN}` && claims.exp * 1000 > Date.now();
+  } catch { return false; }
+}
 
 async function sameSecret(given, expected) {
   // Hash both sides so the comparison time does not depend on the matching prefix.
@@ -17,6 +43,7 @@ export async function authorize(request, env, visitor) {
   if (!adminConfigured(env)) return { ok: false, status: 404 };
   const attempts = await rateLimit(env.CHAT_DB, `admin:${visitor}`, 30, 3600);
   if (!attempts.allowed) return { ok: false, status: 429 };
+  if (!(await verifyAccess(request, env))) return { ok: false, status: 403 };
   const header = request.headers.get('authorization') || '';
   const token = header.startsWith('Bearer ') ? header.slice(7) : '';
   return token && await sameSecret(token, env.ADMIN_TOKEN) ? { ok: true } : { ok: false, status: 401 };
