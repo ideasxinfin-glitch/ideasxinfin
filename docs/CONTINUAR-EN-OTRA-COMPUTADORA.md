@@ -1,5 +1,7 @@
 # Continuar Ideas Xinfin desde otra computadora
 
+> **Atención, actualización 30/10/2026:** esta guía es histórica. Lee primero [CONTEXTO-PARA-AGENTES.md](../CONTEXTO-PARA-AGENTES.md). La versión actual se sincroniza en `feature/nueva-web-ideas-xinfin`. Producción y migración ya están activas; las indicaciones antiguas sobre publicación pendiente y pausa de animaciones están reemplazadas.
+
 ## Abrir el trabajo
 
 Repositorio: https://github.com/ideasxinfin-glitch/ideasxinfin

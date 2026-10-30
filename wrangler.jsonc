@@ -1,0 +1,9 @@
+{
+  "name": "ideasxinfin-preview",
+  "account_id": "9e3fcb2e0a132226793aea19306bdcfd",
+  "compatibility_date": "2026-10-12",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./dist"
+  }
+}

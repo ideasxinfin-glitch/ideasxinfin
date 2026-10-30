@@ -1,5 +1,7 @@
 # Ideas Xinfin · primera versión navegable
 
+> **Continuidad actualizada (30/10/2026):** leer primero [CONTEXTO-PARA-AGENTES.md](CONTEXTO-PARA-AGENTES.md). Esta página conserva notas de etapas anteriores; producción y migración ya están activas y el botón de pausa fue retirado. La versión actual se sincroniza en `feature/nueva-web-ideas-xinfin`.
+
 Web cinematográfica responsive para presentar tres pilares: plataformas digitales y landing pages; IA y automatizaciones; marketing digital, redes sociales y SEO.
 
 ## Stack y costo

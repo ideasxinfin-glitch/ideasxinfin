@@ -38,3 +38,12 @@ La autorización actual cubre una vista de revisión en Cloudflare. No agregar i
 - https://developers.cloudflare.com/pages/framework-guides/deploy-anything/
 - https://developers.cloudflare.com/pages/configuration/git-integration/
 - https://developers.cloudflare.com/pages/get-started/direct-upload/
+
+## Actualización publicada el 29 de octubre de 2026
+
+El rediseño mineral se publicó con Wrangler en el Worker existente ideasxinfin-preview.
+URL: https://ideasxinfin-preview.ideasxinfin.workers.dev
+Versión: bf4dfe62-d007-4423-879c-8af292e1ed94.
+Configuración reproducible: wrangler.jsonc; ejecutar node scripts/build.mjs y npx wrangler deploy.
+Validación: lint, 10 pruebas y build aprobados; ambos temas públicos confirmados con las nuevas imágenes y FAQ. La primera consulta durante la propagación devolvió contenido anterior; las consultas posteriores con revisión confirmaron el nuevo contenido.
+Se mantiene la vista previa noindex y el formulario de consulta por WhatsApp.

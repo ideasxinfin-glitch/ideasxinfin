@@ -1,0 +1,19 @@
+{
+  "name": "ideasxinfin-production",
+  "account_id": "9e3fcb2e0a132226793aea19306bdcfd",
+  "compatibility_date": "2026-10-12",
+  "main": "production-worker.js",
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "ideasxinfin.com/*", "zone_id": "8e05feb88b7503f432051187674fe0c3" },
+    { "pattern": "www.ideasxinfin.com/*", "zone_id": "8e05feb88b7503f432051187674fe0c3" },
+    { "pattern": "xinfinlab.com/*", "zone_id": "29286c7590fb4fa95b46fab39db4293a" },
+    { "pattern": "www.xinfinlab.com/*", "zone_id": "29286c7590fb4fa95b46fab39db4293a" }
+  ],
+  "assets": {
+    "directory": "./dist-production",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "404-page"
+  }
+}
