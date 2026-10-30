@@ -1,27 +1,27 @@
 # Asistente comercial IA: arquitectura, políticas y activación
 
-Actualizado: 30/10/2026. Estado: **activo en producción en https://ideasxinfin.com** (despliegue autorizado por el usuario el 30/10/2026). Panel administrativo de producción **cerrado** hasta configurar Cloudflare Access.
+Actualizado: 30/10/2026. Estado: **activo en producción en https://ideasxinfin.com** (despliegue autorizado por el usuario el 30/10/2026). Panel administrativo de producción **activo y protegido con Cloudflare Access** en https://ideasxinfin.com/admin/chat/.
 
 ## Recursos de producción
 
 | Recurso | Nombre | ID |
 | --- | --- | --- |
-| Worker | `ideasxinfin-production` (mismas rutas de siempre) | versión `8d772a1b-0155-4bd5-9249-b67c655e1ef9`; versión anterior sin asistente: `693de030-64c0-42f3-a5a1-512d73ffc288` |
+| Worker | `ideasxinfin-production` (mismas rutas de siempre) | versión `372e8f61-199c-431c-af9c-06fea73a3142` (con Access); primera versión con asistente: `8d772a1b-0155-4bd5-9249-b67c655e1ef9`; versión anterior sin asistente: `693de030-64c0-42f3-a5a1-512d73ffc288` |
 | D1 | `ideasxinfin-chat` (migración aplicada) | `207758dc-bb52-4480-9d86-c3d4c1c3c28a` |
 | KV | `ideasxinfin-chat` | `7059cc47e58a487eacc64741b84a0c75` |
 | Cron | `23 9 * * *` | — |
-| Secretos | `RATE_LIMIT_SALT` cargado. `ADMIN_TOKEN` generado en `.dev.vars.production` (ignorado por Git) pero **no cargado** | — |
+| Secretos | `RATE_LIMIT_SALT` y `ADMIN_TOKEN` cargados; el valor del token está solo en `.dev.vars.production` (ignorado por Git) | — |
+| Cloudflare Access | Zero Trust Free, equipo `crimson-cloud-d7e1.cloudflareaccess.com`; aplicación self-hosted «Ideas Xinfin - Panel asistente» | app `44cd7bee-1c64-4183-8570-49cca79f65ca`; AUD en `vars.ACCESS_AUD` |
 
-Activo en producción: chat flotante, demo conectada, Gemma 4 → GLM 4.7, caché exacta y semántica, RAG, filtro de relevancia, límites por visitante y presupuesto de neuronas, sincronización diaria de la landing y aviso de privacidad actualizado. Desactivado: Groq (sin `GROQ_API_KEY`), captura de prospectos (`LEAD_CAPTURE_ENABLED=false`) y panel administrativo (sin Access).
+Activo en producción: chat flotante, demo conectada, Gemma 4 → GLM 4.7, caché exacta y semántica, RAG, filtro de relevancia, límites por visitante y presupuesto de neuronas, sincronización diaria de la landing, aviso de privacidad actualizado y panel administrativo tras Access. Desactivado: Groq (sin `GROQ_API_KEY`) y captura de prospectos (`LEAD_CAPTURE_ENABLED=false`).
 
-### Activar el panel de producción con Cloudflare Access
+### Panel de producción con Cloudflare Access
 
-El código exige, en `CHAT_ENV=production`, un JWT válido de Access (firma RS256, audiencia, emisor y vigencia comprobados en el Worker) **además** del token. Sin `ACCESS_TEAM_DOMAIN` y `ACCESS_AUD`, `/admin/chat/` y `/api/admin/*` responden 404.
+Configurado el 30/10/2026. La aplicación de Access cubre `ideasxinfin.com/admin/chat` y `ideasxinfin.com/api/admin` (y sus subrutas), con sesión de 24 h y la política Allow «Equipo Ideas Xinfin» que solo incluye `ideasxinfin@gmail.com` (inicio de sesión con código por correo). El Worker vuelve a comprobar el JWT de Access (firma RS256, audiencia, emisor y vigencia) **y además** exige el `ADMIN_TOKEN`. Sin `ACCESS_TEAM_DOMAIN` y `ACCESS_AUD`, ambas rutas responden 404.
 
-1. En el panel de Cloudflare: Zero Trust → elegir el plan Free (hasta 50 usuarios). **Si pide método de pago, detenerse y decidir.**
-2. Access → Applications → Self-hosted: dominio `ideasxinfin.com`, rutas `/admin/chat*` y `/api/admin/*`. Política Allow solo para los correos del equipo (por ejemplo, código por correo).
-3. Copiar el *Application Audience (AUD) tag* y el dominio del equipo (`<equipo>.cloudflareaccess.com`). Añadirlos a `vars` de `wrangler.production.jsonc` como `ACCESS_AUD` y `ACCESS_TEAM_DOMAIN`.
-4. Cargar el token: `npx wrangler secret put ADMIN_TOKEN --config wrangler.production.jsonc` (valor de `.dev.vars.production`), construir y desplegar.
+Comprobado: sin sesión, las dos rutas redirigen al inicio de sesión de Access; `www` y `xinfinlab.com` redirigen a `ideasxinfin.com` antes de llegar al panel; en `ideasxinfin-production.ideasxinfin.workers.dev` (sin Access delante) el Worker responde 403 porque no hay JWT válido.
+
+Para dar acceso a otra persona: Zero Trust → Access controls → Policies → «Equipo Ideas Xinfin» → añadir su correo. Para cambiar el token: generar uno nuevo de 32 caracteres o más, cargarlo con `npx wrangler secret put ADMIN_TOKEN --config wrangler.production.jsonc` y actualizar `.dev.vars.production`.
 
 Rollback del asistente sin tocar la landing: `CHAT_ENABLED = "false"` en `wrangler.production.jsonc` y volver a desplegar. Rollback completo a la versión anterior: `npx wrangler rollback 693de030-64c0-42f3-a5a1-512d73ffc288 --config wrangler.production.jsonc`.
 
@@ -95,7 +95,7 @@ AI Search empieza a cobrar el 1/11/2026 y su plan gratuito incluye 1,000 consult
 - Acceso: solo el panel administrativo.
 - **Antes de activar:** actualizar `public/privacidad.html` con la finalidad, la retención, los derechos ARCO y quién responde, y conservar la versión del consentimiento sincronizada en `worker/chat/leads.js` y `public/chat.js`.
 
-**Autenticación administrativa.** Usa el secreto `ADMIN_TOKEN` (mínimo 32 caracteres; sin él, el panel responde 404), con comparación de tiempo constante y un límite de 30 intentos por hora. Las respuestas llevan noindex y no-store. El token se guarda en `sessionStorage` y se borra al cerrar la pestaña. **Recomendado para producción:** proteger además `/admin/chat*` y `/api/admin/*` con Cloudflare Access (gratuito hasta 50 usuarios).
+**Autenticación administrativa.** Usa el secreto `ADMIN_TOKEN` (mínimo 32 caracteres; sin él, el panel responde 404), con comparación de tiempo constante y un límite de 30 intentos por hora. Las respuestas llevan noindex y no-store. El token se guarda en `sessionStorage` y se borra al cerrar la pestaña. **En producción** ambas rutas están además detrás de Cloudflare Access (plan Free, hasta 50 usuarios).
 
 **Seguridad del modelo.** Las instrucciones del sistema van separadas del texto del visitante, y el conocimiento se envía marcado como datos, no como instrucciones. El conocimiento `confidential` nunca se envía al modelo. Un identificador canario bloquea las respuestas que filtren las instrucciones. Los mensajes admiten como máximo 600 caracteres y el cuerpo 8 KB. Además se exige el mismo origen, JSON y un campo trampa contra spam. Los registros de errores no guardan textos de visitantes ni credenciales.
 

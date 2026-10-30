@@ -30,7 +30,9 @@
     "CHAT_ENV": "production",
     "LEAD_CAPTURE_ENABLED": "false",
     "LEAD_RETENTION_DAYS": "180",
-    "GROQ_MODEL": "openai/gpt-oss-120b"
+    "GROQ_MODEL": "openai/gpt-oss-120b",
+    "ACCESS_TEAM_DOMAIN": "crimson-cloud-d7e1.cloudflareaccess.com",
+    "ACCESS_AUD": "4850a29a72d8dcbb90af1d9edc1485fbb342b4638dcf291037636bee09cad0fd"
   },
   "triggers": { "crons": ["23 9 * * *"] }
 }
