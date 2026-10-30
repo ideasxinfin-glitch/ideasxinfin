@@ -9,7 +9,7 @@ const html = await readFile(resolve(directory, 'index.html'), 'utf8');
 const jsonLd = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1];
 const hash = createHash('sha256').update(jsonLd).digest('base64');
 createServer(async (req, res) => {
-  const headers = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'X-Frame-Options': 'DENY', 'X-Robots-Tag': 'noindex, nofollow', 'Permissions-Policy': 'camera=(), microphone=(), geolocation=()', 'Content-Security-Policy': `default-src 'self'; script-src 'self' 'sha256-${hash}'; style-src 'self'; img-src 'self' data:; media-src 'self' https://xinfinlab.com; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action https://wa.me` };
+  const headers = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'X-Frame-Options': 'DENY', 'X-Robots-Tag': 'noindex, nofollow', 'Permissions-Policy': 'camera=(), microphone=(self), geolocation=()', 'Content-Security-Policy': `default-src 'self'; script-src 'self' 'sha256-${hash}'; style-src 'self'; img-src 'self' data:; media-src 'self' https://xinfinlab.com; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action https://wa.me` };
   if (!['GET', 'HEAD'].includes(req.method)) { res.writeHead(405, { ...headers, Allow: 'GET, HEAD' }); res.end(); return; }
   try {
     const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);

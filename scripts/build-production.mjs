@@ -53,5 +53,5 @@ for (const route of [...routes, '/privacidad.html']) {
   policies[route] = `default-src 'self'; script-src 'self' ${[...new Set(scripts)].join(' ')}${handlers.length ? " 'unsafe-hashes' " + [...new Set(handlers)].join(' ') : ''}; style-src 'self'${legacy ? " 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com" : ''}; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action https://wa.me`;
 }
 await writeFile(resolve(root, 'migration/policies.json'), JSON.stringify(policies));
-await writeFile(resolve(out, '_headers'), "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: no-referrer\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n/assets/*\n  Cache-Control: public, max-age=86400\n/legacy/*\n  Cache-Control: public, max-age=86400\n");
+await writeFile(resolve(out, '_headers'), "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: no-referrer\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(self), geolocation=()\n/assets/*\n  Cache-Control: public, max-age=86400\n/legacy/*\n  Cache-Control: public, max-age=86400\n");
 console.log(`Production build: ${routes.length} pages, separate from preview, canonical ${origin}`);

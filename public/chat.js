@@ -114,9 +114,48 @@ function openPanel() {
   if (!state.opened) { ensureWelcome(); if (!state.history.length) setSuggestions(state.config.starters); }
   requestAnimationFrame(() => ui.input.focus()); track('assistant_open');
 }
-function minimize() { ui.panel.hidden = true; ui.launcher.setAttribute('aria-expanded', 'false'); document.body.classList.remove('chat-open'); ui.launcher.focus(); }
+function minimize() { ui.voice?.stop(); ui.panel.hidden = true; ui.launcher.setAttribute('aria-expanded', 'false'); document.body.classList.remove('chat-open'); ui.launcher.focus(); }
 function reset() {
   state.history = []; state.opened = false; ui.log.replaceChildren(); setSuggestions([]); closeExtra(); minimize();
+}
+
+// Voice dictation with the browser's own speech service (Chrome, Edge, Safari; desktop and mobile).
+// The text lands in the box for review and is never sent on its own. Unsupported browsers get no button.
+const PLACEHOLDER = 'Escribe tu pregunta…';
+function dictation(input) {
+  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!Recognition || !window.isSecureContext) return null;
+  const button = el('button', 'chat-mic'); button.type = 'button';
+  button.setAttribute('aria-label', 'Dictar mensaje por voz'); button.setAttribute('aria-pressed', 'false'); button.title = 'Dictar por voz';
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', '1.7'); svg.setAttribute('stroke-linecap', 'round');
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3ZM5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21');
+  svg.append(path); button.append(svg);
+  let recognition = null; let failed = false;
+  const stop = () => { if (recognition) recognition.stop(); };
+  button.addEventListener('click', () => {
+    if (recognition) return stop();
+    const before = input.value.trim(); failed = false;
+    recognition = new Recognition();
+    recognition.lang = 'es-MX'; recognition.interimResults = true; recognition.continuous = false; recognition.maxAlternatives = 1;
+    recognition.onresult = event => {
+      const spoken = [...event.results].map(result => result[0].transcript).join('').trim();
+      input.value = `${before}${before && spoken ? ' ' : ''}${spoken}`.slice(0, input.maxLength);
+    };
+    recognition.onerror = event => {
+      failed = true;
+      input.placeholder = ['not-allowed', 'service-not-allowed'].includes(event.error) ? 'Permite el micrófono para dictar' : event.error === 'no-speech' ? 'No te escuché, intenta de nuevo' : 'No se pudo dictar; escribe tu pregunta';
+    };
+    recognition.onend = () => {
+      recognition = null; button.classList.remove('is-listening'); button.setAttribute('aria-pressed', 'false');
+      if (!failed) input.placeholder = PLACEHOLDER;
+    };
+    try { recognition.start(); } catch { recognition = null; return; }
+    button.classList.add('is-listening'); button.setAttribute('aria-pressed', 'true'); input.placeholder = 'Escuchando… habla ahora';
+  });
+  input.addEventListener('input', () => { if (!recognition) input.placeholder = PLACEHOLDER; });
+  return { button, stop };
 }
 
 function build(config) {
@@ -141,9 +180,10 @@ function build(config) {
   const suggestions = el('div', 'chat-suggestions');
   const extra = el('div', 'chat-extra'); extra.hidden = true;
   const form = el('form', 'chat-form'); const label = el('label', 'sr-only', 'Escribe tu mensaje');
-  const input = el('textarea'); input.id = 'chat-input'; input.rows = 1; input.maxLength = 600; input.placeholder = 'Escribe tu pregunta…'; label.htmlFor = input.id;
+  const input = el('textarea'); input.id = 'chat-input'; input.rows = 1; input.maxLength = 600; input.placeholder = PLACEHOLDER; label.htmlFor = input.id;
   const send = el('button', 'chat-send', '➤'); send.type = 'submit'; send.setAttribute('aria-label', 'Enviar mensaje');
-  form.append(label, input, send);
+  const voice = dictation(input);
+  form.append(label, input, ...(voice ? [voice.button] : []), send);
   const actions = el('div', 'chat-actions');
   const human = el('button', 'chat-link', 'Hablar con una persona por WhatsApp ↗'); human.type = 'button'; human.addEventListener('click', whatsappComposer);
   actions.append(human);
@@ -152,13 +192,13 @@ function build(config) {
   const privacy = el('a', '', 'Privacidad'); privacy.href = '/privacidad.html'; note.append(privacy);
   panel.append(head, log, suggestions, extra, form, actions, note);
   document.body.append(launcher, panel);
-  ui = { launcher, panel, log, suggestions, extra, form, input, send };
+  ui = { launcher, panel, log, suggestions, extra, form, input, send, voice };
 
   launcher.addEventListener('click', () => (panel.hidden ? openPanel() : minimize()));
   minimizeButton.addEventListener('click', minimize);
   closeButton.addEventListener('click', reset);
   panel.addEventListener('keydown', event => { if (event.key === 'Escape') { event.stopPropagation(); minimize(); } });
-  form.addEventListener('submit', event => { event.preventDefault(); const text = input.value; input.value = ''; ask(text); });
+  form.addEventListener('submit', event => { event.preventDefault(); voice?.stop(); const text = input.value; input.value = ''; ask(text); });
   input.addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); form.requestSubmit(); } });
 }
 

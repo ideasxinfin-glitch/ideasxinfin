@@ -46,7 +46,7 @@ export default {
     response.headers.set('X-Content-Type-Options', 'nosniff');
     response.headers.set('Referrer-Policy', 'no-referrer');
     response.headers.set('X-Frame-Options', 'DENY');
-    response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+    response.headers.set('Permissions-Policy', 'camera=(), microphone=(self), geolocation=()');
     if (!production || url.pathname === '/privacidad.html' || response.status === 404) {
       response.headers.set('X-Robots-Tag', 'noindex, nofollow');
     }

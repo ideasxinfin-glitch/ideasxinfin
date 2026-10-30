@@ -6,7 +6,7 @@ Actualizado: 30/10/2026. Estado: **activo en producción en https://ideasxinfin.
 
 | Recurso | Nombre | ID |
 | --- | --- | --- |
-| Worker | `ideasxinfin-production` (mismas rutas de siempre) | versión `372e8f61-199c-431c-af9c-06fea73a3142` (con Access); primera versión con asistente: `8d772a1b-0155-4bd5-9249-b67c655e1ef9`; versión anterior sin asistente: `693de030-64c0-42f3-a5a1-512d73ffc288` |
+| Worker | `ideasxinfin-production` (mismas rutas de siempre) | versión `90b8e362-1f1a-4243-a28e-927f810705f0` (dictado por voz); anterior con Access: `372e8f61-199c-431c-af9c-06fea73a3142`; primera versión con asistente: `8d772a1b-0155-4bd5-9249-b67c655e1ef9`; versión anterior sin asistente: `693de030-64c0-42f3-a5a1-512d73ffc288` |
 | D1 | `ideasxinfin-chat` (migración aplicada) | `207758dc-bb52-4480-9d86-c3d4c1c3c28a` |
 | KV | `ideasxinfin-chat` | `7059cc47e58a487eacc64741b84a0c75` |
 | Cron | `23 9 * * *` | — |
@@ -22,6 +22,10 @@ Configurado el 30/10/2026. La aplicación de Access cubre `ideasxinfin.com/admin
 Comprobado: sin sesión, las dos rutas redirigen al inicio de sesión de Access; `www` y `xinfinlab.com` redirigen a `ideasxinfin.com` antes de llegar al panel; en `ideasxinfin-production.ideasxinfin.workers.dev` (sin Access delante) el Worker responde 403 porque no hay JWT válido.
 
 Para dar acceso a otra persona: Zero Trust → Access controls → Policies → «Equipo Ideas Xinfin» → añadir su correo. Para cambiar el token: generar uno nuevo de 32 caracteres o más, cargarlo con `npx wrangler secret put ADMIN_TOKEN --config wrangler.production.jsonc` y actualizar `.dev.vars.production`.
+
+### Dictado por voz
+
+Desde el 30/10/2026 el chat tiene un botón de micrófono (`public/chat.js`, función `dictation`). Usa el reconocimiento de voz del propio navegador (`SpeechRecognition`, idioma `es-MX`): funciona en Chrome, Edge y Safari, en computadora y celular, y en Firefox el botón no aparece. El texto se coloca en el campo para revisarlo y nunca se envía solo. No consume neurons ni pasa por el Worker, pero Chrome envía el audio a Google y Safari a Apple, por eso el aviso de privacidad lo menciona. Para permitirlo, `Permissions-Policy` pasó de `microphone=()` a `microphone=(self)` (solo este sitio, nunca iframes de terceros). Para quitarlo: borrar `dictation` y su botón en `chat.js`, volver a `microphone=()` en `production-worker.js`, `public/_headers`, `scripts/build-production.mjs` y `scripts/serve.mjs`, y retirar el párrafo del aviso.
 
 ### Precios cargados en producción
 
