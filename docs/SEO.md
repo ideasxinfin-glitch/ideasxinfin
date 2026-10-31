@@ -1,6 +1,6 @@
 # SEO de ideasxinfin.com
 
-Actualizado: 30/10/2026. Fases 1 y 2 aprobadas y **publicadas en producción** (Worker `ideasxinfin-production`, versión `d281be1d-df68-4594-83cf-53382449987f`; la anterior, con dictado por voz y sin estas páginas, es `90b8e362-1f1a-4243-a28e-927f810705f0`). Después se publicó el favicon con el logotipo infinito (`favicon.ico`, `assets/icon-192.png`, `apple-touch-icon.png`; también es el `logo` de los datos estructurados) como versión `3efa4103-beb0-49c6-b9a3-052872e5e56e`. Verificado en vivo: las 12 URL responden 200 e indexables, el sitemap lista 12, las rutas antiguas sin equivalente siguen en 301 a la portada y `xinfinlab.com/mx/<ciudad>` llega a la página nueva.
+Actualizado: 30/10/2026. Fases 1 y 2 aprobadas y **publicadas en producción** (Worker `ideasxinfin-production`, versión `d281be1d-df68-4594-83cf-53382449987f`; la anterior, con dictado por voz y sin estas páginas, es `90b8e362-1f1a-4243-a28e-927f810705f0`). Después se publicó el favicon con el logotipo infinito (`favicon.ico`, `assets/icon-192.png`, `apple-touch-icon.png`; también es el `logo` de los datos estructurados) como versión `3efa4103-beb0-49c6-b9a3-052872e5e56e`. Luego, los logotipos nuevos (`assets/logo-wordmark-dark.webp` y `logo-wordmark-light.webp`, fondo transparente, sin `mix-blend-mode`) como versión `169621ea-83dc-4e3e-928e-788a35edfc13`. Verificado en vivo: las 12 URL responden 200 e indexables, el sitemap lista 12, las rutas antiguas sin equivalente siguen en 301 a la portada y `xinfinlab.com/mx/<ciudad>` llega a la página nueva.
 
 ## Objetivo
 
