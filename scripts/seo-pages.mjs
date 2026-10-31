@@ -26,7 +26,7 @@ const breadcrumb = items => ({ '@type': 'BreadcrumbList', itemListElement: items
 export function organizationSchema() {
   return {
     '@type': 'ProfessionalService', '@id': ORG, name: 'Ideas Xinfin', alternateName: 'Xinfin Lab', url: `${ORIGIN}/`,
-    logo: `${ORIGIN}/assets/mark.svg`, image: `${ORIGIN}/assets/service-platforms-landing.webp`, telephone: '+52 999 185 0841',
+    logo: `${ORIGIN}/assets/icon-192.png`, image: `${ORIGIN}/assets/service-platforms-landing.webp`, telephone: '+52 999 185 0841',
     description: 'Diseño de páginas web y landing pages, agentes de inteligencia artificial, automatización, gestión de redes sociales, Google Business y SEO.',
     priceRange: '$$', knowsLanguage: 'es',
     sameAs: ['https://www.facebook.com/xinfinlab/', 'https://www.instagram.com/xinfinlab/'],
@@ -131,7 +131,7 @@ function document({ route, title, description, schema, body }) {
 <meta property="og:url" content="${url}">
 <meta property="og:image" content="${ORIGIN}/assets/service-platforms-landing.webp">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
+<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/styles.css">
 <script src="/theme.js"></script>
 <script type="application/ld+json">${json({ '@context': 'https://schema.org', '@graph': schema })}</script>
