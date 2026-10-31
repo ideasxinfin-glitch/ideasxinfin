@@ -124,7 +124,17 @@ function syncMotion() {
     }
     advanceWorkflow();
   }
+  syncWater();
   updateScroll();
+}
+
+// The lake ripples only animate while the hero devices are on screen.
+const water = document.querySelector('.water-defs');
+let heroVisible = true;
+function syncWater() {
+  if (!water?.pauseAnimations) return;
+  if (active && heroVisible) water.unpauseAnimations();
+  else water.pauseAnimations();
 }
 
 reduced.addEventListener('change', syncMotion);
@@ -180,6 +190,11 @@ if ('IntersectionObserver' in window) {
     stopWorkflow();
     advanceWorkflow();
   }, { threshold: .2 }).observe(workflow);
+  const stage = document.querySelector('.device-stage');
+  if (stage && water) new IntersectionObserver(([entry]) => {
+    heroVisible = entry.isIntersecting;
+    syncWater();
+  }).observe(stage);
   const form = document.querySelector('.contact-form');
   if (form) new IntersectionObserver(([entry]) => {
     document.body.classList.toggle('contact-in-view', entry.isIntersecting);
