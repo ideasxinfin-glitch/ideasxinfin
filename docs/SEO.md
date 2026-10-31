@@ -1,6 +1,6 @@
 # SEO de ideasxinfin.com
 
-Actualizado: 30/10/2026. Fases 1 y 2 aprobadas por el usuario; **construidas y probadas en local, pendientes de publicar** hasta su autorización.
+Actualizado: 30/10/2026. Fases 1 y 2 aprobadas y **publicadas en producción** (Worker `ideasxinfin-production`, versión `d281be1d-df68-4594-83cf-53382449987f`; la anterior, con dictado por voz y sin estas páginas, es `90b8e362-1f1a-4243-a28e-927f810705f0`). Verificado en vivo: las 12 URL responden 200 e indexables, el sitemap lista 12, las rutas antiguas sin equivalente siguen en 301 a la portada y `xinfinlab.com/mx/<ciudad>` llega a la página nueva.
 
 ## Objetivo
 
@@ -34,7 +34,7 @@ Posicionar Ideas Xinfin en búsquedas orgánicas de Mérida, Guadalajara, Ciudad
 
 1. **Search Console**: con la cuenta propietaria, crear la propiedad de dominio `ideasxinfin.com` (verificación por DNS en Cloudflare), enviar `https://ideasxinfin.com/sitemap.xml` y, desde la propiedad de `xinfinlab.com`, usar «Cambio de dirección» hacia `ideasxinfin.com`. Modificar el DNS requiere autorización expresa.
 2. **Perfil de Empresa en Google**: uno solo, con domicilio real o como negocio de zona de servicio. No crear perfiles en ciudades sin presencia física (va contra las directrices de Google).
-3. **Cloudflare Web Analytics**: confirmar en el panel de Cloudflare que está activo para `ideasxinfin.com` (inyección automática).
+3. **Cloudflare Web Analytics**: activo; el beacon se carga sin errores desde el despliegue `d281be1d`. Los datos se consultan en el panel de Cloudflare → Web Analytics.
 
 ## Fase 3 (propuesta, sin implementar)
 
