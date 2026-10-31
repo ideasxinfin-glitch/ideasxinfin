@@ -94,7 +94,7 @@ Worker de producción: `ideasxinfin-production`. Última versión registrada en 
 
 Plan, páginas generadas y pasos manuales: `docs/SEO.md`.
 
-Pendiente acceder a la cuenta propietaria de Search Console, revisar propiedades, tramitar cambio de dirección cuando corresponda y enviar el sitemap nuevo. No se ha confirmado que esos pasos estén terminados. No asumir que una cuenta de Google visible es la propietaria.
+Search Console: el usuario confirmó el 30/10/2026 que dio de alta la propiedad de dominio `ideasxinfin.com`, envió el sitemap y tramitó el cambio de dirección desde `xinfinlab.com`. Ambas zonas tienen su TXT `google-site-verification` (no borrarlos). No asumir que una cuenta de Google visible es la propietaria.
 
 Las redirecciones pueden ayudar a trasladar señales, pero no garantizan conservar posiciones, especialmente de páginas antiguas por ciudad o idioma consolidadas a la portada. No hay datos confirmados de tráfico/posiciones en esta guía. El historial de informes de Search Console no se fusiona automáticamente con el dominio nuevo. **No volver a publicar el sitio antiguo como supuesto requisito SEO.**
 

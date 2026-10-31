@@ -32,7 +32,7 @@ Posicionar Ideas Xinfin en búsquedas orgánicas de Mérida, Guadalajara, Ciudad
 
 ## Pasos que dependen del usuario
 
-1. **Search Console**: con la cuenta propietaria, crear la propiedad de dominio `ideasxinfin.com` (verificación por DNS en Cloudflare), enviar `https://ideasxinfin.com/sitemap.xml` y, desde la propiedad de `xinfinlab.com`, usar «Cambio de dirección» hacia `ideasxinfin.com`. Modificar el DNS requiere autorización expresa.
+1. **Search Console** (hecho por el usuario, 30/10/2026): propiedad de dominio `ideasxinfin.com` verificada por TXT, sitemap enviado y «Cambio de dirección» desde `xinfinlab.com`. Los TXT `google-site-verification` de ambas zonas deben conservarse. Revisar en 1–2 semanas «Páginas» (indexación) y «Rendimiento».
 2. **Perfil de Empresa en Google**: uno solo, con domicilio real o como negocio de zona de servicio. No crear perfiles en ciudades sin presencia física (va contra las directrices de Google).
 3. **Cloudflare Web Analytics**: activo; el beacon se carga sin errores desde el despliegue `d281be1d`. Los datos se consultan en el panel de Cloudflare → Web Analytics.
 

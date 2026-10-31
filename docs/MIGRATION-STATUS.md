@@ -9,7 +9,7 @@ Estado 2026-10-29, tras aclaración del usuario: publicar exclusivamente la land
 - Las 46 rutas conocidas de Xinfin Lab se consolidan con 301 a la nueva portada. Las rutas antiguas del dominio nuevo también redirigen a esa portada, sin mostrar diseños anteriores.
 - La nueva oferta cubre los servicios principales; la consolidación no garantiza mantener posicionamiento específico por ciudad/idioma y Google puede reevaluar esas URLs.
 - xinfinlab.com y www usan Cloudflare para redirigir. Nameservers registrados en Hostinger: eloise.ns.cloudflare.com y ernest.ns.cloudflare.com. Zona Cloudflare activa. Registro del dominio y renovación siguen en Hostinger. No se canceló hosting compartido ni se modificaron otros sitios.
-- Conservado el TXT de verificación Google de Xinfin Lab. Search Console: pendiente seleccionar la cuenta propietaria y tramitar cambio de dirección/sitemap.
+- Conservado el TXT de verificación Google de Xinfin Lab. Search Console: propiedad de dominio, sitemap y cambio de dirección hechos por el usuario (30/10/2026).
 - Canonical y sitemap: solo nueva portada indexable. Preview workers.dev sigue noindex.
 - Los recursos públicos antiguos guardados en /legacy mantienen enlaces a archivos y el video bajo demanda; no incluyen páginas HTML ni estilos aplicados a la nueva landing.
 - Rollback: fuentes y exportación DNS anterior en la carpeta de trabajo de esta conversación. Regla inversa en Ideas Xinfin queda deshabilitada para evitar bucle. No activarla mientras Xinfin Lab redirige a Ideas Xinfin.
