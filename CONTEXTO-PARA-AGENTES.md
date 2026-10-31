@@ -79,10 +79,10 @@ Prompts, procedencia y decisiones: `docs/SERVICE-CAMPAIGN.md` y `docs/MINERAL-AS
 
 1. `ideasxinfin.com` sirve exclusivamente la landing nueva. `www` y HTTP se normalizan a HTTPS sin www.
 2. `xinfinlab.com` y `www.xinfinlab.com` redirigen mediante Cloudflare. Las 46 rutas antiguas conocidas se consolidan con 301 a la portada nueva, conservando parámetros de consulta.
-3. `migration/routes.json` es un inventario para redirecciones, **no una lista de páginas que haya que reconstruir**. Rutas desconocidas no deben convertirse indiscriminadamente en páginas 200.
+3. `migration/routes.json` es un inventario para redirecciones, **no una lista de páginas que haya que reconstruir**. Rutas desconocidas no deben convertirse indiscriminadamente en páginas 200. Excepción aprobada: las ciudades de `scripts/seo-content.mjs` se sirven en su ruta antigua con contenido nuevo y el diseño actual.
 4. `migration/pages/` contiene 45 páginas antiguas como respaldo local. **No copiarlas al build ni desplegarlas.** Se retiraron expresamente después de que el usuario rechazara su estructura visual.
 5. `migration/assets/` conserva archivos públicos antiguos. El build los sirve bajo `/legacy/` para enlaces y video bajo demanda; no implica aplicar estilos antiguos a la nueva web.
-6. Sitemap de producción: solo la nueva portada. Canonical: `https://ideasxinfin.com/`. No anunciar páginas en inglés inexistentes.
+6. Sitemap de producción: la portada más las páginas de servicio y de ciudad generadas por `scripts/seo-pages.mjs` (aprobadas el 30/10/2026, ver `docs/SEO.md`). Cada página tiene su propio canonical. No anunciar páginas en inglés inexistentes.
 7. Preview y hosts técnicos workers.dev siguen sin indexación. No retirar sus restricciones al corregir SEO de producción.
 8. La antigua regla Cloudflare que enviaba Ideas Xinfin hacia Xinfin Lab está deshabilitada. **No reactivarla:** produciría un bucle con la redirección actual.
 9. Xinfin Lab sigue registrado en Hostinger, con renovación conservada. Nameservers: `eloise.ns.cloudflare.com` y `ernest.ns.cloudflare.com`; zona Cloudflare activa. Se conservó el TXT de verificación de Google.
@@ -91,6 +91,8 @@ Prompts, procedencia y decisiones: `docs/SERVICE-CAMPAIGN.md` y `docs/MINERAL-AS
 Worker de producción: `ideasxinfin-production`. Última versión registrada en esta sesión: `693de030-64c0-42f3-a5a1-512d73ffc288`; comprobar el despliegue vigente, no asumir que este ID seguirá siendo el último.
 
 ### SEO pendiente y límites
+
+Plan, páginas generadas y pasos manuales: `docs/SEO.md`.
 
 Pendiente acceder a la cuenta propietaria de Search Console, revisar propiedades, tramitar cambio de dirección cuando corresponda y enviar el sitemap nuevo. No se ha confirmado que esos pasos estén terminados. No asumir que una cuenta de Google visible es la propietaria.
 

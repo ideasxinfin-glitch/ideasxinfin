@@ -3,7 +3,10 @@ import media from './migration/media-routes.json' with { type: 'json' };
 import previousRoutes from './migration/routes.json' with { type: 'json' };
 import { handleChat, isChatPath, runChatMaintenance } from './worker/chat/index.js';
 const mediaPaths = new Set(media);
-const consolidatedRoutes = new Set(previousRoutes.filter(path => path !== '/'));
+// Old routes that now have their own page (city pages, built by scripts/seo-pages.mjs) are served;
+// the rest consolidate into the landing.
+const publishedRoutes = new Set(Object.keys(policies));
+const consolidatedRoutes = new Set(previousRoutes.filter(path => path !== '/' && !publishedRoutes.has(path)));
 const isConsolidated = path => consolidatedRoutes.has(path.replace(/index\.html$/, '').replace(/\/?$/, '/'));
 
 export default {
@@ -16,12 +19,12 @@ export default {
       else {
         url.pathname = url.pathname.replace(/\/index\.html$/, '/');
         if (isConsolidated(url.pathname)) url.pathname = '/';
+        else if (publishedRoutes.has(url.pathname.replace(/\/?$/, '/'))) url.pathname = url.pathname.replace(/\/?$/, '/');
       }
       return Response.redirect(url.href, 301);
     }
     const production = url.hostname === 'ideasxinfin.com';
-    // Only the newly approved landing is published. Previous service pages
-    // are consolidated into the equivalent business offering on that landing.
+    // Previous pages without a new equivalent are consolidated into the landing.
     if (isConsolidated(url.pathname)) {
       url.protocol = 'https:';
       url.hostname = 'ideasxinfin.com';

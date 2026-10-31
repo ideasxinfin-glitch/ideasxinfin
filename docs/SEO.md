@@ -1,0 +1,41 @@
+# SEO de ideasxinfin.com
+
+Actualizado: 30/10/2026. Fases 1 y 2 aprobadas por el usuario; **construidas y probadas en local, pendientes de publicar** hasta su autorización.
+
+## Objetivo
+
+Posicionar Ideas Xinfin en búsquedas orgánicas de Mérida, Guadalajara, Ciudad de México, Monterrey y el resto de México, y en búsquedas en español de toda Latinoamérica (y de hispanohablantes en otros países). No se puede garantizar el primer lugar: depende de la competencia, del tiempo (normalmente meses) y de la autoridad externa.
+
+## Qué se implementó
+
+**Fase 1 (base técnica)**
+- Portada: título «Diseño web, landing pages e IA en México | Ideas Xinfin», descripción con los precios aprobados y Open Graph actualizado.
+- Datos estructurados de la portada (`@graph`): `ProfessionalService` (área de servicio: países de habla hispana; catálogo de servicios con precios), `WebSite` y `FAQPage` generada desde las preguntas visibles de la portada.
+- La pregunta «¿Cuánto cuesta…?» de la portada ya muestra los precios aprobados.
+- Cloudflare Web Analytics: la CSP permite `static.cloudflareinsights.com` y `cloudflareinsights.com` (antes el beacon quedaba bloqueado). Sin cookies; mencionado en el aviso de privacidad.
+
+**Fase 2 (páginas nuevas, mismo diseño de la landing)**
+- 4 páginas de servicio en `/servicios/`: `landing-pages`, `redes-sociales-google-business`, `inteligencia-artificial` y `seo`.
+- 7 páginas de ciudad en las **mismas direcciones del sitio anterior**: `/mx/merida/`, `/mx/guadalajara/`, `/mx/ciudad-de-mexico/`, `/mx/monterrey/`, `/mx/queretaro/`, `/mx/puebla/` y `/mx/cancun/`. Recuperan el historial de esas URL con contenido nuevo y propio de cada ciudad, no con las páginas antiguas.
+- Cada página tiene título, descripción, canonical, hreflang `es`/`x-default`, Open Graph, migas de pan y datos estructurados (`BreadcrumbList`, `Service` con precio cuando existe y `FAQPage`).
+- Enlaces internos: cada tarjeta de servicio de la portada enlaza a su página; un bloque «Servicios y ciudades» aparece en la portada y en todas las páginas nuevas.
+- Sitemap con las 12 URL y `lastmod`.
+- Las demás rutas antiguas (otras ciudades de México, Estados Unidos, Canadá e inglés) siguen redirigiendo 301 a la portada. `xinfinlab.com/mx/<ciudad>` redirige a la página de ciudad nueva.
+
+## Cómo está construido
+
+- Contenido: `scripts/seo-content.mjs`. Reglas: sin oficinas, clientes, resultados ni garantías inventados; precios solo los aprobados (landing desde $3,800 MXN en un pago; redes y Google Business desde $3,500 MXN al mes).
+- Generador: `scripts/seo-pages.mjs` (cabecera, pie, esquemas y bloque de enlaces). Lo llama `scripts/build-production.mjs`.
+- Comportamiento compartido: `public/site.js` (tema, menú móvil y medición de WhatsApp), usado por `public/app.js` (portada) y `public/page.js` (páginas nuevas, con el asistente IA).
+- El Worker sirve las rutas publicadas (las claves de `migration/policies.json`) y solo consolida en la portada las rutas antiguas sin equivalente.
+- Para agregar una ciudad: añadirla a `CITIES` con contenido realmente propio. Si su ruta existe en `migration/routes.json`, dejará de redirigir automáticamente.
+
+## Pasos que dependen del usuario
+
+1. **Search Console**: con la cuenta propietaria, crear la propiedad de dominio `ideasxinfin.com` (verificación por DNS en Cloudflare), enviar `https://ideasxinfin.com/sitemap.xml` y, desde la propiedad de `xinfinlab.com`, usar «Cambio de dirección» hacia `ideasxinfin.com`. Modificar el DNS requiere autorización expresa.
+2. **Perfil de Empresa en Google**: uno solo, con domicilio real o como negocio de zona de servicio. No crear perfiles en ciudades sin presencia física (va contra las directrices de Google).
+3. **Cloudflare Web Analytics**: confirmar en el panel de Cloudflare que está activo para `ideasxinfin.com` (inyección automática).
+
+## Fase 3 (propuesta, sin implementar)
+
+Artículos útiles (por ejemplo, «¿Cuánto cuesta una landing page en México?»), alta en directorios mexicanos y créditos «Sitio por Ideas Xinfin» en los sitios de clientes, con su permiso.
