@@ -43,8 +43,8 @@ const header = `<a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="header is-scrolled">
 <a class="brand" href="/" aria-label="Ideas Xinfin, inicio">
 <span class="brand-logo">
-<img class="logo-dark" src="/assets/logo-dark.webp" width="1200" height="896" alt="Ideas Xinfin">
-<img class="logo-light" src="/assets/logo-light.webp" width="1200" height="896" alt="Ideas Xinfin">
+<img class="logo-dark" src="/assets/logo-wordmark-dark.webp" width="720" height="192" alt="Ideas Xinfin">
+<img class="logo-light" src="/assets/logo-wordmark-light.webp" width="720" height="192" alt="Ideas Xinfin">
 </span>
 </a>
 <nav class="desktop-nav" aria-label="Navegación principal">
@@ -88,8 +88,8 @@ export function linksSection(current = '') {
 const footer = `<footer class="footer section">
 <a class="brand" href="/" aria-label="Ideas Xinfin, inicio">
 <span class="brand-logo">
-<img class="logo-dark" src="/assets/logo-dark.webp" width="1200" height="896" alt="Ideas Xinfin" loading="lazy">
-<img class="logo-light" src="/assets/logo-light.webp" width="1200" height="896" alt="Ideas Xinfin" loading="lazy">
+<img class="logo-dark" src="/assets/logo-wordmark-dark.webp" width="720" height="192" alt="Ideas Xinfin" loading="lazy">
+<img class="logo-light" src="/assets/logo-wordmark-light.webp" width="720" height="192" alt="Ideas Xinfin" loading="lazy">
 </span>
 </a>
 <nav aria-label="Navegación del pie">

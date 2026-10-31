@@ -6,7 +6,7 @@ await mkdir(dirname(destination), { recursive: true });
 const read = file => readFile(resolve(root, 'public', file), 'utf8');
 const [html, css, theme, app, contact, analytics, privacy, motion] = await Promise.all(['index.html', 'styles.css', 'theme.js', 'app.js', 'contact.js', 'analytics.js', 'privacidad.html', 'motion.js'].map(read));
 const assets = new Map();
-for (const file of ['logo-dark.webp', 'logo-light.webp', 'mark.svg', 'infinity-mark-v1.svg', 'scene-light.webp', 'scene-dark.webp', 'editorial-atlas.webp', 'branding-v3.webp', 'property-v3.webp', 'automation-v3.webp']) {
+for (const file of ['logo-wordmark-dark.webp', 'logo-wordmark-light.webp', 'mark.svg', 'infinity-mark-v1.svg', 'scene-light.webp', 'scene-dark.webp', 'editorial-atlas.webp', 'branding-v3.webp', 'property-v3.webp', 'automation-v3.webp']) {
   const bytes = await readFile(resolve(root, 'public/assets', file));
   assets.set('/assets/' + file, `data:${file.endsWith('.svg') ? 'image/svg+xml' : 'image/webp'};base64,${bytes.toString('base64')}`);
 }
