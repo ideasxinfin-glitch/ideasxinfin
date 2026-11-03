@@ -1,6 +1,6 @@
 # Ideas Xinfin: contexto para continuar con otro agente
 
-Actualizado: 30 de octubre de 2026. Lee este archivo antes de modificar el proyecto. Es el punto de entrada actualizado; los documentos históricos pueden describir decisiones ya reemplazadas. Confirma siempre el estado real de los archivos, Git y producción antes de actuar.
+Actualizado: 2 de noviembre de 2026. Lee este archivo antes de modificar el proyecto. Es el punto de entrada actualizado; los documentos históricos pueden describir decisiones ya reemplazadas. Confirma siempre el estado real de los archivos, Git y producción antes de actuar.
 
 ## Objetivo y decisión principal del usuario
 
@@ -49,9 +49,11 @@ Editar fuentes, no `dist/` ni `dist-production/`: se regeneran. El build de prod
 ## Dirección visual y comportamiento aprobados
 
 - Paleta mineral: grafito y piedra en oscuro; marfil, gris y tonos naturales en claro. Evitar naranjas saturados, neón, brillo dorado excesivo y aspecto genérico de imágenes de IA.
-- Tipografía editorial con encabezados serif, buen espacio y contraste; conservar identidad y logos completos originales del infinito.
+- Tipografía editorial con encabezados serif, buen espacio y contraste; conservar la identidad del infinito.
+- Logos (desde 30/10/2026, entregados por el usuario): `assets/logo-wordmark-dark.webp` (texto blanco, tema oscuro) y `assets/logo-wordmark-light.webp` (texto azul marino, tema claro), 720×192 con fondo transparente; tamaños en `.brand-logo` de `styles.css`. Los anteriores `logo-dark/light.webp` se eliminaron. Favicon: `favicon.ico`, `assets/icon-192.png` y `apple-touch-icon.png` (infinito sin texto).
 - Hero fotográfico arquitectónico con laptop y móvil construidos en HTML/CSS. Las pantallas deben mostrar una landing reconocible, no solo un paisaje.
 - Mantener experiencia responsive, navegación por teclado, foco visible y legibilidad en ambos temas.
+- Ondas sutiles solo en el agua del lago de las pantallas del hero: `.scene-water` (copia del fondo enmascarada con `assets/scene-water-mask.png`) + filtro SVG `#water-ripple` en `index.html`; `motion.js` lo pausa fuera de pantalla, con la pestaña oculta o con movimiento reducido. Árboles y textos quedan fijos por decisión del usuario. Si cambia la foto `scene-mineral-*.webp`, rehacer la máscara.
 - Animaciones activas por defecto. **El usuario pidió quitar el botón de pausar/reproducir**; no reintroducirlo por leer documentación anterior. Respetar `prefers-reduced-motion` y suspender trabajo cuando la pestaña está oculta.
 - WhatsApp flotante con halo, barrido y gesto sutil del icono, aproximadamente cada ocho segundos. Evitar movimiento constante invasivo.
 - Formulario prepara un mensaje de WhatsApp: el visitante lo revisa y envía allí. No hay backend de leads, bandeja de entrada ni envío automático.
@@ -88,7 +90,7 @@ Prompts, procedencia y decisiones: `docs/SERVICE-CAMPAIGN.md` y `docs/MINERAL-AS
 9. Xinfin Lab sigue registrado en Hostinger, con renovación conservada. Nameservers: `eloise.ns.cloudflare.com` y `ernest.ns.cloudflare.com`; zona Cloudflare activa. Se conservó el TXT de verificación de Google.
 10. **No cancelar el hosting compartido de Hostinger:** aloja otro sitio ajeno a esta migración. No modificar otros dominios, sitios ni renovaciones.
 
-Worker de producción: `ideasxinfin-production`. Última versión registrada en esta sesión: `693de030-64c0-42f3-a5a1-512d73ffc288`; comprobar el despliegue vigente, no asumir que este ID seguirá siendo el último.
+Worker de producción: `ideasxinfin-production`. Última versión registrada (30/10/2026, logos nuevos, favicon, páginas SEO, asistente IA y ondas del lago): `c9088d51-2148-4400-94ac-cb34e09c5c5b`. Historial y rollback en `docs/SEO.md` y `docs/ASISTENTE-IA.md`; comprobar el despliegue vigente, no asumir que este ID seguirá siendo el último.
 
 ### SEO pendiente y límites
 
@@ -116,7 +118,7 @@ node --test
 node scripts/build-production.mjs
 ```
 
-Último control de la sesión anterior: 15 pruebas y lint correctos; ejecutar de nuevo tras los cambios relevantes. Las pruebas de producción generan su salida. Revisar visualmente escritorio y móvil, ambos temas, CTA, diálogos, formulario y movimiento reducido; no enviar mensajes reales de WhatsApp para probar.
+Último control (30/10/2026): 33 pruebas y lint correctos; ejecutar de nuevo tras los cambios relevantes. Las pruebas de producción generan su salida. Revisar visualmente escritorio y móvil, ambos temas, CTA, diálogos, formulario y movimiento reducido; no enviar mensajes reales de WhatsApp para probar.
 
 Para probar el Worker localmente después del build:
 

@@ -1,5 +1,7 @@
 # Migración a Ideas Xinfin
 
+Nota 02/11/2026: estado histórico; la versión vigente y los cambios posteriores están en `CONTEXTO-PARA-AGENTES.md` y `docs/SEO.md`.
+
 Actualización 30/10/2026: publicadas las mejoras de automatización (WhatsApp/CRM), contacto (estudio creativo con “Diseño digital para negocios con propósito.” en pantalla) y las cuatro etapas del proyecto FORMA con títulos y explicaciones. Producción `693de030-64c0-42f3-a5a1-512d73ffc288`; preview `f5967ea6-33f2-4d93-96d8-5f3f1a55be53`. Lint y 15 pruebas correctos antes del despliegue. Verificados públicamente HTML, CSS y seis imágenes activas contra los archivos del build, todos 200 y contenido idéntico. Verificadas las 46 redirecciones sin errores; producción indexable. Fuentes y recursos de esta versión sincronizados en la rama feature/nueva-web-ideas-xinfin por solicitud del usuario.
 
 Estado 2026-10-29, tras aclaración del usuario: publicar exclusivamente la landing nueva. No reutilizar estructura visual anterior.

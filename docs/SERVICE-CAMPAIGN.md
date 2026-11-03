@@ -1,5 +1,7 @@
 # Service campaign imagery · 2026-10-29
 
+Nota 02/11/2026: estado histórico; la versión vigente y los cambios posteriores están en `CONTEXTO-PARA-AGENTES.md` y `docs/SEO.md`.
+
 Deployment update 2026-10-30: all process, automation and contact revisions below are now published to production and preview. Any earlier “local/pending deployment” notes describe their creation stage. Production version `693de030-64c0-42f3-a5a1-512d73ffc288`; preview `f5967ea6-33f2-4d93-96d8-5f3f1a55be53`. Verified public files match build output and all 46 old routes retain their redirects.
 
 ## Process storytelling · 2026-10-30
