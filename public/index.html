@@ -19,7 +19,19 @@
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
-<svg class="water-defs" aria-hidden="true" focusable="false"><filter id="water-ripple" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.006 0.09" numOctaves="2" seed="7" result="noise"><animate attributeName="baseFrequency" dur="14s" values="0.006 0.09;0.008 0.105;0.006 0.09" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="7" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+<svg class="hero-defs" aria-hidden="true" focusable="false">
+<symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9 16h6"/><circle cx="12" cy="3" r="1"/></symbol>
+<symbol id="i-flow" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8.5 6h7M7.2 8.2l3.6 7.4M16.8 8.2l-3.6 7.4"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16M4 16l5-5 4 3 7-7M15 7h5v5"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M9 10.5h.01M12 10.5h.01M15 10.5h.01"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-7 9 7M5 10v10h14V10M10 20v-6h4v6"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></symbol>
+<symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v3H9zM9 11h6M9 15h4"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c3 0 5 1.8 5 5"/></symbol>
+<symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 21h4"/></symbol>
+</svg>
 <header class="header">
 <a class="brand" href="#inicio" aria-label="Ideas Xinfin, inicio">
 <span class="brand-logo">
@@ -57,8 +69,11 @@
 </nav>
 </header>
 <main id="contenido">
-<section class="hero" id="inicio" aria-labelledby="hero-title">
+<section class="hero" id="inicio" aria-labelledby="hero-title" data-scene="ia">
 <div class="environment" aria-hidden="true">
+<div class="hero-scene" data-scene="ia"></div>
+<div class="hero-scene" data-scene="inmobiliaria"></div>
+<div class="hero-scene" data-scene="colegios"></div>
 </div>
 <div class="hero-inner">
 <div class="hero-copy">
@@ -79,32 +94,35 @@
 <br>Diseño a medida. Tecnología con propósito.</p>
 </div>
 </div>
-<div class="device-stage" aria-label="Concepto de experiencia web inmobiliaria en escritorio y móvil">
+<div class="device-stage" role="img" aria-label="Conceptos de plataformas digitales en escritorio y móvil: inteligencia artificial, inmobiliaria y colegios">
 <div class="laptop">
 <div class="laptop-screen">
-<div class="device-nav">
-<span>
-<b>ϟ</b> AURUM</span>
-<small>Inicio &nbsp; Propiedades &nbsp; Nosotros &nbsp; Contacto</small>
-</div>
+<div class="screen-scene" data-scene="ia">
+<div class="device-nav"><img class="device-logo" src="/assets/logo-wordmark-dark.webp" width="720" height="192" alt=""><small>Inicio &nbsp; Servicios &nbsp; Proyectos</small></div>
 <div class="device-website">
-<span class="scene-water" aria-hidden="true"></span>
-<span class="device-overline">CONCEPTO INMOBILIARIO</span>
-<p>Espacios<br>que inspiran<br>
-<i>tu próxima historia.</i>
-</p>
-<span class="device-cta">Ver propiedades →</span>
+<span class="device-overline">CONCEPTO · INTELIGENCIA ARTIFICIAL</span>
+<p>Automatiza<br>tu negocio<br><i>con IA.</i></p>
+<span class="device-cta">Conocer agentes →</span>
 </div>
-<div class="device-features">
-<span>Diseño<br>
-<b>A medida</b>
-</span>
-<span>Experiencia<br>
-<b>Responsive</b>
-</span>
-<span>Conexiones<br>
-<b>Reales</b>
-</span>
+<div class="device-features"><span><svg aria-hidden="true"><use href="#i-bot"/></svg><b>Agentes IA</b></span><span><svg aria-hidden="true"><use href="#i-flow"/></svg><b>Automatización</b></span><span><svg aria-hidden="true"><use href="#i-chart"/></svg><b>Leads y ventas</b></span><span><svg aria-hidden="true"><use href="#i-check"/></svg><b>Optimización</b></span></div>
+</div>
+<div class="screen-scene" data-scene="inmobiliaria">
+<div class="device-nav"><img class="device-logo" src="/assets/logo-wordmark-dark.webp" width="720" height="192" alt=""><small>Inicio &nbsp; Propiedades &nbsp; Contacto</small></div>
+<div class="device-website">
+<span class="device-overline">CONCEPTO INMOBILIARIO</span>
+<p>Plataformas<br>inmobiliarias que<br><i>generan clientes.</i></p>
+<span class="device-search">Casa, departamento o terreno <svg aria-hidden="true"><use href="#i-search"/></svg></span>
+</div>
+<div class="device-features device-listings"><i></i><i></i><i></i><i></i></div>
+</div>
+<div class="screen-scene" data-scene="colegios">
+<div class="device-nav"><img class="device-logo" src="/assets/logo-wordmark-dark.webp" width="720" height="192" alt=""><small>Inicio &nbsp; Admisiones &nbsp; Padres &nbsp; Alumnos</small></div>
+<div class="device-website">
+<span class="device-overline">CONCEPTO EDUCATIVO</span>
+<p>Colegios<br><i>siempre conectados.</i></p>
+<span class="device-cta">Solicitar informes →</span>
+</div>
+<div class="device-features"><span><svg aria-hidden="true"><use href="#i-clipboard"/></svg><b>Admisiones</b></span><span><svg aria-hidden="true"><use href="#i-users"/></svg><b>Comunicación</b></span><span><svg aria-hidden="true"><use href="#i-card"/></svg><b>Pagos y trámites</b></span><span><svg aria-hidden="true"><use href="#i-bell"/></svg><b>Tareas y avisos</b></span></div>
 </div>
 </div>
 <div class="laptop-base">
@@ -113,17 +131,35 @@
 <div class="phone-device">
 <span class="phone-camera">
 </span>
-<div class="phone-nav">
-<b>ϟ</b> AURUM <span>☰</span>
-</div>
+<div class="screen-scene" data-scene="ia">
+<div class="phone-nav"><img class="device-logo" src="/assets/logo-wordmark-dark.webp" width="720" height="192" alt=""><span>☰</span></div>
 <div class="phone-site">
-<span class="scene-water" aria-hidden="true"></span>
-<small>CONCEPTO</small>
-<p>Vive<br>
-<i>extraordinario.</i>
-</p>
-<span>Espacios para imaginar<br>tu siguiente historia.</span>
-<b class="device-cta">Explorar →</b>
+<svg class="phone-icon" aria-hidden="true"><use href="#i-chat"/></svg>
+<small>ASISTENTE</small>
+<p>Responde<br><i>24/7.</i></p>
+<span>Atención automática<br>para tus clientes.</span>
+<b class="device-cta">Probar →</b>
+</div>
+</div>
+<div class="screen-scene" data-scene="inmobiliaria">
+<div class="phone-nav"><img class="device-logo" src="/assets/logo-wordmark-dark.webp" width="720" height="192" alt=""><span>☰</span></div>
+<div class="phone-site">
+<svg class="phone-icon" aria-hidden="true"><use href="#i-home"/></svg>
+<small>PROPIEDADES</small>
+<p>Tu próximo<br><i>hogar.</i></p>
+<span>Busca, agenda y<br>escribe por WhatsApp.</span>
+<b class="device-cta">Ver casas →</b>
+</div>
+</div>
+<div class="screen-scene" data-scene="colegios">
+<div class="phone-nav"><img class="device-logo" src="/assets/logo-wordmark-dark.webp" width="720" height="192" alt=""><span>☰</span></div>
+<div class="phone-site">
+<svg class="phone-icon" aria-hidden="true"><use href="#i-bot"/></svg>
+<small>ASISTENTE IA</small>
+<p>Dudas<br><i>resueltas 24/7.</i></p>
+<span>Avisos, tareas y pagos<br>en un solo lugar.</span>
+<b class="device-cta">Preguntar →</b>
+</div>
 </div>
 </div>
 <span class="device-caption">Concepto de diseño · experiencia en escritorio y móvil</span>

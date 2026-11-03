@@ -124,17 +124,26 @@ function syncMotion() {
     }
     advanceWorkflow();
   }
-  syncWater();
+  syncScenes();
   updateScroll();
 }
 
-// The lake ripples only animate while the hero devices are on screen.
-const water = document.querySelector('.water-defs');
+// Hero scenes crossfade every 7.5 s while the hero is on screen. Reduced motion keeps the first one.
+const SCENE_INTERVAL = 7500;
+const scenes = [...new Set([...document.querySelectorAll('.hero-scene')].map(scene => scene.dataset.scene))];
 let heroVisible = true;
-function syncWater() {
-  if (!water?.pauseAnimations) return;
-  if (active && heroVisible) water.unpauseAnimations();
-  else water.pauseAnimations();
+let sceneTimer = 0;
+function syncScenes() {
+  clearTimeout(sceneTimer);
+  sceneTimer = 0;
+  if (!hero || scenes.length < 2 || !active || !heroVisible) return;
+  // Other scenes start downloading only after the page has loaded.
+  if (document.readyState === 'complete') hero.classList.add('scenes-ready');
+  else return addEventListener('load', syncScenes, { once: true });
+  sceneTimer = setTimeout(() => {
+    hero.dataset.scene = scenes[(scenes.indexOf(hero.dataset.scene) + 1) % scenes.length];
+    syncScenes();
+  }, SCENE_INTERVAL);
 }
 
 reduced.addEventListener('change', syncMotion);
@@ -190,11 +199,10 @@ if ('IntersectionObserver' in window) {
     stopWorkflow();
     advanceWorkflow();
   }, { threshold: .2 }).observe(workflow);
-  const stage = document.querySelector('.device-stage');
-  if (stage && water) new IntersectionObserver(([entry]) => {
+  if (hero) new IntersectionObserver(([entry]) => {
     heroVisible = entry.isIntersecting;
-    syncWater();
-  }).observe(stage);
+    syncScenes();
+  }).observe(hero);
   const form = document.querySelector('.contact-form');
   if (form) new IntersectionObserver(([entry]) => {
     document.body.classList.toggle('contact-in-view', entry.isIntersecting);

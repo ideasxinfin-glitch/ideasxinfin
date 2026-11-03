@@ -53,7 +53,7 @@ Editar fuentes, no `dist/` ni `dist-production/`: se regeneran. El build de prod
 - Logos (desde 30/10/2026, entregados por el usuario): `assets/logo-wordmark-dark.webp` (texto blanco, tema oscuro) y `assets/logo-wordmark-light.webp` (texto azul marino, tema claro), 720×192 con fondo transparente; tamaños en `.brand-logo` de `styles.css`. Los anteriores `logo-dark/light.webp` se eliminaron. Favicon: `favicon.ico`, `assets/icon-192.png` y `apple-touch-icon.png` (infinito sin texto).
 - Hero fotográfico arquitectónico con laptop y móvil construidos en HTML/CSS. Las pantallas deben mostrar una landing reconocible, no solo un paisaje.
 - Mantener experiencia responsive, navegación por teclado, foco visible y legibilidad en ambos temas.
-- Ondas sutiles solo en el agua del lago de las pantallas del hero: `.scene-water` (copia del fondo enmascarada con `assets/scene-water-mask.png`) + filtro SVG `#water-ripple` en `index.html`; `motion.js` lo pausa fuera de pantalla, con la pestaña oculta o con movimiento reducido. Árboles y textos quedan fijos por decisión del usuario. Si cambia la foto `scene-mineral-*.webp`, rehacer la máscara.
+- Hero con 3 escenas rotativas (IA, inmobiliaria, colegios) cada 7.5 s: fondo + pantalla de laptop + móvil cambian juntos; textos y botones siguen en HTML. **En la rama, sin publicar; imágenes de `public/assets/hero/` provisionales.** Detalle, medidas y cómo reemplazarlas: `docs/HERO-ESCENAS.md`. Las ondas del lago (publicadas en `c9088d51`) se retiraron en esta rama porque esa foto ya no se usa en el hero.
 - Animaciones activas por defecto. **El usuario pidió quitar el botón de pausar/reproducir**; no reintroducirlo por leer documentación anterior. Respetar `prefers-reduced-motion` y suspender trabajo cuando la pestaña está oculta.
 - WhatsApp flotante con halo, barrido y gesto sutil del icono, aproximadamente cada ocho segundos. Evitar movimiento constante invasivo.
 - Formulario prepara un mensaje de WhatsApp: el visitante lo revisa y envía allí. No hay backend de leads, bandeja de entrada ni envío automático.
@@ -94,7 +94,7 @@ Worker de producción: `ideasxinfin-production`. Última versión registrada (30
 
 ### SEO pendiente y límites
 
-Plan, páginas generadas y pasos manuales: `docs/SEO.md`.
+Plan, páginas generadas y pasos manuales: `docs/SEO.md`. Escenas del hero: `docs/HERO-ESCENAS.md`.
 
 Search Console: el usuario confirmó el 30/10/2026 que dio de alta la propiedad de dominio `ideasxinfin.com`, envió el sitemap y tramitó el cambio de dirección desde `xinfinlab.com`. Ambas zonas tienen su TXT `google-site-verification` (no borrarlos). No asumir que una cuenta de Google visible es la propietaria.
 
