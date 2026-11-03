@@ -1,6 +1,6 @@
 # Escenas rotativas del hero
 
-Actualizado: 02/11/2026. **Implementado en la rama, sin publicar.** Las imágenes actuales de `public/assets/hero/` son **provisionales** (fotos que ya tenía el sitio, y un degradado en colegios). Antes de publicar hay que sustituirlas por las escenas finales.
+Actualizado: 02/11/2026. **Implementado en la rama, sin publicar.** Las 6 imágenes de `public/assets/hero/` son las **finales que entregó el usuario** (generadas a partir de los prompts acordados): fondos de 1672 × 941 y pantallas recortadas a 1600 × 900, en WebP de 90–225 KB. Los fondos quedan por debajo de los 2560 px recomendados; si más adelante hay versiones más grandes, basta con reemplazar los archivos.
 
 ## Cómo funciona
 
