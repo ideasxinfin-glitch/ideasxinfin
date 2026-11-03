@@ -1,0 +1,38 @@
+{
+  "name": "ideasxinfin-production",
+  "account_id": "9e3fcb2e0a132226793aea19306bdcfd",
+  "compatibility_date": "2026-10-12",
+  "main": "production-worker.js",
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "ideasxinfin.com/*", "zone_id": "8e05feb88b7503f432051187674fe0c3" },
+    { "pattern": "www.ideasxinfin.com/*", "zone_id": "8e05feb88b7503f432051187674fe0c3" },
+    { "pattern": "xinfinlab.com/*", "zone_id": "29286c7590fb4fa95b46fab39db4293a" },
+    { "pattern": "www.xinfinlab.com/*", "zone_id": "29286c7590fb4fa95b46fab39db4293a" }
+  ],
+  "assets": {
+    "directory": "./dist-production",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "404-page"
+  },
+  // Asistente IA (docs/ASISTENTE-IA.md). Recursos propios de producción, distintos de los de prueba.
+  // Para desactivarlo sin afectar la landing: CHAT_ENABLED = "false" y volver a desplegar.
+  "ai": { "binding": "AI" },
+  "d1_databases": [
+    { "binding": "CHAT_DB", "database_name": "ideasxinfin-chat", "database_id": "207758dc-bb52-4480-9d86-c3d4c1c3c28a", "migrations_dir": "migrations/chat" }
+  ],
+  "kv_namespaces": [
+    { "binding": "CHAT_CACHE", "id": "7059cc47e58a487eacc64741b84a0c75" }
+  ],
+  "vars": {
+    "CHAT_ENABLED": "true",
+    "CHAT_ENV": "production",
+    "LEAD_CAPTURE_ENABLED": "false",
+    "LEAD_RETENTION_DAYS": "180",
+    "GROQ_MODEL": "openai/gpt-oss-120b",
+    "ACCESS_TEAM_DOMAIN": "crimson-cloud-d7e1.cloudflareaccess.com",
+    "ACCESS_AUD": "4850a29a72d8dcbb90af1d9edc1485fbb342b4638dcf291037636bee09cad0fd"
+  },
+  "triggers": { "crons": ["23 9 * * *"] }
+}

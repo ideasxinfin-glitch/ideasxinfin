@@ -1,0 +1,17 @@
+dist/
+dist-production/
+node_modules/
+.env
+.env.*
+!.env.example
+.wrangler/
+test-results/
+outputs/
+graphify-out/
+migration/pages/
+migration/hostinger-redirect.htaccess
+
+# Secretos locales de Wrangler (ADMIN_TOKEN, GROQ_API_KEY, RATE_LIMIT_SALT)
+.dev.vars
+.dev.vars.*
+!.dev.vars.example

@@ -1,0 +1,156 @@
+# Ideas Xinfin: contexto para continuar con otro agente
+
+Actualizado: 2 de noviembre de 2026. Lee este archivo antes de modificar el proyecto. Es el punto de entrada actualizado; los documentos históricos pueden describir decisiones ya reemplazadas. Confirma siempre el estado real de los archivos, Git y producción antes de actuar.
+
+## Objetivo y decisión principal del usuario
+
+La web que se debe mantener y mejorar es **la landing NUEVA de Ideas Xinfin**. El usuario busca atraer negocios que quieren digitalizarse y están cansados de propuestas visuales genéricas. Quiere una presentación profesional, distintiva, atractiva y con animaciones elegantes, en tema claro y oscuro.
+
+**No reconstruir, copiar ni publicar la estructura visual anterior de xinfinlab.com.** El sitio anterior solo interviene como origen de redirecciones y señales SEO. Conservar posicionamiento no implica conservar su diseño ni sus páginas HTML. Esta aclaración es expresa del usuario y prevalece sobre planes anteriores.
+
+## Dónde está el trabajo
+
+- Carpeta de código actual: `C:/Users/Felipe Plascencia/Documents/Xinfin/ideasxinfin`.
+- Repositorio: https://github.com/ideasxinfin-glitch/ideasxinfin
+- Rama de trabajo: `feature/nueva-web-ideas-xinfin`.
+- Producción: https://ideasxinfin.com/
+- Preview separado: https://ideasxinfin-preview.ideasxinfin.workers.dev/
+- Instrucciones del directorio padre: `../AGENTS.md`. Hay grafo en `graphify-out/`; consultar con `graphify query` antes de preguntas sobre código y actualizarlo después de modificar código.
+
+**Estado de entrega (30/10/2026):** la versión publicada en Cloudflare, sus imágenes, scripts de build, Worker, pruebas y esta documentación se sincronizan en la rama `feature/nueva-web-ideas-xinfin`. Para continuar en otro equipo, clona esa rama y confirma el último commit remoto. Revisa siempre `git status --short` antes de editar y no descartes modificaciones existentes. Se excluyen builds, credenciales, capturas de revisión, el grafo regenerable y las páginas HTML antiguas archivadas localmente; ninguno de esos respaldos es necesario para construir la landing nueva. Los recursos legacy necesarios para el build sí están incluidos.
+
+## Archivos que se editan
+
+HTML, CSS y JavaScript nativos, sin framework ni dependencias de producción. Node.js 22 o superior.
+
+| Archivo | Responsabilidad |
+| --- | --- |
+| `public/index.html` | Landing nueva: contenido, secciones, dispositivos del hero, servicios y diálogos |
+| `public/styles.css` | Composición responsive, tipografía, ambos temas y efectos visuales |
+| `public/app.js` | Tema, menú, diálogos, formulario y comportamiento general |
+| `public/theme.js` / `public/contact.js` | Utilidades de tema y validación/construcción de la consulta |
+| `public/motion.js` | Animaciones, revelados y respeto de movimiento reducido |
+| `public/analytics.js` | Eventos internos; no asumir que hay proveedor conectado |
+| `public/assets/` | Logos, fuentes y fotografías optimizadas |
+| `public/i18n.js` / `scripts/en-home.mjs` / `scripts/seo-content-en.mjs` | Versión en inglés: textos del navegador, portada `/en/` generada desde `public/index.html` y páginas de servicio (ver `docs/IDIOMAS-SEO.md`) |
+| `public/en/privacy.html` | Aviso de privacidad en inglés; mantenerlo igual que `public/privacidad.html` |
+| `public/privacidad.html` | Aviso de privacidad; revisar datos legales antes de asumir que están completos |
+| `scripts/build.mjs` | Build de preview en `dist/`, bloqueado para indexación |
+| `scripts/build-production.mjs` | Build real en `dist-production/`, metadatos, sitemap, políticas y recursos legacy |
+| `production-worker.js` | Dominio canónico, redirecciones, cabeceras e indexación |
+| `wrangler.jsonc` | Worker de preview |
+| `wrangler.production.jsonc` | Worker de producción y rutas de los cuatro hosts |
+| `tests/` | Pruebas de contacto, movimiento, producción y asistente |
+| `public/chat.js` | Chat flotante del asistente IA y conexión de la demo; mejora progresiva |
+| `public/pricing.js` / `worker/chat/pricing.js` | Selector México/Global y catálogo único de precios de referencia (ver `docs/PRECIOS.md`) |
+| `worker/chat/` | Backend del asistente: modelos con respaldo, caché, RAG, prospectos y panel `/admin/chat/` |
+| `migrations/chat/` | Esquema D1 del asistente |
+| `wrangler.chat-test.jsonc` | Worker de prueba del asistente (`ideasxinfin-chat-test`), separado de producción |
+
+Editar fuentes, no `dist/` ni `dist-production/`: se regeneran. El build de producción limpia su salida para impedir que reaparezcan páginas antiguas.
+
+## Dirección visual y comportamiento aprobados
+
+- Paleta mineral: grafito y piedra en oscuro; marfil, gris y tonos naturales en claro. Evitar naranjas saturados, neón, brillo dorado excesivo y aspecto genérico de imágenes de IA.
+- Tipografía editorial con encabezados serif, buen espacio y contraste; conservar la identidad del infinito.
+- Logos (desde 30/10/2026, entregados por el usuario): `assets/logo-wordmark-dark.webp` (texto blanco, tema oscuro) y `assets/logo-wordmark-light.webp` (texto azul marino, tema claro), 720×192 con fondo transparente; tamaños en `.brand-logo` de `styles.css`. Los anteriores `logo-dark/light.webp` se eliminaron. Favicon: `favicon.ico`, `assets/icon-192.png` y `apple-touch-icon.png` (infinito sin texto).
+- Hero fotográfico arquitectónico con laptop y móvil construidos en HTML/CSS. Las pantallas deben mostrar una landing reconocible, no solo un paisaje.
+- Mantener experiencia responsive, navegación por teclado, foco visible y legibilidad en ambos temas.
+- Hero con 3 escenas rotativas (IA, inmobiliaria, colegios) cada 7.5 s: fondo + pantalla de laptop + móvil cambian juntos; textos y botones siguen en HTML. **Publicado el 02/11/2026 (versión `0c9a012c`); imágenes finales del usuario en `public/assets/hero/`.** Detalle, medidas y cómo reemplazarlas: `docs/HERO-ESCENAS.md`. Las ondas del lago (publicadas en `c9088d51`) se retiraron en esta rama porque esa foto ya no se usa en el hero.
+- Animaciones activas por defecto. **El usuario pidió quitar el botón de pausar/reproducir**; no reintroducirlo por leer documentación anterior. Respetar `prefers-reduced-motion` y suspender trabajo cuando la pestaña está oculta.
+- Botones flotantes (publicados el 02/11/2026, versión `c5990da3`): WhatsApp con pulsación de escala 1→1.06 y halo cada 4 s (≈1.2 s de movimiento). En móvil el asistente usa un robot SVG (cian→violeta) con insignia «IA», en lugar del globo con cruz; en escritorio no cambia. Su señal (brillo, parpadeo y destello) ocurre en una línea de 12 s, a los 2 s y a los 6.3 s, siempre durante la pausa de WhatsApp. `alignFloats()` en `motion.js` sincroniza ambos. Respetan movimiento reducido y pestaña oculta. Evitar movimiento constante invasivo.
+- Panel del asistente rediseñado el 02/11/2026 según la imagen aprobada (azul marino, bienvenida con robot, 6 tarjetas, preguntas frecuentes, vista ampliada en escritorio). **Publicado el 02/11/2026 (versión `b000b9cc`).** Tarjetas y preguntas se editan en `HOME_CARDS` / `HOME_FAQS` de `public/chat.js`. Detalle: `docs/ASISTENTE-IA.md`, «Diseño del panel».
+- Contacto en móvil (≤ 760 px), rediseñado el 02/11/2026 según imagen aprobada. **Publicado el 02/11/2026 (versión `63ef6f38`).** Foto anclada en la pared oscura con velo grafito, «contigo.» en acento, beneficios en tarjetas con check, botón «Hablemos por WhatsApp» (solo móvil, mismo `wa.me`) y número como enlace `tel:` en píldora. El botón deja libre la columna de los botones flotantes (`padding-right` en `.contact-actions`; ancho completo solo ≤ 340 px). Escritorio y tablet (> 760 px) sin cambios visuales, salvo que el número ahora llama (`tel:`) en lugar de abrir WhatsApp.
+- Formulario prepara un mensaje de WhatsApp: el visitante lo revisa y envía allí. No hay backend de leads, bandeja de entrada ni envío automático.
+- Asistente: la demo de la sección de automatización y el chat flotante (`public/chat.js`) usan la misma API `/api/chat`. Solo se activan cuando `/api/chat/status` responde, es decir, cuando el Worker tiene `CHAT_ENABLED=true` y una base D1. Si no, la demo sigue siendo una simulación local que no afirma tener IA conectada. Desde el 30/10/2026 está activo en producción (ideasxinfin.com) y en el entorno de prueba https://ideasxinfin-chat-test.ideasxinfin.workers.dev. El panel administrativo de producción (/admin/chat/) está protegido con Cloudflare Access más el token del Worker. Detalle, políticas y activación: `docs/ASISTENTE-IA.md`.
+- Proyectos y marcas ilustrativas son **conceptos**, no clientes reales ni resultados demostrados. No inventar testimonios o métricas.
+
+### Imágenes vigentes importantes
+
+- Revisión local 30/10/2026: sección de proceso con `process-listen.webp`, `process-design.webp`, `process-build.webp` y `process-evolve.webp`. Cuatro escenas del proyecto ilustrativo FORMA con contenido relevante dentro de las pantallas y materiales; títulos y explicaciones HTML debajo. Cuatro columnas en escritorio, dos en tablet y una en móvil. Publicada en producción y preview el 30/10/2026.
+
+- Revisión local 30/10/2026: `contact-creative-studio-purpose.webp` como fondo de contacto, con velos CSS distintos por tema y encuadre/desvanecido en móvil. Pantalla con el texto solicitado “Diseño digital para negocios con propósito.” y CTA “Hablemos”. Formulario sólido y lógica de WhatsApp intacta. La versión sin ese texto se conserva como `contact-creative-studio.webp`. Publicada junto con la imagen de automatización el 30/10/2026.
+
+- Revisión local 30/10/2026: `automation-opportunity.webp` ilustra WhatsApp → oportunidades → cita en el panel izquierdo de automatización; fotografía con texto HTML y secuencia de pasos debajo. Integrada, comprobada y publicada el 30/10/2026.
+
+- `scene-mineral-dark.webp` / `scene-mineral-light.webp`: escenarios del hero según tema.
+- `service-platforms-landing.webp`: laptop recta y móvil con landing del estudio ficticio FORMA, navegación, textos y CTA.
+- `service-automation-editorial.webp`: composición de módulos de automatización.
+- `service-marketing-social.webp`: campaña de café ORIGEN con Instagram, Facebook y búsqueda; estos canales deben ser reconocibles.
+- `project-origen-brand.webp`: concepto de marca ORIGEN para portafolio y diálogo compartido.
+- Hay versiones anteriores conservadas en assets. Comprueba referencias HTML/CSS antes de sustituir una imagen.
+
+Prompts, procedencia y decisiones: `docs/SERVICE-CAMPAIGN.md` y `docs/MINERAL-ASSETS.md`. Las imágenes son sintéticas ilustrativas y se optimizaron a WebP. El nuevo agente puede usar su herramienta de generación disponible; no debe asumir acceso a originales fuera de la carpeta del proyecto.
+
+## Producción y migración: estado que hay que preservar
+
+1. `ideasxinfin.com` sirve exclusivamente la landing nueva. `www` y HTTP se normalizan a HTTPS sin www.
+2. `xinfinlab.com` y `www.xinfinlab.com` redirigen mediante Cloudflare. Las 46 rutas antiguas conocidas se consolidan con 301 a la portada nueva, conservando parámetros de consulta.
+3. `migration/routes.json` es un inventario para redirecciones, **no una lista de páginas que haya que reconstruir**. Rutas desconocidas no deben convertirse indiscriminadamente en páginas 200. Excepción aprobada: las ciudades de `scripts/seo-content.mjs` se sirven en su ruta antigua con contenido nuevo y el diseño actual.
+4. `migration/pages/` contiene 45 páginas antiguas como respaldo local. **No copiarlas al build ni desplegarlas.** Se retiraron expresamente después de que el usuario rechazara su estructura visual.
+5. `migration/assets/` conserva archivos públicos antiguos. El build los sirve bajo `/legacy/` para enlaces y video bajo demanda; no implica aplicar estilos antiguos a la nueva web.
+6. Sitemap de producción: la portada más las páginas de servicio y de ciudad generadas por `scripts/seo-pages.mjs` (aprobadas el 30/10/2026, ver `docs/SEO.md`). Cada página tiene su propio canonical. Incluye las cinco páginas en inglés bajo `/en/` (ver `docs/IDIOMAS-SEO.md`); no anunciar otras páginas en inglés inexistentes.
+7. Preview y hosts técnicos workers.dev siguen sin indexación. No retirar sus restricciones al corregir SEO de producción.
+8. La antigua regla Cloudflare que enviaba Ideas Xinfin hacia Xinfin Lab está deshabilitada. **No reactivarla:** produciría un bucle con la redirección actual.
+9. Xinfin Lab sigue registrado en Hostinger, con renovación conservada. Nameservers: `eloise.ns.cloudflare.com` y `ernest.ns.cloudflare.com`; zona Cloudflare activa. Se conservó el TXT de verificación de Google.
+10. **No cancelar el hosting compartido de Hostinger:** aloja otro sitio ajeno a esta migración. No modificar otros dominios, sitios ni renovaciones.
+
+Worker de producción: `ideasxinfin-production`. Última versión registrada (02/11/2026, contacto móvil): `63ef6f38-3163-4a6f-9940-1d3bcfb01746`; antes, nuevo panel del asistente: `b000b9cc-818a-49c4-b32b-60502a424914`; antes, botones flotantes: `c5990da3-25eb-4ba3-ab77-e0eb03f2791f`; antes, hero con 3 escenas: `0c9a012c-8ccd-4a2d-a637-51f953904561`; la anterior (logos, favicon, SEO, asistente IA y ondas del lago) es `c9088d51-2148-4400-94ac-cb34e09c5c5b`. Historial y rollback en `docs/SEO.md` y `docs/ASISTENTE-IA.md`; comprobar el despliegue vigente, no asumir que este ID seguirá siendo el último.
+
+### SEO pendiente y límites
+
+Plan, páginas generadas y pasos manuales: `docs/SEO.md`. Escenas del hero: `docs/HERO-ESCENAS.md`.
+
+Search Console: el usuario confirmó el 30/10/2026 que dio de alta la propiedad de dominio `ideasxinfin.com`, envió el sitemap y tramitó el cambio de dirección desde `xinfinlab.com`. Ambas zonas tienen su TXT `google-site-verification` (no borrarlos). No asumir que una cuenta de Google visible es la propietaria.
+
+Las redirecciones pueden ayudar a trasladar señales, pero no garantizan conservar posiciones, especialmente de páginas antiguas por ciudad o idioma consolidadas a la portada. No hay datos confirmados de tráfico/posiciones en esta guía. El historial de informes de Search Console no se fusiona automáticamente con el dominio nuevo. **No volver a publicar el sitio antiguo como supuesto requisito SEO.**
+
+Detalle de migración: `docs/MIGRATION-STATUS.md`. `migration/hostinger-redirect.htaccess` es una propuesta previa no aplicada; no instalarla sin revisar su correspondencia con la estrategia actual del Worker.
+
+## Trabajar y verificar
+
+Desde la raíz del repositorio:
+
+```sh
+node scripts/serve.mjs
+```
+
+Abre `http://localhost:4173/`. Se puede usar `PORT` para otro puerto. Revisa `/?tema=dark` y `/?tema=light`; comprueba el tema efectivo y preferencias guardadas. El servidor de fuentes no sustituye la prueba del Worker y sus redirecciones.
+
+```sh
+node scripts/lint.mjs
+node --test
+node scripts/build-production.mjs
+```
+
+Último control (30/10/2026): 33 pruebas y lint correctos; ejecutar de nuevo tras los cambios relevantes. Las pruebas de producción generan su salida. Revisar visualmente escritorio y móvil, ambos temas, CTA, diálogos, formulario y movimiento reducido; no enviar mensajes reales de WhatsApp para probar.
+
+Para probar el Worker localmente después del build:
+
+```sh
+npx --yes wrangler dev --config wrangler.production.jsonc --port 4176
+```
+
+Publicación **solo cuando la tarea del usuario la incluya**; una petición de modificar diseño no debe interpretarse automáticamente como publicar:
+
+```sh
+node scripts/build-production.mjs
+npx --yes wrangler deploy --config wrangler.production.jsonc
+node scripts/verify-production-live.mjs
+```
+
+Para preview: `node scripts/build.mjs` y `npx --yes wrangler deploy --config wrangler.jsonc`. No confundir configuraciones. Autenticar con el mecanismo propio de Cloudflare si hace falta; nunca incorporar tokens, cookies ni credenciales al repositorio, al documento o a mensajes.
+
+## Documentación histórica y orden de lectura
+
+1. Este archivo.
+2. `docs/MIGRATION-STATUS.md` para dominios y SEO.
+   - `docs/PRECIOS.md` para precios MXN/USD, tipo de cambio y cotizaciones.
+3. `docs/SERVICE-CAMPAIGN.md` y `docs/MINERAL-ASSETS.md` para imágenes.
+4. Código y configuración actuales para resolver detalles concretos.
+
+`docs/REFINEMENT-V3.md`, `docs/REFINEMENT-V4.md`, planes antiguos y partes del README original cuentan etapas anteriores: pueden hablar de pausa de animaciones, publicación pendiente o no tocar dominios. Esas descripciones fueron reemplazadas por las decisiones y despliegues indicados aquí.
+
+## Texto para iniciar con otro agente
+
+> Lee CONTEXTO-PARA-AGENTES.md y las instrucciones AGENTS.md aplicables. Trabaja sobre la landing nueva de Ideas Xinfin en public/, rama feature/nueva-web-ideas-xinfin. Revisa el último commit y los cambios locales antes de editar. Mantén ambos temas, la dirección visual mineral, las animaciones accesibles y las redirecciones actuales. No reutilices el diseño ni las páginas antiguas de Xinfin Lab. Después te indicaré el cambio concreto que quiero; no publiques sin que mi tarea lo incluya.

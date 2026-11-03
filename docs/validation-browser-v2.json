@@ -1,0 +1,157 @@
+{
+  "reports": [
+    {
+      "name": "v2-desktop-dark",
+      "width": 1440,
+      "height": 1000,
+      "theme": "dark",
+      "scrollWidth": 1425,
+      "h1": 1,
+      "hero": {
+        "x": 64.796875,
+        "y": 148.75,
+        "width": 738.375,
+        "height": 186.65625,
+        "top": 148.75,
+        "right": 803.171875,
+        "bottom": 335.40625,
+        "left": 64.796875
+      },
+      "brokenImages": 0
+    },
+    {
+      "name": "v2-tablet-768",
+      "width": 768,
+      "height": 1024,
+      "theme": "dark",
+      "scrollWidth": 753,
+      "h1": 1,
+      "hero": {
+        "x": 34.546875,
+        "y": 180.46875,
+        "width": 396.65625,
+        "height": 104.203125,
+        "top": 180.46875,
+        "right": 431.203125,
+        "bottom": 284.671875,
+        "left": 34.546875
+      },
+      "brokenImages": 0
+    },
+    {
+      "name": "v2-tablet-1024",
+      "width": 1024,
+      "height": 900,
+      "theme": "light",
+      "scrollWidth": 1009,
+      "h1": 1,
+      "hero": {
+        "x": 46.078125,
+        "y": 160.828125,
+        "width": 531.765625,
+        "height": 135.84375,
+        "top": 160.828125,
+        "right": 577.84375,
+        "bottom": 296.671875,
+        "left": 46.078125
+      },
+      "brokenImages": 0
+    },
+    {
+      "name": "v2-desktop-light",
+      "width": 1440,
+      "height": 1000,
+      "theme": "light",
+      "scrollWidth": 1425,
+      "h1": 1,
+      "hero": {
+        "x": 64.796875,
+        "y": 148.75,
+        "width": 738.375,
+        "height": 186.65625,
+        "top": 148.75,
+        "right": 803.171875,
+        "bottom": 335.40625,
+        "left": 64.796875
+      },
+      "brokenImages": 0
+    },
+    {
+      "name": "v2-mobile-dark",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "scrollWidth": 390,
+      "h1": 1,
+      "hero": {
+        "x": 22,
+        "y": 132.390625,
+        "width": 346,
+        "height": 106.6875,
+        "top": 132.390625,
+        "right": 368,
+        "bottom": 239.078125,
+        "left": 22
+      },
+      "brokenImages": 0
+    },
+    {
+      "name": "v2-mobile-light",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "scrollWidth": 390,
+      "h1": 1,
+      "hero": {
+        "x": 22,
+        "y": 132.390625,
+        "width": 346,
+        "height": 106.6875,
+        "top": 132.390625,
+        "right": 368,
+        "bottom": 239.078125,
+        "left": 22
+      },
+      "brokenImages": 0
+    },
+    {
+      "name": "v2-mobile-small",
+      "width": 320,
+      "height": 740,
+      "theme": "dark",
+      "scrollWidth": 320,
+      "h1": 1,
+      "hero": {
+        "x": 22,
+        "y": 130.921875,
+        "width": 276,
+        "height": 102.796875,
+        "top": 130.921875,
+        "right": 298,
+        "bottom": 233.71875,
+        "left": 22
+      },
+      "brokenImages": 0
+    }
+  ],
+  "interaction": {
+    "assistant": true,
+    "themeToggle": true,
+    "saved": true,
+    "menuOpen": true,
+    "menuCloses": true,
+    "dialog": true,
+    "demo": true,
+    "dialogClose": true,
+    "emptyFormBlocked": true,
+    "validForm": true
+  },
+  "media": {
+    "exists": true,
+    "preload": "none",
+    "source": "https://xinfinlab.com/img/pilar-landings.mp4",
+    "error": null
+  },
+  "formHandoff": true,
+  "runtimeErrors": []
+}

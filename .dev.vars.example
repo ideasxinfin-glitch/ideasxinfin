@@ -1,0 +1,7 @@
+# Copiar a .dev.vars SOLO para pruebas locales. En Cloudflare usar `wrangler secret put`.
+# Token administrativo de prueba: mínimo 32 caracteres aleatorios.
+ADMIN_TOKEN=
+# Sal para el hash diario de IP del límite por visitante.
+RATE_LIMIT_SALT=
+# Opcional: clave de GroqCloud del plan gratuito (sin tarjeta). Vacía = Groq desactivado.
+GROQ_API_KEY=
