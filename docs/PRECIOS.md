@@ -1,6 +1,6 @@
 # Precios de referencia: México (MXN) y Global (USD)
 
-Reglas comerciales autorizadas por el usuario el 03/11/2026. Todavía no se publican en producción: hace falta su autorización explícita.
+Reglas comerciales autorizadas por el usuario el 03/11/2026. Publicadas en producción ese mismo día con su autorización: versión `4f1e9e28-cb5a-4008-9d92-09e9d8ef765b`. Para revertir: `npx wrangler rollback 63ef6f38-3163-4a6f-9940-1d3bcfb01746 --config wrangler.production.jsonc`.
 
 ## Fuente única
 
