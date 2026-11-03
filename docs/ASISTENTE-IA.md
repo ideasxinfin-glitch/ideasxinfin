@@ -27,6 +27,33 @@ Para dar acceso a otra persona: Zero Trust → Access controls → Policies → 
 
 Desde el 30/10/2026 el chat tiene un botón de micrófono (`public/chat.js`, función `dictation`). Usa el reconocimiento de voz del propio navegador (`SpeechRecognition`, idioma `es-MX`): funciona en Chrome, Edge y Safari, en computadora y celular, y en Firefox el botón no aparece. El texto se coloca en el campo para revisarlo y nunca se envía solo. No consume neurons ni pasa por el Worker, pero Chrome envía el audio a Google y Safari a Apple, por eso el aviso de privacidad lo menciona. Para permitirlo, `Permissions-Policy` pasó de `microphone=()` a `microphone=(self)` (solo este sitio, nunca iframes de terceros). Para quitarlo: borrar `dictation` y su botón en `chat.js`, volver a `microphone=()` en `production-worker.js`, `public/_headers`, `scripts/build-production.mjs` y `scripts/serve.mjs`, y retirar el párrafo del aviso.
 
+### Diseño del panel (02/11/2026, en local; sin publicar)
+
+Rediseño según la imagen aprobada por el usuario. Solo cambió el frontal (`public/chat.js` y el bloque «Assistant panel» de `public/styles.css`); el backend, la caché, el RAG, los prospectos, los límites y el panel administrativo no se tocaron.
+
+- Panel azul marino con iluminación azul/violeta, igual en tema claro y oscuro (tokens locales en `.chat-panel`).
+  - Encabezado: logo original `logo-wordmark-dark.webp`, separador, robot SVG, título, punto verde y subtítulo. A la derecha: ampliar (solo con pantalla ≥ 960 × 640), minimizar y cerrar.
+- **Inicio:**
+  - Tarjeta de bienvenida con el robot (SVG propio, función `mascot`).
+  - Seis tarjetas (`HOME_CARDS`).
+  - Preguntas frecuentes (`HOME_FAQS`).
+  - Para cambiarlas basta editar esas dos listas. Cada elemento manda su `question` a `/api/chat`, así que la respuesta siempre viene del asistente real.
+- **Conversación:** al elegir una tarjeta o pregunta, o al escribir, el inicio se oculta y aparece el historial. Arriba hay un enlace «Explorar servicios» que regresa al inicio sin borrar nada; desde ahí, «Volver a la conversación».
+  - Cerrar (×) borra la conversación; minimizar la conserva.
+- **Vista ampliada:** 840 px de ancho, con las tarjetas en 3 columnas como en la referencia. El tamaño normal es de 496 px, con 2 columnas.
+- **Móvil (≤ 700 px):**
+  - Panel casi a pantalla completa, 2 columnas (1 columna por debajo de 340 px) y bloqueo del scroll de la página.
+  - El panel sigue al `visualViewport` (`--chat-vh` y `--chat-kb`), así que el teclado no tapa el campo.
+  - Al abrir en pantallas táctiles no se enfoca el campo, para que el teclado no cubra las tarjetas.
+- **Micrófono:** es el dictado existente; solo aparece si el navegador lo soporta.
+- **Pie del panel:** WhatsApp abre el redactor de siempre, que no envía nada solo. También incluye «Privacidad», «IA de Ideas Xinfin», el aviso de errores de IA y «Quiero que me contacten» si `LEAD_CAPTURE_ENABLED`.
+- **Animaciones:** entrada del panel, de la bienvenida y de las tarjetas en cascada; hover y pulsación de las tarjetas; brillo de la antena y parpadeo del robot cada 8 s; puntos de «escribiendo».
+  - Se apagan con `prefers-reduced-motion`. El robot se detiene con la pestaña oculta (`.motion-suspended`).
+- **Accesibilidad:**
+  - Tarjetas y preguntas son `<button>`.
+  - Al cerrar o minimizar, el foco vuelve al botón del asistente (antes no volvía porque el lanzador seguía con `visibility:hidden` durante la transición).
+- **Bienvenida:** el `welcome` y los `starters` de `/api/chat/status` ya no se muestran, porque la tarjeta de bienvenida y las preguntas frecuentes los reemplazan. Las sugerencias que devuelve cada respuesta sí se siguen mostrando.
+
 ### Precios cargados en producción
 
 Autorizados por el usuario el 30/10/2026 y cargados en D1 de producción (no en `seed.js`, que sigue sin precios): landing page desde $3,800 MXN en un solo pago (entrada 25) y gestión y optimización de Google Business Profile y redes sociales desde $3,500 MXN al mes (entrada 26). También se actualizaron la política «Precios, tiempos y cotizaciones» (7) y la FAQ «¿Cuánto cuesta una página web?» (10), que decían que no había precios publicados. El resto de servicios sigue sin precio y se deriva a WhatsApp. La landing es pago único y la gestión es mensual (confirmado por el usuario); no se indicó IVA, así que el asistente no lo menciona. Para cambiarlos, usar el panel → Conocimiento.
