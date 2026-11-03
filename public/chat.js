@@ -1,6 +1,7 @@
 import { WHATSAPP_PHONE, SERVICES } from './contact.js';
 import { track } from './analytics.js';
 import { requestedCurrency, quoteText } from './pricing.js';
+import { t, lang, privacyPath } from './i18n.js';
 
 // Progressive enhancement: without a working /api/chat/status the page keeps its local demo
 // and no chat button appears. One conversation state feeds both the inline demo and the panel.
@@ -9,17 +10,17 @@ const BUDGETS = ['Prefiero comentarlo después', 'Menos de $10,000 MXN', '$10,00
 // Home screen of the panel. Edit these lists to change the cards or the frequent questions:
 // each one sends its `question` to /api/chat, so every answer comes from the real assistant.
 const HOME_CARDS = [
-  { tone: 'blue', icon: 'laptop', title: 'Crear mi página web', text: 'Un sitio web profesional y enfocado en resultados.', question: 'Quiero crear una página web para mi negocio. ¿Cómo me pueden ayudar?' },
-  { tone: 'violet', icon: 'bot', title: 'Automatizar con IA', text: 'Ahorra tiempo y mejora la atención con agentes IA.', question: 'Quiero automatizar la atención y los procesos de mi negocio con IA. ¿Qué me recomiendan?' },
-  { tone: 'teal', icon: 'growth', title: 'Conseguir más clientes', text: 'Estrategias digitales para atraer y vender más.', question: 'Quiero conseguir más clientes para mi negocio. ¿Qué estrategias digitales ofrecen?' },
-  { tone: 'gold', icon: 'search', title: 'Mejorar mi SEO', text: 'Haz que tu negocio aparezca en Google.', question: 'Quiero mejorar el SEO de mi negocio para aparecer en Google. ¿Cómo lo trabajan?' },
-  { tone: 'indigo', icon: 'building', title: 'Solución para mi negocio', text: 'Soluciones digitales para inmobiliarias, colegios, comercios y más.', question: '¿Qué soluciones digitales tienen para mi tipo de negocio, como inmobiliarias, colegios o comercios?' },
-  { tone: 'sky', icon: 'tag', title: 'Precios y servicios', text: 'Conoce nuestros planes y cómo pueden ayudarte.', question: '¿Qué servicios ofrecen y cómo se definen los precios?' }
+  { tone: 'blue', icon: 'laptop', title: t('Crear mi página web'), text: t('Un sitio web profesional y enfocado en resultados.'), question: t('Quiero crear una página web para mi negocio. ¿Cómo me pueden ayudar?') },
+  { tone: 'violet', icon: 'bot', title: t('Automatizar con IA'), text: t('Ahorra tiempo y mejora la atención con agentes IA.'), question: t('Quiero automatizar la atención y los procesos de mi negocio con IA. ¿Qué me recomiendan?') },
+  { tone: 'teal', icon: 'growth', title: t('Conseguir más clientes'), text: t('Estrategias digitales para atraer y vender más.'), question: t('Quiero conseguir más clientes para mi negocio. ¿Qué estrategias digitales ofrecen?') },
+  { tone: 'gold', icon: 'search', title: t('Mejorar mi SEO'), text: t('Haz que tu negocio aparezca en Google.'), question: t('Quiero mejorar el SEO de mi negocio para aparecer en Google. ¿Cómo lo trabajan?') },
+  { tone: 'indigo', icon: 'building', title: t('Solución para mi negocio'), text: t('Soluciones digitales para inmobiliarias, colegios, comercios y más.'), question: t('¿Qué soluciones digitales tienen para mi tipo de negocio, como inmobiliarias, colegios o comercios?') },
+  { tone: 'sky', icon: 'tag', title: t('Precios y servicios'), text: t('Conoce nuestros planes y cómo pueden ayudarte.'), question: t('¿Qué servicios ofrecen y cómo se definen los precios?') }
 ];
 const HOME_FAQS = [
-  { label: '¿En cuánto tiempo se realiza?', question: '¿En cuánto tiempo se realiza un proyecto con Ideas Xinfin?' },
-  { label: '¿Qué incluye cada plan?', question: '¿Qué incluye cada plan o servicio de Ideas Xinfin?' },
-  { label: '¿Puedo integrar WhatsApp?', question: '¿Puedo integrar WhatsApp en mi sitio web o asistente?' }
+  { label: t('¿En cuánto tiempo se realiza?'), question: t('¿En cuánto tiempo se realiza un proyecto con Ideas Xinfin?') },
+  { label: t('¿Qué incluye cada plan?'), question: t('¿Qué incluye cada plan o servicio de Ideas Xinfin?') },
+  { label: t('¿Puedo integrar WhatsApp?'), question: t('¿Puedo integrar WhatsApp en mi sitio web o asistente?') }
 ];
 const state = { history: [], busy: false, config: null, quote: null };
 const el = (tag, className, text) => { const node = document.createElement(tag); if (className) node.className = className; if (text != null) node.textContent = text; return node; };
@@ -89,7 +90,7 @@ async function post(path, body) {
 
 function addMessage(role, text) {
   const item = el('div', `chat-msg chat-msg--${role}`);
-  const label = el('span', 'sr-only', role === 'user' ? 'Tú: ' : 'Asistente: ');
+  const label = el('span', 'sr-only', role === 'user' ? t('Tú: ') : t('Asistente: '));
   item.append(label, el('p', '', text));
   ui.log.append(item); ui.log.scrollTop = ui.log.scrollHeight;
   return item;
@@ -121,14 +122,14 @@ export async function ask(text) {
   state.busy = true; ui.form.setAttribute('aria-busy', 'true'); ui.send.disabled = true;
   showConversation(); setSuggestions([]); addMessage('user', message);
   const typing = el('div', 'chat-msg chat-msg--assistant chat-typing');
-  typing.append(el('span', 'sr-only', 'El asistente está escribiendo…'), el('i'), el('i'), el('i'));
+  typing.append(el('span', 'sr-only', t('El asistente está escribiendo…')), el('i'), el('i'), el('i'));
   ui.log.append(typing); ui.log.scrollTop = ui.log.scrollHeight;
   let data;
   try {
-    const result = await post('/api/chat', { message, history: state.history.slice(-6), currency: requestedCurrency() });
-    data = result.data.reply ? result.data : { reply: result.data.error || 'No pude responder en este momento. Puedes escribirnos por WhatsApp.', actions: ['whatsapp'] };
+    const result = await post('/api/chat', { message, history: state.history.slice(-6), currency: requestedCurrency(), lang: lang() });
+    data = result.data.reply ? result.data : { reply: t(result.data.error || 'No pude responder en este momento. Puedes escribirnos por WhatsApp.'), actions: ['whatsapp'] };
   } catch {
-    data = { reply: 'No pude conectarme en este momento. Puedes escribirnos por WhatsApp y el equipo te atenderá.', actions: ['whatsapp'] };
+    data = { reply: t('No pude conectarme en este momento. Puedes escribirnos por WhatsApp y el equipo te atenderá.'), actions: ['whatsapp'] };
   }
   typing.remove();
   addMessage('assistant', data.reply);
@@ -144,18 +145,18 @@ export async function ask(text) {
 
 function whatsappComposer() {
   const topics = state.history.filter(item => item.role === 'user').slice(-3).map(item => `• ${item.content.slice(0, 160)}`);
-  const quote = state.quote ? `\nPrecio de referencia que vi: ${quoteText(state.quote)} (orientativo).` : '';
-  const text = topics.length ? `Hola, Ideas Xinfin. Conversé con su asistente de IA y me interesa:\n${topics.join('\n')}${quote}` : `Hola, Ideas Xinfin. Me gustaría hablar sobre un proyecto.${quote}`;
+  const quote = state.quote ? `\n${t('Precio de referencia que vi: {quote} (orientativo).').replace('{quote}', () => quoteText(state.quote))}` : '';
+  const text = topics.length ? `${t('Hola, Ideas Xinfin. Conversé con su asistente de IA y me interesa:')}\n${topics.join('\n')}${quote}` : `${t('Hola, Ideas Xinfin. Me gustaría hablar sobre un proyecto.')}${quote}`;
   const box = el('div', 'chat-extra-box');
-  const label = el('label', '', 'Mensaje para WhatsApp. Revísalo o edítalo antes de abrirlo:');
+  const label = el('label', '', t('Mensaje para WhatsApp. Revísalo o edítalo antes de abrirlo:'));
   const area = el('textarea'); area.id = 'chat-wa-text'; area.rows = 4; area.maxLength = 900; area.value = text; label.htmlFor = area.id;
-  const open = el('a', 'button primary small', 'Abrir WhatsApp ↗'); open.target = '_blank'; open.rel = 'noopener noreferrer';
+  const open = el('a', 'button primary small', t('Abrir WhatsApp ↗')); open.target = '_blank'; open.rel = 'noopener noreferrer';
   const sync = () => { open.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(area.value.trim())}`; };
   area.addEventListener('input', sync); sync();
   open.addEventListener('click', () => { track('whatsapp_click'); closeExtra(); });
-  const cancel = el('button', 'chat-link', 'Cancelar'); cancel.type = 'button'; cancel.addEventListener('click', closeExtra);
+  const cancel = el('button', 'chat-link', t('Cancelar')); cancel.type = 'button'; cancel.addEventListener('click', closeExtra);
   const row = el('div', 'chat-extra-actions'); row.append(open, cancel);
-  box.append(label, area, el('small', '', 'Nada se envía hasta que lo confirmes en WhatsApp.'), row);
+  box.append(label, area, el('small', '', t('Nada se envía hasta que lo confirmes en WhatsApp.')), row);
   showExtra(box); area.focus();
 }
 
@@ -163,28 +164,28 @@ function leadForm() {
   const form = el('form', 'chat-extra-box chat-lead');
   const field = (labelText, control) => { const wrap = el('div', 'chat-field'); const label = el('label', '', labelText); control.id = `chat-lead-${control.name}`; label.htmlFor = control.id; wrap.append(label, control); return wrap; };
   const input = (name, type = 'text', required = true, max = 120) => { const node = el('input'); node.name = name; node.type = type; node.required = required; node.maxLength = max; return node; };
-  const select = (name, options, placeholder) => { const node = el('select'); node.name = name; node.required = Boolean(placeholder); if (placeholder) { const first = el('option', '', placeholder); first.value = ''; node.append(first); } options.forEach(option => node.append(el('option', '', option))); return node; };
+  const select = (name, options, placeholder) => { const node = el('select'); node.name = name; node.required = Boolean(placeholder); if (placeholder) { const first = el('option', '', placeholder); first.value = ''; node.append(first); } options.forEach(option => { const item = el('option', '', t(option)); item.value = option; node.append(item); }); return node; };
   const need = el('textarea'); need.name = 'need'; need.required = true; need.maxLength = 600; need.rows = 3;
   need.value = state.history.filter(item => item.role === 'user').slice(-1)[0]?.content || '';
   const consent = el('input'); consent.type = 'checkbox'; consent.name = 'consent'; consent.required = true; consent.id = 'chat-lead-consent';
   const consentLabel = el('label', 'chat-consent'); consentLabel.htmlFor = consent.id;
-  const privacy = el('a', '', 'aviso de privacidad'); privacy.href = '/privacidad.html'; privacy.target = '_blank'; privacy.rel = 'noopener';
-  consentLabel.append(consent, ' Acepto que Ideas Xinfin guarde estos datos solo para responder a mi solicitud, por un tiempo limitado, conforme al ', privacy, '.');
+  const privacy = el('a', '', t('aviso de privacidad')); privacy.href = privacyPath(); privacy.target = '_blank'; privacy.rel = 'noopener';
+  consentLabel.append(consent, t(' Acepto que Ideas Xinfin guarde estos datos solo para responder a mi solicitud, por un tiempo limitado, conforme al '), privacy, '.');
   const trap = input('website', 'text', false, 80); trap.tabIndex = -1; trap.autocomplete = 'off'; const trapWrap = el('div', 'chat-trap'); trapWrap.setAttribute('aria-hidden', 'true'); trapWrap.append(trap);
   const status = el('p', 'chat-status'); status.setAttribute('role', 'status');
-  const submit = el('button', 'button primary small', 'Enviar datos'); submit.type = 'submit';
-  const cancel = el('button', 'chat-link', 'Cancelar'); cancel.type = 'button'; cancel.addEventListener('click', closeExtra);
+  const submit = el('button', 'button primary small', t('Enviar datos')); submit.type = 'submit';
+  const cancel = el('button', 'chat-link', t('Cancelar')); cancel.type = 'button'; cancel.addEventListener('click', closeExtra);
   const row = el('div', 'chat-extra-actions'); row.append(submit, cancel);
-  form.append(el('strong', '', 'Déjanos tus datos y te contactamos'), field('Nombre *', input('name', 'text', true, 80)), field('Negocio', input('business', 'text', false)),
-    field('Servicio *', select('service', SERVICES, 'Selecciona un servicio')), field('¿Qué necesitas resolver? *', need),
-    field('WhatsApp o correo *', input('contact', 'text', true, 120)), field('Presupuesto aproximado (opcional)', select('budget', BUDGETS)), consentLabel, trapWrap, row, status);
+  form.append(el('strong', '', t('Déjanos tus datos y te contactamos')), field(t('Nombre *'), input('name', 'text', true, 80)), field(t('Negocio'), input('business', 'text', false)),
+    field(t('Servicio *'), select('service', SERVICES, t('Selecciona un servicio'))), field(t('¿Qué necesitas resolver? *'), need),
+    field(t('WhatsApp o correo *'), input('contact', 'text', true, 120)), field(t('Presupuesto aproximado (opcional)'), select('budget', BUDGETS)), consentLabel, trapWrap, row, status);
   form.addEventListener('submit', async event => {
-    event.preventDefault(); submit.disabled = true; status.textContent = 'Enviando…';
+    event.preventDefault(); submit.disabled = true; status.textContent = t('Enviando…');
     const data = Object.fromEntries(new FormData(form));
     try {
       const result = await post('/api/chat/lead', { ...data, consent: consent.checked, consentVersion: CONSENT_VERSION, quote: state.quote });
-      if (!result.ok) throw new Error(result.data.error || 'No pudimos guardar tus datos.');
-      closeExtra(); showConversation(); addMessage('assistant', '¡Gracias! Recibimos tus datos y el equipo de Ideas Xinfin te contactará. Si prefieres, también puedes escribirnos por WhatsApp.');
+      if (!result.ok) throw new Error(t(result.data.error || 'No pudimos guardar tus datos.'));
+      closeExtra(); showConversation(); addMessage('assistant', t('¡Gracias! Recibimos tus datos y el equipo de Ideas Xinfin te contactará. Si prefieres, también puedes escribirnos por WhatsApp.'));
       track('lead_submit');
     } catch (error) { status.textContent = error.message; submit.disabled = false; }
   });
@@ -213,12 +214,12 @@ function reset() {
 
 // Voice dictation with the browser's own speech service (Chrome, Edge, Safari; desktop and mobile).
 // The text lands in the box for review and is never sent on its own. Unsupported browsers get no button.
-const PLACEHOLDER = 'Escribe tu pregunta…';
+const PLACEHOLDER = t('Escribe tu pregunta…');
 function dictation(input) {
   const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!Recognition || !window.isSecureContext) return null;
   const button = el('button', 'chat-mic'); button.type = 'button';
-  button.setAttribute('aria-label', 'Dictar mensaje por voz'); button.setAttribute('aria-pressed', 'false'); button.title = 'Dictar por voz';
+  button.setAttribute('aria-label', t('Dictar mensaje por voz')); button.setAttribute('aria-pressed', 'false'); button.title = t('Dictar por voz');
   const svg = icon('message'); svg.replaceChildren(svgNode('path', { d: 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3ZM5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21' }));
   button.append(svg);
   let recognition = null; let failed = false;
@@ -227,21 +228,21 @@ function dictation(input) {
     if (recognition) return stop();
     const before = input.value.trim(); failed = false;
     recognition = new Recognition();
-    recognition.lang = 'es-MX'; recognition.interimResults = true; recognition.continuous = false; recognition.maxAlternatives = 1;
+    recognition.lang = lang() === 'en' ? 'en-US' : 'es-MX'; recognition.interimResults = true; recognition.continuous = false; recognition.maxAlternatives = 1;
     recognition.onresult = event => {
       const spoken = [...event.results].map(result => result[0].transcript).join('').trim();
       input.value = `${before}${before && spoken ? ' ' : ''}${spoken}`.slice(0, input.maxLength);
     };
     recognition.onerror = event => {
       failed = true;
-      input.placeholder = ['not-allowed', 'service-not-allowed'].includes(event.error) ? 'Permite el micrófono para dictar' : event.error === 'no-speech' ? 'No te escuché, intenta de nuevo' : 'No se pudo dictar; escribe tu pregunta';
+      input.placeholder = ['not-allowed', 'service-not-allowed'].includes(event.error) ? t('Permite el micrófono para dictar') : event.error === 'no-speech' ? t('No te escuché, intenta de nuevo') : t('No se pudo dictar; escribe tu pregunta');
     };
     recognition.onend = () => {
       recognition = null; button.classList.remove('is-listening'); button.setAttribute('aria-pressed', 'false');
       if (!failed) input.placeholder = PLACEHOLDER;
     };
     try { recognition.start(); } catch { recognition = null; return; }
-    button.classList.add('is-listening'); button.setAttribute('aria-pressed', 'true'); input.placeholder = 'Escuchando… habla ahora';
+    button.classList.add('is-listening'); button.setAttribute('aria-pressed', 'true'); input.placeholder = t('Escuchando… habla ahora');
   });
   input.addEventListener('input', () => { if (!recognition) input.placeholder = PLACEHOLDER; });
   return { button, stop };
@@ -255,13 +256,13 @@ function iconButton(name, label, className = 'chat-icon') {
 function buildHome() {
   const home = el('div', 'chat-home');
   const resume = el('button', 'chat-nav-link'); resume.type = 'button'; resume.hidden = true;
-  resume.append('Volver a la conversación', icon('arrow'));
+  resume.append(t('Volver a la conversación'), icon('arrow'));
   resume.addEventListener('click', () => { showConversation(); ui.input.focus(); });
   const welcome = el('div', 'chat-welcome');
   const copy = el('div', 'chat-welcome-copy');
-  copy.append(el('h2', '', '¡Hola! 👋 Soy tu asistente digital.'), el('p', '', 'Cuéntame qué quieres mejorar de tu negocio. Te ayudaré a encontrar la mejor solución de Ideas Xinfin.'));
+  copy.append(el('h2', '', t('¡Hola! 👋 Soy tu asistente digital.')), el('p', '', t('Cuéntame qué quieres mejorar de tu negocio. Te ayudaré a encontrar la mejor solución de Ideas Xinfin.')));
   welcome.append(mascot('chat-welcome-bot'), copy);
-  const cardsTitle = el('h3', 'chat-section-title', '¿Qué te gustaría hacer?'); cardsTitle.id = 'chat-cards-title';
+  const cardsTitle = el('h3', 'chat-section-title', t('¿Qué te gustaría hacer?')); cardsTitle.id = 'chat-cards-title';
   const grid = el('div', 'chat-cards'); grid.setAttribute('role', 'group'); grid.setAttribute('aria-labelledby', cardsTitle.id);
   const cards = HOME_CARDS.map((card, index) => {
     const button = el('button', 'chat-card'); button.type = 'button'; button.dataset.tone = card.tone; button.style.setProperty('--i', index);
@@ -273,7 +274,7 @@ function buildHome() {
   });
   grid.append(...cards);
   const faq = el('div', 'chat-faq');
-  const faqTitle = el('p', 'chat-faq-title'); faqTitle.id = 'chat-faq-title'; faqTitle.append(icon('faq'), 'Preguntas frecuentes:');
+  const faqTitle = el('p', 'chat-faq-title'); faqTitle.id = 'chat-faq-title'; faqTitle.append(icon('faq'), t('Preguntas frecuentes:'));
   const faqList = el('div', 'chat-faq-list'); faqList.setAttribute('role', 'group'); faqList.setAttribute('aria-labelledby', faqTitle.id);
   faqList.append(...HOME_FAQS.map(item => { const button = el('button', 'chat-chip', item.label); button.type = 'button'; button.addEventListener('click', () => ask(item.question)); return button; }));
   faq.append(faqTitle, faqList);
@@ -300,55 +301,55 @@ function build(config) {
     return svg;
   };
   const launcher = el('button', 'chat-launcher'); launcher.type = 'button';
-  launcher.setAttribute('aria-expanded', 'false'); launcher.setAttribute('aria-controls', 'chat-panel'); launcher.setAttribute('aria-label', 'Abrir asistente de inteligencia artificial');
-  const badge = el('b', 'chat-badge', 'IA'); badge.setAttribute('aria-hidden', 'true');
-  launcher.append(bubble(), robot(), el('span', '', 'Asistente IA'), badge);
+  launcher.setAttribute('aria-expanded', 'false'); launcher.setAttribute('aria-controls', 'chat-panel'); launcher.setAttribute('aria-label', t('Abrir asistente de inteligencia artificial'));
+  const badge = el('b', 'chat-badge', t('IA')); badge.setAttribute('aria-hidden', 'true');
+  launcher.append(bubble(), robot(), el('span', '', t('Asistente IA')), badge);
 
   const panel = el('section', 'chat-panel'); panel.id = 'chat-panel'; panel.hidden = true; panel.tabIndex = -1; panel.setAttribute('aria-labelledby', 'chat-title');
   const head = el('header', 'chat-head');
   const logo = el('img', 'chat-logo'); logo.src = '/assets/logo-wordmark-dark.webp'; logo.width = 720; logo.height = 192; logo.alt = 'Ideas Xinfin'; logo.decoding = 'async';
-  const titles = el('div', 'chat-titles'); const title = el('strong', '', 'Asistente Ideas Xinfin'); title.id = 'chat-title';
+  const titles = el('div', 'chat-titles'); const title = el('strong', '', t('Asistente Ideas Xinfin')); title.id = 'chat-title';
   const sub = el('small'); const dot = el('span', 'chat-dot'); dot.setAttribute('aria-hidden', 'true');
-  sub.append(dot, 'Asistente de inteligencia artificial', el('span', 'sr-only', ' · en línea'));
+  sub.append(dot, t('Asistente de inteligencia artificial'), el('span', 'sr-only', t(' · en línea')));
   titles.append(title, sub);
   const wave = svgNode('svg', { class: 'chat-wave', viewBox: '0 0 240 60', preserveAspectRatio: 'none', 'aria-hidden': 'true', focusable: 'false' });
   const waveTone = svgNode('linearGradient', { id: 'chat-wave-tone', x1: '0', y1: '0', x2: '1', y2: '0' });
   waveTone.append(svgNode('stop', { offset: '0', 'stop-color': '#38d6ff', 'stop-opacity': '0' }), svgNode('stop', { offset: '.45', 'stop-color': '#38bdf8' }), svgNode('stop', { offset: '1', 'stop-color': '#a855f7' }));
   const waveDefs = svgNode('defs'); waveDefs.append(waveTone);
   wave.append(waveDefs, svgNode('path', { d: 'M0 48C40 48 60 30 100 30s60 22 100 14 32-22 40-24', fill: 'none', stroke: 'url(#chat-wave-tone)', 'stroke-width': '2' }));
-  const expandButton = iconButton('expand', 'Ampliar asistente', 'chat-icon chat-expand'); expandButton.setAttribute('aria-pressed', 'false');
-  const minimizeButton = iconButton('minimize', 'Minimizar asistente');
-  const closeButton = iconButton('close', 'Cerrar y borrar la conversación');
+  const expandButton = iconButton('expand', t('Ampliar asistente'), 'chat-icon chat-expand'); expandButton.setAttribute('aria-pressed', 'false');
+  const minimizeButton = iconButton('minimize', t('Minimizar asistente'));
+  const closeButton = iconButton('close', t('Cerrar y borrar la conversación'));
   const tools = el('div', 'chat-tools'); tools.append(expandButton, minimizeButton, closeButton);
   head.append(wave, logo, el('span', 'chat-sep'), mascot('chat-avatar', true), titles, tools);
 
   const body = el('div', 'chat-body');
   const { home, resume, cards } = buildHome();
   const convo = el('div', 'chat-convo'); convo.hidden = true;
-  const back = el('button', 'chat-nav-link chat-back'); back.type = 'button'; back.append(icon('back'), 'Explorar servicios');
+  const back = el('button', 'chat-nav-link chat-back'); back.type = 'button'; back.append(icon('back'), t('Explorar servicios'));
   back.addEventListener('click', showHome);
-  const log = el('div', 'chat-log'); log.setAttribute('role', 'log'); log.setAttribute('aria-live', 'polite'); log.tabIndex = 0; log.setAttribute('aria-label', 'Conversación');
+  const log = el('div', 'chat-log'); log.setAttribute('role', 'log'); log.setAttribute('aria-live', 'polite'); log.tabIndex = 0; log.setAttribute('aria-label', t('Conversación'));
   const suggestions = el('div', 'chat-suggestions');
   convo.append(back, log, suggestions);
   body.append(home, convo);
 
   const extra = el('div', 'chat-extra'); extra.hidden = true;
-  const form = el('form', 'chat-form'); const label = el('label', 'sr-only', 'Escribe tu mensaje');
+  const form = el('form', 'chat-form'); const label = el('label', 'sr-only', t('Escribe tu mensaje'));
   const input = el('textarea'); input.id = 'chat-input'; input.rows = 1; input.maxLength = 600; input.placeholder = PLACEHOLDER; input.enterKeyHint = 'send'; label.htmlFor = input.id;
-  const send = el('button', 'chat-send'); send.type = 'submit'; send.setAttribute('aria-label', 'Enviar mensaje'); send.append(icon('send'));
+  const send = el('button', 'chat-send'); send.type = 'submit'; send.setAttribute('aria-label', t('Enviar mensaje')); send.append(icon('send'));
   const voice = dictation(input);
   form.append(icon('message', 'chat-form-icon'), label, input, ...(voice ? [voice.button] : []), send);
 
   const foot = el('footer', 'chat-foot');
-  const human = el('button', 'chat-wa'); human.type = 'button'; human.append(icon('whatsapp'), el('span', '', 'Hablar con un asesor por WhatsApp'), icon('external'));
+  const human = el('button', 'chat-wa'); human.type = 'button'; human.append(icon('whatsapp'), el('span', '', t('Hablar con un asesor por WhatsApp')), icon('external'));
   human.addEventListener('click', whatsappComposer);
   const links = el('div', 'chat-foot-links');
-  const privacy = el('a', '', 'Privacidad'); privacy.href = '/privacidad.html'; privacy.prepend(icon('shield'));
-  const brand = el('span', '', 'IA de Ideas Xinfin'); brand.prepend(icon('sparkle'));
+  const privacy = el('a', '', t('Privacidad')); privacy.href = privacyPath(); privacy.prepend(icon('shield'));
+  const brand = el('span', '', t('IA de Ideas Xinfin')); brand.prepend(icon('sparkle'));
   links.append(privacy, brand);
-  const lead = config.leads ? el('button', 'chat-link', 'Quiero que me contacten') : null;
+  const lead = config.leads ? el('button', 'chat-link', t('Quiero que me contacten')) : null;
   if (lead) { lead.type = 'button'; lead.addEventListener('click', leadForm); }
-  const note = el('p', 'chat-note', 'Respuestas generadas por IA; pueden contener errores. No compartas datos sensibles.');
+  const note = el('p', 'chat-note', t('Respuestas generadas por IA; pueden contener errores. No compartas datos sensibles.'));
   foot.append(human, links, note, ...(lead ? [lead] : []));
 
   panel.append(head, body, extra, form, foot);
@@ -358,7 +359,7 @@ function build(config) {
   launcher.addEventListener('click', () => (panel.hidden ? openPanel() : minimize()));
   expandButton.addEventListener('click', () => {
     const wide = panel.classList.toggle('is-wide');
-    expandButton.setAttribute('aria-pressed', String(wide)); expandButton.setAttribute('aria-label', wide ? 'Reducir asistente' : 'Ampliar asistente'); expandButton.title = expandButton.getAttribute('aria-label');
+    expandButton.setAttribute('aria-pressed', String(wide)); expandButton.setAttribute('aria-label', wide ? t('Reducir asistente') : t('Ampliar asistente')); expandButton.title = expandButton.getAttribute('aria-label');
   });
   minimizeButton.addEventListener('click', minimize);
   closeButton.addEventListener('click', reset);
@@ -374,15 +375,15 @@ function connectInlineDemo() {
   const preview = document.querySelector('.assistant-preview');
   if (!preview) return;
   const status = preview.querySelector('.assistant-top small');
-  if (status?.lastChild) status.lastChild.textContent = ' Asistente IA en línea';
+  if (status?.lastChild) status.lastChild.textContent = t(' Asistente IA en línea');
   const disclaimer = preview.querySelector('.demo-disclaimer');
-  if (disclaimer) disclaimer.textContent = 'Asistente de IA conectado. Puede equivocarse; la conversación continúa en el chat.';
+  if (disclaimer) disclaimer.textContent = t('Asistente de IA conectado. Puede equivocarse; la conversación continúa en el chat.');
   const message = preview.querySelector('.assistant-message');
-  const questions = { propuesta: 'Quiero una propuesta para mi negocio', landing: 'Me interesa una landing page', automatizar: 'Necesito automatizar procesos de mi negocio', seo: 'Quiero mejorar mi SEO' };
+  const questions = { propuesta: t('Quiero una propuesta para mi negocio'), landing: t('Me interesa una landing page'), automatizar: t('Necesito automatizar procesos de mi negocio'), seo: t('Quiero mejorar mi SEO') };
   preview.querySelectorAll('[data-assistant]').forEach(button => button.addEventListener('click', async () => {
     if (state.busy) return;
     preview.querySelectorAll('[data-assistant]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-    message.textContent = 'Escribiendo…'; message.setAttribute('aria-busy', 'true');
+    message.textContent = t('Escribiendo…'); message.setAttribute('aria-busy', 'true');
     const data = await ask(questions[button.dataset.assistant]);
     message.removeAttribute('aria-busy');
     if (data) message.textContent = data.reply;

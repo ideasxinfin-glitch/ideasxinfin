@@ -323,3 +323,13 @@ body.chat-open{overflow:hidden}
 .quote-remove{flex-shrink:0;border:0;background:transparent;padding:6px 2px;font-size:.72rem;font-weight:600;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 @media(max-width:960px){.pricing-grid{grid-template-columns:1fr}.price-card{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;column-gap:16px}.price-card>*{grid-column:1}.price-card .price-amount{grid-column:2;grid-row:1 / span 2;margin:0;flex-direction:column;align-items:flex-end;gap:0}}
 @media(max-width:700px){.pricing{padding:22px 18px}.pricing-head{align-items:flex-start;flex-direction:column}.market-switch{align-self:stretch}.market-switch button{flex:1;justify-content:center;min-height:44px}.price-card{display:flex;padding:18px}.price-card .price-amount{flex-direction:row;align-items:baseline;gap:6px}.price-amount strong{font-size:1.7rem}}
+
+/* Language switch beside the theme toggle: two real links, so each version stays reachable without JavaScript. */
+.lang-switch{display:flex;align-items:center;gap:1px;flex-shrink:0;height:40px;padding:0 5px;border:1px solid var(--line);border-radius:30px;background:rgba(var(--veil),.75);font-size:.72rem;font-weight:600;line-height:1}
+.lang-switch a{display:flex;align-items:center;min-height:30px;padding:0 6px;border-radius:20px;color:var(--muted);transition:color .2s}
+.lang-switch a:hover{color:var(--ink)}.lang-switch a[aria-current]{color:var(--ink);text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:4px}
+.lang-switch span{color:var(--muted);opacity:.5}
+.page-market{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:18px 0 6px}.page-market>small{font-size:.72rem;line-height:1.5;color:var(--muted)}
+@media(max-width:700px){.header .brand-logo{width:150px;height:40px}.lang-switch{height:38px;padding:0 3px;font-size:.68rem}.lang-switch a{padding:0 5px}}
+@media(max-width:380px){.header .brand-logo{width:136px;height:36px}.lang-switch{height:36px;padding:0 2px}.lang-switch a{padding:0 4px}}
+@media(max-width:340px){.header .brand-logo{width:118px;height:32px}}

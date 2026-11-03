@@ -13,11 +13,11 @@ export const PRICING_POLICY = Object.freeze({
 
 // usdMinimum: commercial floor in USD for that service (null = none). usdMargin: optional fraction (0.05 = +5 %).
 export const CATALOG = Object.freeze([
-  Object.freeze({ id: 'landing', name: 'Landing page profesional', mxn: 3800, billing: 'one_time', usdMinimum: 220, usdMargin: 0 }),
-  Object.freeze({ id: 'landing_ai', name: 'Landing page con inteligencia artificial', mxn: 6500, billing: null, usdMinimum: 350, usdMargin: 0 }),
-  Object.freeze({ id: 'social', name: 'Gestión de redes sociales y Google Business', mxn: 3500, billing: 'monthly', usdMinimum: null, usdMargin: 0 })
+  Object.freeze({ id: 'landing', name: 'Landing page profesional', nameEn: 'Professional landing page', mxn: 3800, billing: 'one_time', usdMinimum: 220, usdMargin: 0 }),
+  Object.freeze({ id: 'landing_ai', name: 'Landing page con inteligencia artificial', nameEn: 'AI-powered landing page', mxn: 6500, billing: null, usdMinimum: 350, usdMargin: 0 }),
+  Object.freeze({ id: 'social', name: 'Gestión de redes sociales y Google Business', nameEn: 'Social media and Google Business management', mxn: 3500, billing: 'monthly', usdMinimum: null, usdMargin: 0 })
 ]);
-const BILLING = { one_time: 'en un solo pago', monthly: 'al mes' };
+const BILLING = { es: { one_time: 'en un solo pago', monthly: 'al mes' }, en: { one_time: 'as a one-time payment', monthly: 'per month' } };
 export const CURRENCIES = Object.freeze(['MXN', 'USD']);
 
 export function usdFor(item, rate, policy = PRICING_POLICY) {
@@ -29,7 +29,9 @@ export function usdFor(item, rate, policy = PRICING_POLICY) {
 }
 
 export const formatPrice = (amount, currency) => `$${amount.toLocaleString('en-US')} ${currency}`;
-const formatDate = iso => iso.split('-').reverse().join('/');
+const formatDate = (iso, lang = 'es') => (lang === 'en'
+  ? new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })
+  : iso.split('-').reverse().join('/'));
 
 // Exchange rate: memory → KV → provider. A failed or absurd answer keeps the last valid value; with none, USD is unavailable.
 const FX_KEY = 'fx:USD-MXN';
@@ -73,13 +75,13 @@ export async function pricingPayload(env, options) {
 
 // Assistant: deterministic "desde" answers from the catalog, so prices never depend on the model.
 const SERVICE_PATTERNS = [
-  ['landing_ai', /\blanding\b.*\b(ia|inteligencia artificial|asistente|chatbot|bot)\b|\b(ia|inteligencia artificial|asistente|chatbot)\b.*\blanding\b/],
+  ['landing_ai', /\blanding\b.*\b(ia|ai|inteligencia artificial|artificial intelligence|asistente|assistant|chatbot|bot)\b|\b(ia|ai|inteligencia artificial|artificial intelligence|asistente|assistant|chatbot)\b.*\blanding\b|\b(ai|ai powered)\b.*\b(website|site)\b|\b(website|site)\b.*\b(with|using) (ai|artificial intelligence)\b/],
   ['landing', /\blanding\b/],
-  ['social', /\b(redes|red social|redes sociales|google business|perfil de empresa|instagram|facebook|tiktok|community)\b/]
+  ['social', /\b(redes|red social|redes sociales|social media|social networks?|google business|perfil de empresa|instagram|facebook|tiktok|community)\b/]
 ];
 // Other services have no published price: those questions keep the regular knowledge flow.
-const OTHER_SERVICE = /\b(agente|agentes|automatiz\w*|seo|posicionamiento|plataforma|plataformas|tienda|ecommerce|e commerce|sistema|app|aplicacion|chatbot|integracion\w*|corporativ\w*|branding|logo)\b/;
-const PROMO = /\b(promocion|promociones|descuento|descuentos|oferta|ofertas|meses sin intereses)\b/;
+const OTHER_SERVICE = /\b(agente|agentes|agent|agents|automatiz\w*|automat\w*|seo|posicionamiento|plataforma|plataformas|platform|platforms|tienda|store|shop|ecommerce|e commerce|sistema|system|app|aplicacion|application|chatbot|integracion\w*|integration\w*|corporativ\w*|corporate|branding|logo)\b/;
+const PROMO = /\b(promocion|promociones|descuento|descuentos|oferta|ofertas|meses sin intereses|promotion|promotions|discount|discounts|coupon|deal|deals)\b/;
 
 export function detectService(text) {
   const normalized = normalize(text);
@@ -87,7 +89,7 @@ export function detectService(text) {
   return OTHER_SERVICE.test(normalized) ? 'other' : null;
 }
 
-export async function pricingReply(env, message, history, requested, options) {
+export async function pricingReply(env, message, history, requested, options, lang = 'es') {
   if (PROMO.test(normalize(message))) return null;
   let service = detectService(message);
   if (!service) {
@@ -98,20 +100,24 @@ export async function pricingReply(env, message, history, requested, options) {
   const fx = requested === 'USD' ? await getExchangeRate(env, options) : null;
   const currency = fx ? 'USD' : 'MXN';
   const priceOf = item => (currency === 'USD' ? usdFor(item, fx.rate) : item.mxn);
-  const line = item => `desde ${formatPrice(priceOf(item), currency)}${item.billing ? ` ${BILLING[item.billing]}` : ''}`;
-  const note = requested === 'USD' && !fx ? 'Por ahora solo puedo darte el precio en pesos mexicanos. '
-    : currency === 'USD' ? `Es un precio de referencia en dólares, calculado con el tipo de cambio del ${formatDate(fx.date)}. ` : '';
-  const close = 'El costo final depende de lo que necesite tu proyecto; antes de empezar te enviamos una propuesta con alcance, precio y vigencia. Si quieres, un asesor te ayuda por WhatsApp.';
+  const en = lang === 'en';
+  const nameOf = item => (en ? item.nameEn : item.name);
+  const line = item => `${en ? 'from' : 'desde'} ${formatPrice(priceOf(item), currency)}${item.billing ? ` ${BILLING[lang][item.billing]}` : ''}`;
+  const note = requested === 'USD' && !fx ? (en ? 'For now I can only give you the price in Mexican pesos. ' : 'Por ahora solo puedo darte el precio en pesos mexicanos. ')
+    : currency === 'USD' ? (en ? `This is a reference price in US dollars, based on the exchange rate of ${formatDate(fx.date, lang)}. ` : `Es un precio de referencia en dólares, calculado con el tipo de cambio del ${formatDate(fx.date)}. `) : '';
+  const close = en ? 'The final cost depends on what your project needs; before we start, we send you a proposal with scope, price and validity. If you like, an advisor can help you on WhatsApp.'
+    : 'El costo final depende de lo que necesite tu proyecto; antes de empezar te enviamos una propuesta con alcance, precio y vigencia. Si quieres, un asesor te ayuda por WhatsApp.';
   if (service) {
     const item = CATALOG.find(entry => entry.id === service);
     return {
-      reply: `${item.name}: ${line(item)}. ${note}${close}`, source: 'pricing', actions: ['whatsapp'],
-      quote: { service: item.id, name: item.name, currency, amount: priceOf(item), rateDate: fx?.date || null }
+      reply: `${nameOf(item)}: ${line(item)}. ${note}${close}`, source: 'pricing', actions: ['whatsapp'],
+      quote: { service: item.id, name: nameOf(item), currency, amount: priceOf(item), rateDate: fx?.date || null }
     };
   }
-  const list = CATALOG.map(item => `• ${item.name}: ${line(item)}.`).join('\n');
+  const list = CATALOG.map(item => `• ${nameOf(item)}: ${line(item)}.`).join('\n');
   return {
-    reply: `Estos son nuestros precios de referencia:\n${list}\nOtros servicios, como agentes de IA, automatizaciones, SEO o sitios más amplios, se cotizan después de un diagnóstico. ${note}${close}`,
+    reply: en ? `These are our reference prices:\n${list}\nOther services, such as AI agents, automations, SEO or larger websites, are quoted after reviewing your project. ${note}${close}`
+      : `Estos son nuestros precios de referencia:\n${list}\nOtros servicios, como agentes de IA, automatizaciones, SEO o sitios más amplios, se cotizan después de un diagnóstico. ${note}${close}`,
     source: 'pricing', actions: ['whatsapp'], quote: null
   };
 }

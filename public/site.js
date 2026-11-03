@@ -1,14 +1,15 @@
 import { track } from './analytics.js';
+import { t } from './i18n.js';
 
 // Theme, mobile menu and WhatsApp tracking shared by the landing and the service/city pages.
 const themeToggle = document.querySelector('.theme-toggle');
 const syncTheme = () => {
   const isDark = document.documentElement.dataset.theme === 'dark';
-  themeToggle.setAttribute('aria-label', `Cambiar a tema ${isDark ? 'claro' : 'oscuro'}`);
+  themeToggle.setAttribute('aria-label', isDark ? t('Cambiar a tema claro') : t('Cambiar a tema oscuro'));
   themeToggle.setAttribute('aria-pressed', String(!isDark));
   themeToggle.firstElementChild.textContent = isDark ? '☼' : '☾';
-  themeToggle.querySelector('.theme-label').textContent = isDark ? 'Claro' : 'Oscuro';
-  themeToggle.title = `Cambiar a modo ${isDark ? 'claro' : 'oscuro'}`;
+  themeToggle.querySelector('.theme-label').textContent = isDark ? t('Claro') : t('Oscuro');
+  themeToggle.title = isDark ? t('Cambiar a modo claro') : t('Cambiar a modo oscuro');
   document.querySelector('meta[name="theme-color"]').content = isDark ? '#191c1e' : '#f6f6f3';
 };
 themeToggle.addEventListener('click', () => {
@@ -30,13 +31,22 @@ syncTheme();
 
 const menuButton = document.querySelector('.menu-toggle');
 const mobileNav = document.querySelector('#mobile-nav');
-const closeMenu = () => { menuButton.setAttribute('aria-expanded', 'false'); menuButton.setAttribute('aria-label', 'Abrir menú'); mobileNav.hidden = true; };
+const closeMenu = () => { menuButton.setAttribute('aria-expanded', 'false'); menuButton.setAttribute('aria-label', t('Abrir menú')); mobileNav.hidden = true; };
 menuButton.addEventListener('click', () => {
   const open = menuButton.getAttribute('aria-expanded') !== 'true';
   menuButton.setAttribute('aria-expanded', String(open));
-  menuButton.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú'); mobileNav.hidden = !open;
+  menuButton.setAttribute('aria-label', open ? t('Cerrar menú') : t('Abrir menú')); mobileNav.hidden = !open;
 });
 mobileNav.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && !mobileNav.hidden) { closeMenu(); menuButton.focus(); } });
 matchMedia('(min-width: 961px)').addEventListener('change', event => { if (event.matches) closeMenu(); });
 document.querySelectorAll('[data-track="whatsapp"]').forEach(link => link.addEventListener('click', () => track('whatsapp_click')));
+
+// The language switch is a pair of real links; a click also saves the choice and keeps the visitor on the same section.
+document.querySelectorAll('[data-lang]').forEach(link => link.addEventListener('click', () => {
+  try { localStorage.setItem('ixf-lang', link.dataset.lang); } catch { /* The link still changes the language. */ }
+  const anchors = Object.entries(window.ixfAnchors || {});
+  const hash = location.hash.slice(1);
+  const match = anchors.find(pair => pair.includes(hash));
+  if (hash && match) link.hash = match[link.dataset.lang === 'en' ? 1 : 0];
+}));

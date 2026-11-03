@@ -32,6 +32,8 @@ HTML, CSS y JavaScript nativos, sin framework ni dependencias de producción. No
 | `public/motion.js` | Animaciones, revelados y respeto de movimiento reducido |
 | `public/analytics.js` | Eventos internos; no asumir que hay proveedor conectado |
 | `public/assets/` | Logos, fuentes y fotografías optimizadas |
+| `public/i18n.js` / `scripts/en-home.mjs` / `scripts/seo-content-en.mjs` | Versión en inglés: textos del navegador, portada `/en/` generada desde `public/index.html` y páginas de servicio (ver `docs/IDIOMAS-SEO.md`) |
+| `public/en/privacy.html` | Aviso de privacidad en inglés; mantenerlo igual que `public/privacidad.html` |
 | `public/privacidad.html` | Aviso de privacidad; revisar datos legales antes de asumir que están completos |
 | `scripts/build.mjs` | Build de preview en `dist/`, bloqueado para indexación |
 | `scripts/build-production.mjs` | Build real en `dist-production/`, metadatos, sitemap, políticas y recursos legacy |
@@ -87,7 +89,7 @@ Prompts, procedencia y decisiones: `docs/SERVICE-CAMPAIGN.md` y `docs/MINERAL-AS
 3. `migration/routes.json` es un inventario para redirecciones, **no una lista de páginas que haya que reconstruir**. Rutas desconocidas no deben convertirse indiscriminadamente en páginas 200. Excepción aprobada: las ciudades de `scripts/seo-content.mjs` se sirven en su ruta antigua con contenido nuevo y el diseño actual.
 4. `migration/pages/` contiene 45 páginas antiguas como respaldo local. **No copiarlas al build ni desplegarlas.** Se retiraron expresamente después de que el usuario rechazara su estructura visual.
 5. `migration/assets/` conserva archivos públicos antiguos. El build los sirve bajo `/legacy/` para enlaces y video bajo demanda; no implica aplicar estilos antiguos a la nueva web.
-6. Sitemap de producción: la portada más las páginas de servicio y de ciudad generadas por `scripts/seo-pages.mjs` (aprobadas el 30/10/2026, ver `docs/SEO.md`). Cada página tiene su propio canonical. No anunciar páginas en inglés inexistentes.
+6. Sitemap de producción: la portada más las páginas de servicio y de ciudad generadas por `scripts/seo-pages.mjs` (aprobadas el 30/10/2026, ver `docs/SEO.md`). Cada página tiene su propio canonical. Incluye las cinco páginas en inglés bajo `/en/` (ver `docs/IDIOMAS-SEO.md`); no anunciar otras páginas en inglés inexistentes.
 7. Preview y hosts técnicos workers.dev siguen sin indexación. No retirar sus restricciones al corregir SEO de producción.
 8. La antigua regla Cloudflare que enviaba Ideas Xinfin hacia Xinfin Lab está deshabilitada. **No reactivarla:** produciría un bucle con la redirección actual.
 9. Xinfin Lab sigue registrado en Hostinger, con renovación conservada. Nameservers: `eloise.ns.cloudflare.com` y `ernest.ns.cloudflare.com`; zona Cloudflare activa. Se conservó el TXT de verificación de Google.

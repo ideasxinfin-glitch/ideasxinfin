@@ -17,10 +17,10 @@ Posicionar Ideas Xinfin en búsquedas orgánicas de Mérida, Guadalajara, Ciudad
 **Fase 2 (páginas nuevas, mismo diseño de la landing)**
 - 4 páginas de servicio en `/servicios/`: `landing-pages`, `redes-sociales-google-business`, `inteligencia-artificial` y `seo`.
 - 7 páginas de ciudad en las **mismas direcciones del sitio anterior**: `/mx/merida/`, `/mx/guadalajara/`, `/mx/ciudad-de-mexico/`, `/mx/monterrey/`, `/mx/queretaro/`, `/mx/puebla/` y `/mx/cancun/`. Recuperan el historial de esas URL con contenido nuevo y propio de cada ciudad, no con las páginas antiguas.
-- Cada página tiene título, descripción, canonical, hreflang `es`/`x-default`, Open Graph, migas de pan y datos estructurados (`BreadcrumbList`, `Service` con precio cuando existe y `FAQPage`).
+- Cada página tiene título, descripción, canonical, hreflang `es`, `es-MX`, `x-default` y `en` si tiene versión inglesa (ver `IDIOMAS-SEO.md`), Open Graph, migas de pan y datos estructurados (`BreadcrumbList`, `Service` con precio cuando existe y `FAQPage`).
 - Enlaces internos: cada tarjeta de servicio de la portada enlaza a su página; un bloque «Servicios y ciudades» aparece en la portada y en todas las páginas nuevas.
 - Sitemap con las 12 URL y `lastmod`.
-- Las demás rutas antiguas (otras ciudades de México, Estados Unidos, Canadá e inglés) siguen redirigiendo 301 a la portada. `xinfinlab.com/mx/<ciudad>` redirige a la página de ciudad nueva.
+- Las demás rutas antiguas (otras ciudades de México, Estados Unidos y Canadá) siguen redirigiendo 301 a la portada. `/en/` dejó de redirigir: ahora es la portada en inglés. `xinfinlab.com/mx/<ciudad>` redirige a la página de ciudad nueva.
 
 ## Cómo está construido
 

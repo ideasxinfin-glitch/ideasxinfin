@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, access } from 'node:fs/promises';
 import worker from '../production-worker.js';
-import { SEO_ROUTES } from '../scripts/seo-pages.mjs';
+import { SEO_ROUTES, EN_ROUTES } from '../scripts/seo-pages.mjs';
+import { renderEnglishHome } from '../scripts/en-home.mjs';
 await import('../scripts/build-production.mjs');
 
 test('www and HTTP redirect directly to final HTTPS URL, preserving path and query', async () => {
@@ -55,7 +56,7 @@ test('previous pages without a new equivalent consolidate into the landing; city
   const titles = new Set();
   for (const route of ['/', ...SEO_ROUTES]) titles.add((await readFile(new URL('../dist-production' + route + 'index.html', import.meta.url), 'utf8')).match(/<title>([^<]+)/)[1]);
   assert.equal(titles.size, SEO_ROUTES.length + 1, 'each page has its own title');
-  for (const route of routes.filter(r => r !== '/' && !SEO_ROUTES.includes(r))) {
+  for (const route of routes.filter(r => r !== '/' && !SEO_ROUTES.includes(r) && !EN_ROUTES.includes(r))) {
     const response = await worker.fetch(new Request('https://ideasxinfin.com' + route), {});
     assert.equal(response.status, 301, route);
     assert.equal(response.headers.get('location'), 'https://ideasxinfin.com/', route);
@@ -65,10 +66,76 @@ test('previous pages without a new equivalent consolidate into the landing; city
   assert.ok(html.includes('rel="canonical" href="https://ideasxinfin.com/"'));
   assert.ok(html.includes('class="device-stage"'));
   assert.ok(!html.includes('class="section coverage"'));
-  assert.ok(!html.includes('href="https://ideasxinfin.com/en/"'));
+  assert.ok(html.includes('hreflang="en" href="https://ideasxinfin.com/en/"'));
   const sitemap = await readFile(new URL('../dist-production/sitemap.xml', import.meta.url), 'utf8');
-  assert.equal((sitemap.match(/<loc>/g) || []).length, SEO_ROUTES.length + 1);
+  assert.equal((sitemap.match(/<loc>/g) || []).length, SEO_ROUTES.length + EN_ROUTES.length + 1);
   for (const route of SEO_ROUTES) assert.ok(html.includes(`href="${route}"`), 'home links ' + route);
   const preview = await readFile(new URL('../public/index.html', import.meta.url), 'utf8');
   assert.ok(preview.includes('content="noindex,nofollow"'));
+});
+
+// English version. These read the build this file runs on import, so they cannot live in another test file.
+const SITE = 'https://ideasxinfin.com';
+const built = route => readFile(new URL(`../dist-production${route}index.html`, import.meta.url), 'utf8');
+const visible = html => html.replace(/<(script|style)[\s\S]*?<\/\1>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+const alternates = html => Object.fromEntries([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map(m => [m[1], m[2]]));
+
+test('each English URL is a real page in English, with its own metadata', async () => {
+  const titles = new Set();
+  for (const route of EN_ROUTES) {
+    const html = await built(route);
+    const served = await worker.fetch(new Request(SITE + route), { ASSETS: { fetch: async () => new Response(html, { headers: { 'content-type': 'text/html' } }) } });
+    assert.equal(served.status, 200, route);
+    assert.equal(served.headers.has('x-robots-tag'), false, route);
+    assert.ok(html.includes('<html lang="en"'), route);
+    assert.ok(html.includes(`rel="canonical" href="${SITE}${route}"`), route);
+    assert.ok(html.includes(`property="og:url" content="${SITE}${route}"`), route);
+    assert.ok(html.includes('content="index,follow'), route);
+    assert.ok(!html.includes('data-en='), `${route} must not redirect to itself`);
+    assert.match(html, /property="og:locale" content="en_US"/, route);
+    const text = visible(html);
+    assert.deepEqual(text.match(/[¿¡áéíóúñ]\S*/gi) || [], [], `${route} has Spanish text`);
+    assert.deepEqual(text.match(/\b(para|nuestros|servicios|también|cuéntanos|solicitar|consulta)\b/gi) || [], [], `${route} has Spanish text`);
+    assert.ok((html.match(/<h1[\s>]/g) || []).length === 1, `${route} has one H1`);
+    titles.add(html.match(/<title>([^<]+)/)[1]);
+    for (const block of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+      JSON.parse(block[1]);
+      assert.ok(!block[1].includes('<span'), `${route} structured data holds markup`);
+    }
+  }
+  assert.equal(titles.size, EN_ROUTES.length, 'unique titles');
+});
+
+test('hreflang is reciprocal and x-default points to the Spanish version', async () => {
+  const pairs = [['/', '/en/'], ['/servicios/landing-pages/', '/en/services/website-landing-page-design/'], ['/servicios/inteligencia-artificial/', '/en/services/ai-agents-automation/'], ['/servicios/redes-sociales-google-business/', '/en/services/digital-marketing/'], ['/servicios/seo/', '/en/services/seo/']];
+  assert.equal(pairs.length, EN_ROUTES.length);
+  for (const [es, en] of pairs) {
+    for (const route of [es, en]) {
+      assert.deepEqual(alternates(await built(route)), { es: SITE + es, 'es-MX': SITE + es, en: SITE + en, 'x-default': SITE + es }, route);
+    }
+    assert.ok((await built(es)).includes(`rel="canonical" href="${SITE}${es}"`), es);
+    assert.ok((await built(es)).includes(`data-en="${en}"`), es);
+  }
+});
+
+test('Spanish city pages keep their canonical and do not claim an English version', async () => {
+  const cities = SEO_ROUTES.filter(route => !route.startsWith('/servicios/'));
+  assert.ok(cities.length > 0);
+  for (const route of cities) {
+    const html = await built(route);
+    assert.ok(html.includes('<html lang="es"'), route);
+    assert.ok(html.includes(`rel="canonical" href="${SITE}${route}"`), route);
+    assert.equal(alternates(html).en, undefined, route);
+    assert.ok(!html.includes('data-en='), route);
+  }
+});
+
+test('sitemap lists both languages; preview pages stay out of the index', async () => {
+  const sitemap = await readFile(new URL('../dist-production/sitemap.xml', import.meta.url), 'utf8');
+  for (const route of ['/', ...SEO_ROUTES, ...EN_ROUTES]) assert.ok(sitemap.includes(`<loc>${SITE}${route}</loc>`), route);
+  assert.ok(!sitemap.includes('privacy'));
+  const preview = renderEnglishHome(await readFile(new URL('../public/index.html', import.meta.url), 'utf8'));
+  assert.ok(preview.includes('content="noindex,nofollow"'));
+  const robots = await worker.fetch(new Request('https://ideasxinfin-chat-test.ideasxinfin.workers.dev/en/'), { ASSETS: { fetch: async () => new Response(preview) } });
+  assert.equal(robots.headers.get('x-robots-tag'), 'noindex, nofollow');
 });

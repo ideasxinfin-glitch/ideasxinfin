@@ -93,6 +93,10 @@ Panel: https://ideasxinfin-chat-test.ideasxinfin.workers.dev/admin/chat/ con el 
 
 Sin framework ni dependencias nuevas. La demo de la sección «Automatización con sentido» y el chat flotante usan la misma API y la misma conversación; si el servicio no responde, la demo vuelve a ser la simulación local de siempre y el botón del asistente no aparece.
 
+## Idiomas
+
+El asistente responde en español o inglés según el mensaje del visitante. Ver `IDIOMAS-SEO.md`, sobre todo la nota de mantenimiento de `worker/chat/knowledge-en.js`.
+
 ## Modelos (verificados en el catálogo de Workers AI el 30/10/2026)
 
 | Orden por defecto | Modelo | Uso |
