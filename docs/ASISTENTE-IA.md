@@ -6,7 +6,7 @@ Actualizado: 30/10/2026. Estado: **activo en producción en https://ideasxinfin.
 
 | Recurso | Nombre | ID |
 | --- | --- | --- |
-| Worker | `ideasxinfin-production` (mismas rutas de siempre) | versión vigente `0c9a012c-8ccd-4a2d-a637-51f953904561` (hero con 3 escenas, ver `docs/HERO-ESCENAS.md`); anterior `c9088d51-2148-4400-94ac-cb34e09c5c5b` (SEO, favicon, logos y ondas); con dictado por voz: `90b8e362-1f1a-4243-a28e-927f810705f0`; anterior con Access: `372e8f61-199c-431c-af9c-06fea73a3142`; primera versión con asistente: `8d772a1b-0155-4bd5-9249-b67c655e1ef9`; versión anterior sin asistente: `693de030-64c0-42f3-a5a1-512d73ffc288` |
+| Worker | `ideasxinfin-production` (mismas rutas de siempre) | versión vigente `c5990da3-25eb-4ba3-ab77-e0eb03f2791f` (robot IA en el botón móvil y pulso de WhatsApp); anterior `0c9a012c-8ccd-4a2d-a637-51f953904561` (hero con 3 escenas, ver `docs/HERO-ESCENAS.md`); anterior `c9088d51-2148-4400-94ac-cb34e09c5c5b` (SEO, favicon, logos y ondas); con dictado por voz: `90b8e362-1f1a-4243-a28e-927f810705f0`; anterior con Access: `372e8f61-199c-431c-af9c-06fea73a3142`; primera versión con asistente: `8d772a1b-0155-4bd5-9249-b67c655e1ef9`; versión anterior sin asistente: `693de030-64c0-42f3-a5a1-512d73ffc288` |
 | D1 | `ideasxinfin-chat` (migración aplicada) | `207758dc-bb52-4480-9d86-c3d4c1c3c28a` |
 | KV | `ideasxinfin-chat` | `7059cc47e58a487eacc64741b84a0c75` |
 | Cron | `23 9 * * *` | — |
