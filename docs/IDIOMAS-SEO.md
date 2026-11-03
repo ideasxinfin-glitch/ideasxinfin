@@ -2,6 +2,8 @@
 
 Versión en inglés de ideasxinfin.com. El español sigue siendo la versión principal y `x-default`.
 
+Publicada en producción el 03/11/2026, versión `fedff969-3bfc-4891-852a-9d7e0d95d31c`. Rollback: `4f1e9e28-cb5a-4008-9d92-09e9d8ef765b`.
+
 ## Rutas
 
 | Inglés | Español |
