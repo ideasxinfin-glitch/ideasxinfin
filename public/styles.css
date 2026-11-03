@@ -109,7 +109,32 @@ html:not(.motion-on){scroll-behavior:auto}html:not(.motion-on) *,html:not(.motio
 .contact .contact-copy h2{text-wrap:balance}
 .contact .contact-form{box-shadow:0 24px 80px #0004}
 html[data-theme=light] .contact:before{background:linear-gradient(180deg,rgba(246,246,243,.93),rgba(246,246,243,.75) 55%,rgba(246,246,243,.1)),linear-gradient(90deg,rgba(246,246,243,.4),transparent 65%)}
-@media(max-width:760px){.contact{background-size:auto 760px;background-position:36% top;background-color:var(--bg)}.contact:before{background:linear-gradient(180deg,rgba(25,28,30,.85),rgba(25,28,30,.65) 360px,var(--bg) 740px)}.contact .contact-copy{padding-top:0;padding-bottom:100px}.contact .contact-form{box-shadow:0 16px 45px var(--shadow)}html[data-theme=light] .contact:before{background:linear-gradient(180deg,rgba(246,246,243,.94),rgba(246,246,243,.7) 360px,var(--bg) 740px)}}
+/* Contact on phones (≤760px): the photo is anchored on its plain dark wall so the monitor never sits behind the copy; benefits become cards and the number gets a WhatsApp button plus a tel: pill. Desktop keeps its layout. */
+.contact-whatsapp,.contact .phone svg{display:none}
+@media(max-width:760px){
+.contact{grid-template-columns:1fr;gap:44px;background-color:var(--bg);background-size:auto 760px;background-position:0 0}
+.contact:before{background:linear-gradient(180deg,rgba(13,17,23,.74),rgba(13,17,23,.6) 300px,rgba(13,17,23,.84) 540px,var(--bg) 760px),linear-gradient(90deg,rgba(13,17,23,.5),rgba(13,17,23,.12))}
+html[data-theme=light] .contact:before{background:linear-gradient(180deg,rgba(246,246,243,.94),rgba(246,246,243,.88) 380px,var(--bg) 760px)}
+.contact .contact-copy{padding:0;max-width:560px}
+.contact-copy .eyebrow{font-size:.7rem;letter-spacing:.2em;margin-bottom:16px}
+.contact-copy h2{font-size:clamp(2.3rem,12.2vw,3.6rem);line-height:1.04;letter-spacing:-.04em}
+.contact-copy h2 br{display:none}
+.contact-accent{display:block;color:var(--accent)}
+.contact-copy>p:not(.eyebrow){max-width:40ch;margin-top:22px;font-size:clamp(.98rem,4.2vw,1.08rem);line-height:1.62;color:var(--ink);opacity:.9}
+.contact-benefits{display:grid;gap:10px;margin:28px 0}
+.contact-benefits li{display:flex;align-items:center;gap:14px;padding:15px 16px;border:1px solid #ffffff26;border-radius:12px;background:rgba(22,27,31,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink);font-size:.95rem;font-weight:600;line-height:1.35}
+.contact-benefits li:before{content:'';flex-shrink:0;width:22px;height:22px;margin:0;background:var(--accent);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 11.5v7A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5v-13A1.5 1.5 0 0 1 5.5 4H15'/%3E%3Cpath d='M8.5 11.5l3 3L20.5 5'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 11.5v7A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5v-13A1.5 1.5 0 0 1 5.5 4H15'/%3E%3Cpath d='M8.5 11.5l3 3L20.5 5'/%3E%3C/svg%3E") center/contain no-repeat}
+html[data-theme=light] .contact-benefits li{background:rgba(255,255,255,.82);border-color:var(--line)}
+.contact-actions{display:flex;flex-direction:column;gap:12px;padding-right:52px}
+.contact-whatsapp{display:flex;align-items:center;gap:10px;min-height:58px;padding:0 16px;border-radius:14px;background:linear-gradient(180deg,#ecdcbb,#cdb68e);color:#1c1f22;font-size:.95rem;white-space:nowrap;font-weight:700;line-height:1.25;box-shadow:0 8px 22px #0003;transition:transform .15s,filter .2s}
+.contact-whatsapp svg{width:22px;height:22px;flex-shrink:0}.contact-whatsapp .contact-arrow{width:20px;height:20px;margin-left:auto}.contact-whatsapp:hover{filter:brightness(1.05)}.contact-whatsapp:active{transform:scale(.98)}
+.contact .phone{display:inline-flex;align-items:center;gap:12px;align-self:flex-start;min-height:52px;margin:0;padding:0 20px;border:1px solid #ffffff2e;border-radius:999px;background:rgba(22,27,31,.55);color:var(--ink);font-size:1.05rem;font-variant-numeric:tabular-nums}
+.contact .phone svg{display:block;width:20px;height:20px;color:var(--accent)}
+html[data-theme=light] .contact .phone{background:rgba(255,255,255,.72);border-color:var(--line)}
+.contact .contact-form{box-shadow:0 16px 45px var(--shadow)}
+}
+@media(max-width:374px){.contact-whatsapp{gap:9px;padding:0 14px;font-size:.88rem}}
+@media(max-width:340px){.contact-actions{padding-right:0}}
 .workflow-panel.workflow-visual{padding:0;background:var(--surface);isolation:isolate}
 .workflow-photo{position:relative;aspect-ratio:4/5;overflow:hidden;background:#343833}
 .workflow-photo img{display:block;width:100%;height:100%;object-fit:cover}
