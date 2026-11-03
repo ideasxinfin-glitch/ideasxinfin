@@ -55,14 +55,12 @@ test('off-topic questions get a friendly pivot without any model call', async ()
 
 test('approved FAQ answers without generation and fills the exact cache', async () => {
   const env = await setup();
-  const first = await (await chat(env, '¿Cuánto cuesta una página web?')).json();
+  const first = await (await chat(env, '¿Qué servicios ofrecen?')).json();
   assert.equal(first.source, 'faq');
-  assert.match(first.reply, /landing page/);
-  assert.match(first.reply, /sitio corporativo/);
-  assert.match(first.reply, /plataforma personalizada/);
+  assert.match(first.reply, /landing pages/);
   assert.equal(generations(env).length, 0);
   assert.equal(env.CHAT_CACHE.store.size, 1);
-  const second = await (await chat(env, 'cuanto cuesta una pagina web')).json();
+  const second = await (await chat(env, 'que servicios ofrecen')).json();
   assert.equal(second.source, 'cache');
   assert.equal(generations(env).length, 0);
 });
@@ -70,7 +68,7 @@ test('approved FAQ answers without generation and fills the exact cache', async 
 test('history-dependent or personal questions never use or feed the shared cache', async () => {
   const env = await setup();
   const history = [{ role: 'user', content: 'Tengo una taquería' }, { role: 'assistant', content: 'Excelente.' }];
-  const data = await (await chat(env, '¿Cuánto cuesta una página web?', history)).json();
+  const data = await (await chat(env, '¿Qué tipo de página web me recomiendan?', history)).json();
   assert.equal(data.source, 'model');
   assert.equal(env.CHAT_CACHE.store.size, 0);
   await chat(env, 'Soy Ana López, mi correo es ana@example.com, ¿hacen tiendas en línea para mi negocio?', [], '203.0.113.9');
@@ -112,7 +110,8 @@ test('exhausted Workers AI quota pauses both Workers AI models and, without Groq
   const again = await (await chat(env, 'Quiero un agente de IA para mi inmobiliaria con muchas propiedades', [], '203.0.113.2')).json();
   assert.equal(again.source, 'fallback');
   assert.equal(generations(env).length, 1);
-  const faq = await (await chat(env, data.suggestions[0], [], '203.0.113.3')).json();
+  // Published prices answer from the catalog, so the check uses a suggestion without price intent.
+  const faq = await (await chat(env, data.suggestions.find(question => !classify(question).priceIntent), [], '203.0.113.3')).json();
   assert.equal(faq.source, 'faq');
 });
 
@@ -184,8 +183,8 @@ test('admin API requires the server token and approving knowledge invalidates th
   assert.equal(created.status, 201);
   const after = (await (await admin('overview')).json()).settings.knowledgeVersion;
   assert.ok(after > before);
-  // With current prices approved, price questions go through RAG so prices prevail over the old FAQ.
-  const data = await (await chat(env, '¿Cuánto cuesta una página web?', [], '203.0.113.50')).json();
+  // Services outside the published catalog keep the RAG flow, where approved prices prevail over the old FAQ.
+  const data = await (await chat(env, '¿Cuánto cuesta un sitio corporativo?', [], '203.0.113.50')).json();
   assert.equal(data.source, 'model');
   const system = generations(env).at(-1).input.messages[0].content;
   assert.match(system, /Landing page básica/);

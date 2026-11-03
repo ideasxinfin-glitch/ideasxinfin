@@ -2,16 +2,28 @@ import './motion.js';
 import { prepareInquiry } from './contact.js';
 import { track } from './analytics.js';
 import './site.js';
+import { quoteFor, quoteText } from './pricing.js';
 import './chat.js';
 
 document.querySelectorAll('[data-service]').forEach(link => link.addEventListener('click', () => { document.querySelector('#service').value = link.dataset.service; }));
+// "Solicitar cotización" carries the price shown on screen into the WhatsApp message; it follows the México/Global switch.
+let quotedService = '';
+const reference = document.querySelector('#quote-reference');
+function showReference() {
+  const text = quotedService ? quoteText(quoteFor(quotedService)) : '';
+  reference.hidden = !text;
+  reference.querySelector('span').textContent = text ? `Precio de referencia: ${text}. Orientativo.` : '';
+}
+document.querySelectorAll('[data-quote]').forEach(link => link.addEventListener('click', () => { quotedService = link.dataset.quote; showReference(); }));
+reference.querySelector('.quote-remove').addEventListener('click', () => { quotedService = ''; showReference(); document.querySelector('#message').focus(); });
+window.addEventListener('ideasxinfin:market', showReference);
 document.querySelector('#contact-form').addEventListener('submit', event => {
   event.preventDefault();
   const form = event.currentTarget;
   const status = document.querySelector('#form-status');
   try {
     const data = new FormData(form);
-    const url = prepareInquiry({ name: data.get('name'), service: data.get('service'), message: data.get('message'), website: data.get('website'), consent: data.get('consent') === 'on' });
+    const url = prepareInquiry({ name: data.get('name'), service: data.get('service'), message: data.get('message'), website: data.get('website'), consent: data.get('consent') === 'on', reference: quotedService ? quoteText(quoteFor(quotedService)) : '' });
     track('contact_start');
     status.textContent = 'Abriendo WhatsApp. Revisa y envía tu mensaje allí; aún no se ha enviado.';
     // Same-tab navigation works on mobile and avoids pop-up blocking. Nothing is stored.

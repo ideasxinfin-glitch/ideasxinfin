@@ -1,5 +1,6 @@
 import { clean, fail } from './text.js';
 import { now, addDays, rateLimit, countEvent } from './store.js';
+import { quoteNote } from './pricing.js';
 
 // Must match the consent text shown in public/chat.js and the privacy notice.
 export const CONSENT_VERSION = 'chat-leads-2026-10-30';
@@ -22,6 +23,10 @@ export function validateLead(body) {
   if (!email && !phone) throw fail('Escribe un WhatsApp (10 dígitos o más) o un correo válido.');
   if (lead.budget && !BUDGETS.includes(lead.budget)) throw fail('Presupuesto no válido.');
   if (body.consent !== true || body.consentVersion !== CONSENT_VERSION) throw fail('Necesitamos tu consentimiento para guardar tus datos.');
+  // The price the visitor saw travels with the request as a reference; it is never a binding quote.
+  const reference = quoteNote(body.quote);
+  if (reference) lead.need = `${lead.need}
+${reference}`;
   return lead;
 }
 

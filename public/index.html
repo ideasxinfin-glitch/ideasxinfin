@@ -234,6 +234,42 @@
 </div>
 </article>
 </div>
+<div class="pricing" id="precios" aria-labelledby="pricing-title">
+<div class="pricing-head">
+<div>
+<p class="eyebrow">Precios de referencia</p>
+<h3 id="pricing-title">Empieza con un precio claro.</h3>
+</div>
+<div class="market-switch" role="group" aria-label="Moneda de los precios">
+<button type="button" data-market="mx" aria-pressed="true"><svg class="flag-mx" viewBox="0 0 24 16" aria-hidden="true"><rect width="8" height="16" fill="#006847"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ce1126"/><circle cx="12" cy="8" r="2.2" fill="#8c6d3f"/></svg>México <small>MXN</small></button>
+<button type="button" data-market="global" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9s-1.2 6.4-3.8 9c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3Z"/></svg>Global <small>USD</small></button>
+</div>
+</div>
+<div class="pricing-grid">
+<article class="price-card">
+<h4>Landing page profesional</h4>
+<p class="price-amount"><small>Desde</small> <strong data-price="landing" data-mxn="3800">$3,800 MXN</strong></p>
+<p class="price-billing">Pago único</p>
+<p class="price-desc">Una página enfocada en un objetivo: diseño propio, rápida, adaptada al celular y conectada a WhatsApp.</p>
+<a class="button outline small" href="#contacto" data-quote="landing" data-service="Plataformas digitales y landing pages">Solicitar cotización <span aria-hidden="true">→</span></a>
+</article>
+<article class="price-card">
+<h4>Landing page con inteligencia artificial</h4>
+<p class="price-amount"><small>Desde</small> <strong data-price="landing_ai" data-mxn="6500">$6,500 MXN</strong></p>
+
+<p class="price-desc">Tu landing page con un asistente de IA que responde a tus clientes con la información que tú apruebas.</p>
+<a class="button outline small" href="#contacto" data-quote="landing_ai" data-service="Plataformas digitales y landing pages">Solicitar cotización <span aria-hidden="true">→</span></a>
+</article>
+<article class="price-card">
+<h4>Gestión de redes sociales y Google Business</h4>
+<p class="price-amount"><small>Desde</small> <strong data-price="social" data-mxn="3500">$3,500 MXN</strong></p>
+<p class="price-billing">Al mes</p>
+<p class="price-desc">Gestión y optimización de tu Perfil de Empresa en Google y de tus redes sociales.</p>
+<a class="button outline small" href="#contacto" data-quote="social" data-service="Marketing digital, redes sociales y SEO">Solicitar cotización <span aria-hidden="true">→</span></a>
+</article>
+</div>
+<p class="pricing-foot"><span data-pricing-note>Precios en pesos mexicanos (MXN).</span> Son orientativos: el costo final depende del alcance y se confirma en una propuesta con vigencia antes de empezar.</p>
+</div>
 <div class="original-media">
 <div>
 <span class="eyebrow">Ideas que se convierten en experiencias</span>
@@ -456,7 +492,7 @@
 </details>
       <details>
 <summary>¿Cuánto cuesta y cuánto tiempo toma?</summary>
-<p>Una landing page cuesta desde $3,800 MXN en un solo pago, y la gestión de redes sociales y Google Business desde $3,500 MXN al mes. Los sitios más amplios, los agentes de IA y las automatizaciones dependen del contenido, las funciones y las integraciones. En todos los casos te presentamos una propuesta con alcance, etapas, tiempos y presupuesto antes de empezar.</p>
+<p>Una landing page cuesta desde <span data-price="landing" data-mxn="3800">$3,800 MXN</span> en un solo pago, una landing page con inteligencia artificial desde <span data-price="landing_ai" data-mxn="6500">$6,500 MXN</span>, y la gestión de redes sociales y Google Business desde <span data-price="social" data-mxn="3500">$3,500 MXN</span> al mes. Los sitios más amplios, los agentes de IA y las automatizaciones dependen del contenido, las funciones y las integraciones. En todos los casos te presentamos una propuesta con alcance, etapas, tiempos y presupuesto antes de empezar.</p>
 </details>
       <details>
 <summary>¿Necesito saber de tecnología para empezar?</summary>
@@ -521,6 +557,7 @@
 <input type="checkbox" id="consent" name="consent" required>
 <span>Entiendo que continuaré en WhatsApp y acepto el <a href="/privacidad.html">aviso de privacidad</a>.</span>
 </label>
+<p class="quote-reference" id="quote-reference" hidden><span></span> <button type="button" class="quote-remove" aria-label="Quitar el precio de referencia">Quitar</button></p>
 <button class="button primary submit" type="submit">Continuar en WhatsApp <span aria-hidden="true">↗</span>
 </button>
 <p id="form-status" role="status" aria-live="polite">

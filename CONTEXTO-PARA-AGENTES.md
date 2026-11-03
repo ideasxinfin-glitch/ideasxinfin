@@ -40,6 +40,7 @@ HTML, CSS y JavaScript nativos, sin framework ni dependencias de producción. No
 | `wrangler.production.jsonc` | Worker de producción y rutas de los cuatro hosts |
 | `tests/` | Pruebas de contacto, movimiento, producción y asistente |
 | `public/chat.js` | Chat flotante del asistente IA y conexión de la demo; mejora progresiva |
+| `public/pricing.js` / `worker/chat/pricing.js` | Selector México/Global y catálogo único de precios de referencia (ver `docs/PRECIOS.md`) |
 | `worker/chat/` | Backend del asistente: modelos con respaldo, caché, RAG, prospectos y panel `/admin/chat/` |
 | `migrations/chat/` | Esquema D1 del asistente |
 | `wrangler.chat-test.jsonc` | Worker de prueba del asistente (`ideasxinfin-chat-test`), separado de producción |
@@ -142,6 +143,7 @@ Para preview: `node scripts/build.mjs` y `npx --yes wrangler deploy --config wra
 
 1. Este archivo.
 2. `docs/MIGRATION-STATUS.md` para dominios y SEO.
+   - `docs/PRECIOS.md` para precios MXN/USD, tipo de cambio y cotizaciones.
 3. `docs/SERVICE-CAMPAIGN.md` y `docs/MINERAL-ASSETS.md` para imágenes.
 4. Código y configuración actuales para resolver detalles concretos.
 

@@ -1,4 +1,5 @@
 import { answer, status, visitorKey } from './chat.js';
+import { pricingPayload } from './pricing.js';
 import { captureLead } from './leads.js';
 import { authorize, adminConfigured, verifyAccess, handleAdminApi, purgeExpired } from './admin.js';
 import { syncSite, embedMissing } from './knowledge.js';
@@ -27,6 +28,7 @@ export async function handleChat(request, env) {
   if (!chatEnabled(env)) return json({ error: 'No encontrado.' }, 404);
   try {
     if (path === '/api/chat/status' && request.method === 'GET') return json(await status(env));
+    if (path === '/api/chat/pricing' && request.method === 'GET') return json(await pricingPayload(env));
     if (['/api/chat', '/api/chat/lead'].includes(path)) {
       if (request.method !== 'POST') return json({ error: 'Método no permitido.' }, 405, { Allow: 'POST' });
       if (!sameOrigin(request, url)) return json({ error: 'Origen no permitido.' }, 403);

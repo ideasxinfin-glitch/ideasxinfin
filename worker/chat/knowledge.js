@@ -135,6 +135,10 @@ async function loadIndex(env, version) {
 }
 export const resetIndexCache = () => { indexCache.version = null; };
 
+export async function hasActivePromos(env, version) {
+  return (await loadIndex(env, version)).some(row => row.kind === 'promo');
+}
+
 export async function hasCurrentPrices(env, version) {
   return (await loadIndex(env, version)).some(row => row.kind === 'price' || row.kind === 'promo');
 }

@@ -58,6 +58,8 @@ Rediseño según la imagen aprobada por el usuario. Solo cambió el frontal (`pu
 
 Autorizados por el usuario el 30/10/2026 y cargados en D1 de producción (no en `seed.js`, que sigue sin precios): landing page desde $3,800 MXN en un solo pago (entrada 25) y gestión y optimización de Google Business Profile y redes sociales desde $3,500 MXN al mes (entrada 26). También se actualizaron la política «Precios, tiempos y cotizaciones» (7) y la FAQ «¿Cuánto cuesta una página web?» (10), que decían que no había precios publicados. El resto de servicios sigue sin precio y se deriva a WhatsApp. La landing es pago único y la gestión es mensual (confirmado por el usuario); no se indicó IVA, así que el asistente no lo menciona. Para cambiarlos, usar el panel → Conocimiento.
 
+**Actualización (rama, sin publicar):** los precios de landing, landing con IA y redes ahora salen del catálogo de `worker/chat/pricing.js`, en MXN o USD según el selector México/Global, y el catálogo responde antes que estas entradas de D1. Las entradas no se tocaron. Ver `docs/PRECIOS.md`.
+
 Rollback del asistente sin tocar la landing: `CHAT_ENABLED = "false"` en `wrangler.production.jsonc` y volver a desplegar. Rollback completo a la versión anterior: `npx wrangler rollback 693de030-64c0-42f3-a5a1-512d73ffc288 --config wrangler.production.jsonc`.
 
 ## Recursos creados en Cloudflare (entorno de prueba)

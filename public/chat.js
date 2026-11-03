@@ -1,5 +1,6 @@
 import { WHATSAPP_PHONE, SERVICES } from './contact.js';
 import { track } from './analytics.js';
+import { requestedCurrency, quoteText } from './pricing.js';
 
 // Progressive enhancement: without a working /api/chat/status the page keeps its local demo
 // and no chat button appears. One conversation state feeds both the inline demo and the panel.
@@ -20,7 +21,7 @@ const HOME_FAQS = [
   { label: '¿Qué incluye cada plan?', question: '¿Qué incluye cada plan o servicio de Ideas Xinfin?' },
   { label: '¿Puedo integrar WhatsApp?', question: '¿Puedo integrar WhatsApp en mi sitio web o asistente?' }
 ];
-const state = { history: [], busy: false, config: null };
+const state = { history: [], busy: false, config: null, quote: null };
 const el = (tag, className, text) => { const node = document.createElement(tag); if (className) node.className = className; if (text != null) node.textContent = text; return node; };
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const svgNode = (tag, attributes = {}) => { const item = document.createElementNS(SVG_NS, tag); Object.entries(attributes).forEach(([key, value]) => item.setAttribute(key, value)); return item; };
@@ -124,13 +125,15 @@ export async function ask(text) {
   ui.log.append(typing); ui.log.scrollTop = ui.log.scrollHeight;
   let data;
   try {
-    const result = await post('/api/chat', { message, history: state.history.slice(-6) });
+    const result = await post('/api/chat', { message, history: state.history.slice(-6), currency: requestedCurrency() });
     data = result.data.reply ? result.data : { reply: result.data.error || 'No pude responder en este momento. Puedes escribirnos por WhatsApp.', actions: ['whatsapp'] };
   } catch {
     data = { reply: 'No pude conectarme en este momento. Puedes escribirnos por WhatsApp y el equipo te atenderá.', actions: ['whatsapp'] };
   }
   typing.remove();
   addMessage('assistant', data.reply);
+  // The last published price the assistant quoted travels to WhatsApp and the lead form as a reference.
+  if (data.quote) state.quote = data.quote;
   if (data.source !== 'limit') state.history.push({ role: 'user', content: message }, { role: 'assistant', content: data.reply });
   state.history = state.history.slice(-12);
   setSuggestions(data.suggestions || []);
@@ -141,7 +144,8 @@ export async function ask(text) {
 
 function whatsappComposer() {
   const topics = state.history.filter(item => item.role === 'user').slice(-3).map(item => `• ${item.content.slice(0, 160)}`);
-  const text = topics.length ? `Hola, Ideas Xinfin. Conversé con su asistente de IA y me interesa:\n${topics.join('\n')}` : 'Hola, Ideas Xinfin. Me gustaría hablar sobre un proyecto.';
+  const quote = state.quote ? `\nPrecio de referencia que vi: ${quoteText(state.quote)} (orientativo).` : '';
+  const text = topics.length ? `Hola, Ideas Xinfin. Conversé con su asistente de IA y me interesa:\n${topics.join('\n')}${quote}` : `Hola, Ideas Xinfin. Me gustaría hablar sobre un proyecto.${quote}`;
   const box = el('div', 'chat-extra-box');
   const label = el('label', '', 'Mensaje para WhatsApp. Revísalo o edítalo antes de abrirlo:');
   const area = el('textarea'); area.id = 'chat-wa-text'; area.rows = 4; area.maxLength = 900; area.value = text; label.htmlFor = area.id;
@@ -178,7 +182,7 @@ function leadForm() {
     event.preventDefault(); submit.disabled = true; status.textContent = 'Enviando…';
     const data = Object.fromEntries(new FormData(form));
     try {
-      const result = await post('/api/chat/lead', { ...data, consent: consent.checked, consentVersion: CONSENT_VERSION });
+      const result = await post('/api/chat/lead', { ...data, consent: consent.checked, consentVersion: CONSENT_VERSION, quote: state.quote });
       if (!result.ok) throw new Error(result.data.error || 'No pudimos guardar tus datos.');
       closeExtra(); showConversation(); addMessage('assistant', '¡Gracias! Recibimos tus datos y el equipo de Ideas Xinfin te contactará. Si prefieres, también puedes escribirnos por WhatsApp.');
       track('lead_submit');
@@ -204,7 +208,7 @@ function openPanel() {
 }
 function minimize() { ui.voice?.stop(); ui.panel.hidden = true; ui.launcher.setAttribute('aria-expanded', 'false'); document.body.classList.remove('chat-open'); ui.launcher.focus(); }
 function reset() {
-  state.history = []; ui.log.replaceChildren(); setSuggestions([]); closeExtra(); showHome(); minimize();
+  state.history = []; state.quote = null; ui.log.replaceChildren(); setSuggestions([]); closeExtra(); showHome(); minimize();
 }
 
 // Voice dictation with the browser's own speech service (Chrome, Edge, Safari; desktop and mobile).
