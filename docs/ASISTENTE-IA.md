@@ -6,7 +6,7 @@ Actualizado: 30/10/2026. Estado: **activo en producción en https://ideasxinfin.
 
 | Recurso | Nombre | ID |
 | --- | --- | --- |
-| Worker | `ideasxinfin-production` (mismas rutas de siempre) | versión vigente `c5990da3-25eb-4ba3-ab77-e0eb03f2791f` (robot IA en el botón móvil y pulso de WhatsApp); anterior `0c9a012c-8ccd-4a2d-a637-51f953904561` (hero con 3 escenas, ver `docs/HERO-ESCENAS.md`); anterior `c9088d51-2148-4400-94ac-cb34e09c5c5b` (SEO, favicon, logos y ondas); con dictado por voz: `90b8e362-1f1a-4243-a28e-927f810705f0`; anterior con Access: `372e8f61-199c-431c-af9c-06fea73a3142`; primera versión con asistente: `8d772a1b-0155-4bd5-9249-b67c655e1ef9`; versión anterior sin asistente: `693de030-64c0-42f3-a5a1-512d73ffc288` |
+| Worker | `ideasxinfin-production` (mismas rutas de siempre) | versión vigente `b000b9cc-818a-49c4-b32b-60502a424914` (nuevo panel del asistente, 02/11/2026); anterior `c5990da3-25eb-4ba3-ab77-e0eb03f2791f` (robot IA en el botón móvil y pulso de WhatsApp); anterior `0c9a012c-8ccd-4a2d-a637-51f953904561` (hero con 3 escenas, ver `docs/HERO-ESCENAS.md`); anterior `c9088d51-2148-4400-94ac-cb34e09c5c5b` (SEO, favicon, logos y ondas); con dictado por voz: `90b8e362-1f1a-4243-a28e-927f810705f0`; anterior con Access: `372e8f61-199c-431c-af9c-06fea73a3142`; primera versión con asistente: `8d772a1b-0155-4bd5-9249-b67c655e1ef9`; versión anterior sin asistente: `693de030-64c0-42f3-a5a1-512d73ffc288` |
 | D1 | `ideasxinfin-chat` (migración aplicada) | `207758dc-bb52-4480-9d86-c3d4c1c3c28a` |
 | KV | `ideasxinfin-chat` | `7059cc47e58a487eacc64741b84a0c75` |
 | Cron | `23 9 * * *` | — |
@@ -27,7 +27,7 @@ Para dar acceso a otra persona: Zero Trust → Access controls → Policies → 
 
 Desde el 30/10/2026 el chat tiene un botón de micrófono (`public/chat.js`, función `dictation`). Usa el reconocimiento de voz del propio navegador (`SpeechRecognition`, idioma `es-MX`): funciona en Chrome, Edge y Safari, en computadora y celular, y en Firefox el botón no aparece. El texto se coloca en el campo para revisarlo y nunca se envía solo. No consume neurons ni pasa por el Worker, pero Chrome envía el audio a Google y Safari a Apple, por eso el aviso de privacidad lo menciona. Para permitirlo, `Permissions-Policy` pasó de `microphone=()` a `microphone=(self)` (solo este sitio, nunca iframes de terceros). Para quitarlo: borrar `dictation` y su botón en `chat.js`, volver a `microphone=()` en `production-worker.js`, `public/_headers`, `scripts/build-production.mjs` y `scripts/serve.mjs`, y retirar el párrafo del aviso.
 
-### Diseño del panel (02/11/2026, en local; sin publicar)
+### Diseño del panel (publicado el 02/11/2026, versión `b000b9cc`; rollback: `c5990da3`)
 
 Rediseño según la imagen aprobada por el usuario. Solo cambió el frontal (`public/chat.js` y el bloque «Assistant panel» de `public/styles.css`); el backend, la caché, el RAG, los prospectos, los límites y el panel administrativo no se tocaron.
 
