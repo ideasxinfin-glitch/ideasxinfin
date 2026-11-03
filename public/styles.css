@@ -71,13 +71,13 @@ html:not(.motion-on){scroll-behavior:auto}html:not(.motion-on) *,html:not(.motio
 .whatsapp-float{isolation:isolate;transition:box-shadow .3s,background .3s,color .3s,opacity .2s,visibility .2s}
 .whatsapp-float:before{content:'';position:absolute;inset:-6px;border:1px solid var(--accent);border-radius:inherit;pointer-events:none;opacity:0}
 .whatsapp-float:after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(110deg,transparent 20%,#ffffff38 45%,transparent 70%);pointer-events:none;opacity:0;transform:translateX(-100%)}
-.motion-on:not(.motion-suspended) .whatsapp-float:before{animation:contact-halo 8s ease-out infinite}
-.motion-on:not(.motion-suspended) .whatsapp-float:after{animation:contact-sheen 8s ease-in-out infinite}
-.motion-on:not(.motion-suspended) .whatsapp-float svg{animation:contact-invitation 8s ease-in-out infinite}
+.motion-on:not(.motion-suspended) .whatsapp-float{animation:contact-pulse 4s ease-in-out infinite}.motion-on:not(.motion-suspended) .whatsapp-float:before{animation:contact-halo 4s ease-out infinite}
+
+
 .whatsapp-float:hover{background:var(--accent);color:var(--on-accent);box-shadow:0 10px 30px var(--shadow)}
-@keyframes contact-halo{0%,65%,100%{opacity:0;scale:1}70%{opacity:.55;scale:1}86%{opacity:0;scale:1.16}}
-@keyframes contact-sheen{0%,68%{opacity:0;transform:translateX(-60%)}72%{opacity:.7}85%,100%{opacity:0;transform:translateX(60%)}}
-@keyframes contact-invitation{0%,68%,86%,100%{transform:rotate(0)}73%{transform:rotate(-10deg)}78%{transform:rotate(7deg)}82%{transform:rotate(-3deg)}}
+@keyframes contact-pulse{0%,30%,100%{transform:scale(1)}12%{transform:scale(1.06)}}@keyframes contact-halo{0%{opacity:.6;transform:scale(1)}30%,100%{opacity:0;transform:scale(1.28)}}
+
+
 @media(max-width:1200px){.service-photo{height:210px}}
 @media(max-width:960px){.service-photo{height:180px}}
 @media(max-width:700px){.service-photo{height:245px}}
@@ -204,3 +204,11 @@ html[data-theme=light] .contact:before{background:linear-gradient(180deg,rgba(24
 .device-listings i:nth-child(2){background-position:20% 70%}.device-listings i:nth-child(3){background-position:80% 40%}.device-listings i:nth-child(4){background-position:50% 90%}
 .phone-icon{width:30px;height:30px;margin-bottom:auto;fill:none;stroke:#c7b99c;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 @media(max-width:700px){.device-features svg{width:11px;height:11px}.device-features>span:nth-child(4){display:none}.device-search{font-size:.36rem;padding:4px 6px}.phone-icon{width:20px;height:20px}}
+/* Floating buttons: WhatsApp pulses every 4 s; on mobile the AI launcher shows a robot icon whose cue (12 s timeline, at 2 s and 6.3 s) lands in WhatsApp's pauses. motion.js aligns both timelines. */
+.chat-icon-robot,.chat-badge{display:none}
+.robot-eyes,.robot-spark{transform-box:fill-box;transform-origin:center}
+.robot-spark{opacity:.5}
+@media(max-width:700px){.chat-launcher{isolation:isolate}.chat-launcher .chat-icon-bubble{display:none}.chat-launcher .chat-icon-robot{display:block;width:27px;height:27px;overflow:visible}.chat-badge{display:block;position:absolute;top:-6px;right:-7px;padding:2px 5px;border-radius:9px;background:linear-gradient(135deg,#1fa6c4,#6d4fe0);color:#fff;font-size:.56rem;font-weight:700;letter-spacing:.04em;line-height:1.25;box-shadow:0 2px 6px var(--shadow)}.chat-launcher:before{content:'';position:absolute;inset:-5px;z-index:-1;border-radius:inherit;box-shadow:0 0 0 1px #7c5cf099,0 0 16px #22b8d870;opacity:0;pointer-events:none}.motion-on:not(.motion-suspended) .chat-launcher:before{animation:ai-glow 12s ease-out infinite}.motion-on:not(.motion-suspended) .robot-eyes{animation:ai-blink 12s linear infinite}.motion-on:not(.motion-suspended) .robot-spark{animation:ai-spark 12s ease-in-out infinite}}
+@keyframes ai-glow{0%,16.6%,52.4%,100%{opacity:0;transform:scale(.94)}19.5%,55.3%{opacity:1;transform:scale(1)}25%,61%{opacity:0;transform:scale(1.16)}}
+@keyframes ai-blink{0%,18%,20.6%,53.8%,56.4%,100%{transform:scaleY(1)}19.3%,55.1%{transform:scaleY(.12)}}
+@keyframes ai-spark{0%,16.6%{opacity:.5;transform:scale(1) rotate(0)}20%{opacity:1;transform:scale(1.55) rotate(45deg)}25%,52.4%{opacity:.5;transform:scale(1) rotate(90deg)}56%{opacity:1;transform:scale(1.55) rotate(135deg)}61%,100%{opacity:.5;transform:scale(1) rotate(180deg)}}

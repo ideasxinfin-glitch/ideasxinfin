@@ -125,8 +125,25 @@ function syncMotion() {
     advanceWorkflow();
   }
   syncScenes();
+  alignFloats();
   updateScroll();
 }
+
+// WhatsApp (4 s) and the mobile AI launcher (12 s) share one origin, so the AI cue always falls in WhatsApp's pause.
+function alignFloats() {
+  if (!active) return;
+  document.querySelectorAll('.whatsapp-float,.chat-launcher').forEach(button => button.getAnimations?.({ subtree: true }).forEach(animation => { animation.startTime = 0; }));
+}
+// chat.js adds the launcher after this module runs.
+if ('MutationObserver' in window && !document.querySelector('.chat-launcher')) {
+  const launcherWatch = new MutationObserver(() => {
+    if (!document.querySelector('.chat-launcher')) return;
+    launcherWatch.disconnect();
+    requestAnimationFrame(alignFloats);
+  });
+  launcherWatch.observe(document.body, { childList: true });
+}
+matchMedia('(max-width: 700px)').addEventListener('change', () => requestAnimationFrame(alignFloats));
 
 // Hero scenes crossfade every 7.5 s while the hero is on screen. Reduced motion keeps the first one.
 const SCENE_INTERVAL = 7500;

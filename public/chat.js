@@ -164,11 +164,27 @@ function build(config) {
     svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', '1.6'); svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path'); path.setAttribute('d', 'M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4h0A1.5 1.5 0 0 1 4 14.5Z');
     const spark = document.createElementNS('http://www.w3.org/2000/svg', 'path'); spark.setAttribute('d', 'M12 6.5v5M9.5 9h5');
+    svg.classList.add('chat-icon-bubble');
     svg.append(path, spark); return svg;
+  };
+  // Mobile-only icon: a friendly robot face with a spark, so the round button reads as "AI" without its label.
+  const robot = () => {
+    const ns = 'http://www.w3.org/2000/svg';
+    const node = (tag, attributes) => { const item = document.createElementNS(ns, tag); Object.entries(attributes).forEach(([key, value]) => item.setAttribute(key, value)); return item; };
+    const svg = node('svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true', fill: 'none', stroke: 'url(#chat-robot-tone)', 'stroke-width': '1.9', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', class: 'chat-icon-robot' });
+    const tone = node('linearGradient', { id: 'chat-robot-tone', x1: '3', y1: '3', x2: '21', y2: '21', gradientUnits: 'userSpaceOnUse' });
+    tone.append(node('stop', { offset: '0', 'stop-color': '#22b8d8' }), node('stop', { offset: '1', 'stop-color': '#7c5cf0' }));
+    const defs = node('defs', {}); defs.append(tone);
+    const eyes = node('g', { class: 'robot-eyes', fill: 'url(#chat-robot-tone)', stroke: 'none' });
+    eyes.append(node('circle', { cx: '9.4', cy: '12.4', r: '1.45' }), node('circle', { cx: '14.6', cy: '12.4', r: '1.45' }));
+    svg.append(defs, node('path', { d: 'M12 4.6v2.2M3.4 11.4v3M20.6 11.4v3M10 15.9q2 1.2 4 0' }), node('rect', { x: '5.2', y: '6.8', width: '13.6', height: '11.8', rx: '3.6' }), node('circle', { cx: '12', cy: '3.6', r: '1', fill: 'url(#chat-robot-tone)', stroke: 'none' }), eyes,
+      node('path', { class: 'robot-spark', d: 'M20.2 1.6l.55 1.25 1.25.55-1.25.55-.55 1.25-.55-1.25-1.25-.55 1.25-.55z', fill: '#7c5cf0', stroke: 'none' }));
+    return svg;
   };
   const launcher = el('button', 'chat-launcher'); launcher.type = 'button';
   launcher.setAttribute('aria-expanded', 'false'); launcher.setAttribute('aria-controls', 'chat-panel'); launcher.setAttribute('aria-label', 'Abrir asistente de inteligencia artificial');
-  launcher.append(icon(), el('span', '', 'Asistente IA'));
+  const badge = el('b', 'chat-badge', 'IA'); badge.setAttribute('aria-hidden', 'true');
+  launcher.append(icon(), robot(), el('span', '', 'Asistente IA'), badge);
   const panel = el('section', 'chat-panel'); panel.id = 'chat-panel'; panel.hidden = true; panel.setAttribute('aria-labelledby', 'chat-title');
   const head = el('header', 'chat-head'); const titles = el('div'); const title = el('strong', '', 'Ideas Xinfin · Asistente IA'); title.id = 'chat-title';
   const sub = el('small'); sub.append(el('span', 'chat-dot'), 'Asistente de inteligencia artificial');
